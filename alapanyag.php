@@ -2,7 +2,7 @@
 require("header.php");
 
 require('helper/mysqli.php');
-listallraklap();
+listallalapanyag();
 
 echo "<br/>...";
 require("footer.php");

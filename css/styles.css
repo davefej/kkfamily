@@ -8,6 +8,7 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     padding-top: 70px;
+    font-size:20px;
 }
 h1 {
     color: #fff3e0;
@@ -19,6 +20,12 @@ p{
 th{
     line-height: 28px;
 }
+
+a{
+	color: white;
+    text-decoration: none;
+}
+
 .thumbnail{
     background: #fffdf9 !important;
 }
@@ -26,4 +33,56 @@ th{
     display: table;
     margin: 0 auto;
     float: none;
+}
+
+
+.header{
+	height: 70px;
+    padding: 15px 10px 0;
+    box-sizing: border-box;
+    -webkit-box-shadow: 0px 0px 10px 2px #000000;
+    -moz-box-shadow: 0px 0px 10px 2px #000000;
+    box-shadow: 0px 0px 10px 2px #000000;
+    z-index: 2;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    background-color: #3E2723;
+}
+
+.headerspan{
+	color: white;
+	font-color: white;
+    margin-top: 15px;
+    margin-left: 25px;
+    margin-right: 15px;
+    font-size: 200%;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.logo{
+	height:70px;
+	position: fixed;    
+    right: 0;
+    top: 0;
+}
+
+.maintable{
+	width:90%;
+}
+
+.mainth{
+	text-align:center;
+}
+
+.maintd{
+	width:33%;
+	height:350px;
+}
+
+.maintddiv{
+	max-heigth:400px;
+	overflow-y: scroll;	
 }
