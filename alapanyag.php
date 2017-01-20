@@ -1,4 +1,5 @@
 <?php
+$selected ="alapanyag";
 require("header.php");
 
 require('helper/mysqli.php');
