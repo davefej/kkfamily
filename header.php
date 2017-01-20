@@ -21,14 +21,10 @@
 	<body class="admin">
 		<header class="header" id="indexheader" >
 			<div class="headerspancontainer">
-				<div class="headerspan"><a <?php if($selected =="index"){echo "class='selheader'";}?>  href="index.php">Kezdőlap</a></div>
+				<div class="headerspan"><a <?php if($selected =="index"){echo "class='selheader'";}?>  href="admin.php">Kezdőlap</a></div>
 				<div class="headerspan"><a <?php if($selected =="raktar"){echo "class='selheader'";}?>  href="raktar.php">Raklapok</a></div>
 				<div class="headerspan"><a <?php if($selected =="alapanyag"){echo "class='selheader'";}?>  href="alapanyag.php">Alapanyagok</a></div>
 				<div class="headerspan"><a <?php if($selected =="beszallito"){echo "class='selheader'";}?>  href="beszallito.php">Beszállítók</a></div>
-				
-				<img class="logo"  src="img/logo.png"/>
-				
-			</div>
-		
-		
+				<img class="logo"  src="img/logo.png"/>				
+			</div>		
 		</header>
