@@ -28,7 +28,7 @@ function listStore(){
 		print '<td>'.$row["a2"].'</td>';
 		print '<td>'.$row["a4"].'</td>';
 		print '<td>'.$row["a3"].'</td>';
-		print '<td><button class="button" onclick="trash('.$row["a0"].','.$row["a3"].')">Selejt</button></td>';
+		print '<td><button class="btn btn-sm btn-danger" onclick="trash('.$row["a0"].','.$row["a3"].')">Selejt</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
@@ -46,7 +46,7 @@ function listProduct(){
 	print '<tr>';
 	print '<th>Alapanyag Neve</th>';
 	print '<th>Kategória</th>';
-	print '<th><button class="btn btn-sm" onclick="ujalap()">Új alapanyag</button></th>';
+	print '<th><button class="btn btn-sm" id="newRetailer" onclick="ujalap()">Új alapanyag</button></th>';
 	print '</tr>';
 	print '</thead>';
 	while($row = $results->fetch_assoc()) {
@@ -71,14 +71,14 @@ function listSupplier(){
 	print '<tr>';
 	print '<th>Beszállító Neve</th>';
 	print '<th>Beszállító címe</th>';
-	print '<th><button class="btn btn-sm" onclick="ujbesz()">Új Beszállító</button></th>';
+	print '<th><button class="btn btn-sm" id="newRetailer" onclick="ujbesz()">Új Beszállító</button></th>';
 	print '</tr>';
 	print '</thead>';
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
 		print '<td id="besznev_'.$row["id"].'">'.$row["name"].'</td>';
 		print '<td id="beszcim_'.$row["id"].'">'.$row["address"].'</td>';
-		print '<td ><button class="btn btn-sm" onclick="editbeszallito('.$row["id"].')">szerkeszt</button></td>';
+		print '<td ><button class="btn btn-sm" onclick="editbeszallito('.$row["id"].')">Szerkeszt</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
@@ -173,7 +173,7 @@ function palletSpare($alapanyag){
 		print '<td>'.$row["a2"].'</td>';
 		print '<td>'.$row["a4"].'</td>';
 		print '<td>'.$row["a3"].'</td>';
-		print '<td><button class="button" onclick="trash('.$row["a0"].','.$row["a3"].')">Selejt</button></td>';
+		print '<td><button class="btn btn-sm" onclick="trash('.$row["a0"].','.$row["a3"].')">Selejt</button></td>';
 		print '</tr>';
 	}
 	print '</table>';

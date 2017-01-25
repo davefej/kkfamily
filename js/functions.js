@@ -25,7 +25,7 @@ function ujalap(){
 			str += "</td>";
 		str += "</tr>";
 	str += "</table>";
-	bootbox.alert(str);
+	bootbox.alert("Hello");
 }
 
 
