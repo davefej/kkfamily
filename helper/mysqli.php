@@ -66,7 +66,7 @@ function listallraklap(){
 	// close connection
 	$mysqli->close();
 }
-function listallalapanyag(){
+function listProduct(){
 	$mysqli = connect();
 	$results = $mysqli->query("SELECT p.id as id, p.name as name, c.name as cat FROM product p, category c WHERE c.id = p.category_id");
 	print '<table class="table table-hover">';
@@ -81,7 +81,7 @@ function listallalapanyag(){
 		print '<tr>';
 		print '<td id="alapnev_'.$row["id"].'">'.$row["name"].'</td>';
 		print '<td id="alapkat_'.$row["id"].'">'.$row["cat"].'</td>';
-		print '<td><button class="btn btn-sm" onclick="editalap('.$row["id"].')">Szerkeszt</button></td>';
+		print '<td><button class="btn btn-sm" onclick="editproduct('.$row["id"].')">Szerkeszt</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
@@ -90,7 +90,7 @@ function listallalapanyag(){
 	// close connection
 	$mysqli->close();
 }
-function listallsupplier(){
+function listSupplier(){
 	$mysqli = connect();
 	$results = $mysqli->query("SELECT * FROM supplier");
 	print '<table class="table table-hover">';
