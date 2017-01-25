@@ -16,16 +16,19 @@ function connect(){
 	}
 	return $db;
 }
+
 function insert($sql){
 	$mysqli = connect();
 	$var = $mysqli->query($sql);
 	return $var;
 }
+
 function update($sql){
 	$mysqli = connect();
 	$var = $mysqli->query($sql);
 	return $var;
 }
+
 function listallraklap(){
 	$mysqli = connect();
 	$results = $mysqli->query(
@@ -66,6 +69,7 @@ function listallraklap(){
 	// close connection
 	$mysqli->close();
 }
+
 function listProduct(){
 	$mysqli = connect();
 	$results = $mysqli->query("SELECT p.id as id, p.name as name, c.name as cat FROM product p, category c WHERE c.id = p.category_id");
@@ -90,6 +94,7 @@ function listProduct(){
 	// close connection
 	$mysqli->close();
 }
+
 function listSupplier(){
 	$mysqli = connect();
 	$results = $mysqli->query("SELECT * FROM supplier");
@@ -114,6 +119,7 @@ function listSupplier(){
 	// close connection
 	$mysqli->close();
 }
+
 function tablegen($results,$type,$headers){
 	print '<table  align="center" class="'.$type.'table" border="1">';
 	print '<tr>';
@@ -132,6 +138,7 @@ function tablegen($results,$type,$headers){
 	}
 	print '</table>';
 }
+
 function palletOutput($alapanyag){
 	$mysqli = connect();
 	$results = $mysqli->query(
@@ -161,7 +168,7 @@ function palletOutput($alapanyag){
 		print '<td>'.$row["a4"].'</td>';
 		print '<td>'.$row["a3"].'</td>';
 
-		print '<td><button class="button" onclick="output('.$row["a0"].','.$row["a3"].')">Kiadás</button></td>';
+		print '<td><button class="btn btn-sm" onclick="output('.$row["a0"].','.$row["a3"].')">Kiadás</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
@@ -170,6 +177,7 @@ function palletOutput($alapanyag){
 	// close connection
 	$mysqli->close();
 }
+
 function palletSpare($alapanyag){
 	$mysqli = connect();
 	$results = $mysqli->query(
@@ -197,7 +205,7 @@ function palletSpare($alapanyag){
 		print '<td>'.$row["a2"].'</td>';
 		print '<td>'.$row["a4"].'</td>';
 		print '<td>'.$row["a3"].'</td>';
-		print '<td><button class="button" onclick="trash('.$row["a0"].','.$row["a3"].')">Kiadás</button></td>';
+		print '<td><button class="btn btn-sm" onclick="trash('.$row["a0"].','.$row["a3"].')">Kiadás</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
@@ -206,6 +214,7 @@ function palletSpare($alapanyag){
 	// close connection
 	$mysqli->close();
 }
+
 function supplierOption(){
 	$mysqli = connect();
 	$results = $mysqli->query("SELECT * FROM supplier order by name");
@@ -220,6 +229,7 @@ function supplierOption(){
 	// close connection
 	$mysqli->close();
 }
+
 function productOption(){
 
 	$mysqli = connect();
@@ -264,6 +274,7 @@ function dailyInput(){
 	// close connection
 	$mysqli->close();
 }
+
 function dailyOutput(){
 	$mysqli = connect();
 	$results = $mysqli->query(
@@ -292,6 +303,7 @@ function dailyOutput(){
 	// close connection
 	$mysqli->close();
 }
+
 function listOld(){
 	$mysqli = connect();
 	$results = $mysqli->query(
@@ -330,7 +342,35 @@ function listOld(){
 	// close connection
 	$mysqli->close();
 }
+
 function listUser(){
 	print "TODO";
+}
+
+function listAllInStore(){
+	$mysqli = connect();
+	$results = $mysqli->query("SELECT p.id as id, p.name as name, c.name as cat, p.type as type, r.amount as amount FROM product p, category c, pallet r WHERE c.id = p.category_id AND p.deleted=0 AND r.product_id = p.id");
+	print '<table class="table table-hover">';
+	print '<thead>';
+	print '<tr>';
+	print '<th data-sortable="true">Alapanyag Neve</th>';
+	print '<th data-sortable="true">Kategória</th>';
+	print '<th data-sortable="true">Mennyiség</th>';
+	print '<th data-sortable="true">Típus</th>';
+	print '</tr>';
+	print '</thead>';
+	while($row = $results->fetch_assoc()) {
+		print '<tr>';
+		print '<td id="alapnev_'.$row["id"].'">'.$row["name"].'</td>';
+		print '<td id="alapkat_'.$row["id"].'">'.$row["cat"].'</td>';
+		print '<td id="alapkat_'.$row["id"].'">'.$row["amount"].'</td>';
+		print '<td id="alapkat_'.$row["id"].'">'.$row["type"].'</td>';
+		print '</tr>';
+	}
+	print '</table>';
+	// Frees the memory associated with a result
+	$results->free();
+	// close connection
+	$mysqli->close();
 }
 ?>
