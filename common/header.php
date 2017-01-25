@@ -32,6 +32,8 @@
 	</head>
 	<body class="admin">
 		<?php 
+			require('../helper/contentgenerator.php');
+			
 			if($selected == "admin")
 				require("../common/adminnavbar.php");
 			else

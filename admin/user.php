@@ -1,10 +1,10 @@
 <?php
 $selected ="admin";
-$selector ="product";
+$selector ="user";
 require("../common/header.php");
 
 
-	listProduct();
+listUser();
 
 require("../common/footer.php");
 ?>

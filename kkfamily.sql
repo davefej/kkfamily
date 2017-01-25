@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2017. Jan 25. 12:38
+-- Létrehozás ideje: 2017. Jan 25. 15:01
 -- Kiszolgáló verziója: 10.1.13-MariaDB
 -- PHP verzió: 5.6.21
 
@@ -84,7 +84,8 @@ CREATE TABLE `pallet` (
 
 INSERT INTO `pallet` (`id`, `product_id`, `supplier_id`, `time`, `amount`, `user_id`, `deleted`) VALUES
 (1, 2, 1, '2017-01-24 17:48:39', 101, 2, 0),
-(2, 3, 6, '2017-01-25 10:26:31', 213, 0, 0);
+(2, 3, 6, '2017-01-25 10:26:31', 213, 0, 0),
+(3, 3, 3, '2017-01-25 12:56:04', 321, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -168,6 +169,8 @@ INSERT INTO `trash` (`id`, `pallet_id`, `amount`, `time`, `user_id`, `deleted`) 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `type` int(11) NOT NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -175,8 +178,10 @@ CREATE TABLE `user` (
 -- A tábla adatainak kiíratása `user`
 --
 
-INSERT INTO `user` (`id`, `name`, `deleted`) VALUES
-(1, 'Kis Pisti', 0);
+INSERT INTO `user` (`id`, `name`, `password`, `type`, `deleted`) VALUES
+(1, 'Kis Pisti', 'alma', 0, 0),
+(2, 'admin', 'kkpass', 0, 0),
+(3, 'raktar', 'kkpass', 1, 0);
 
 --
 -- Indexek a kiírt táblákhoz
@@ -242,7 +247,7 @@ ALTER TABLE `output`
 -- AUTO_INCREMENT a táblához `pallet`
 --
 ALTER TABLE `pallet`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT a táblához `product`
 --
@@ -262,7 +267,7 @@ ALTER TABLE `trash`
 -- AUTO_INCREMENT a táblához `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

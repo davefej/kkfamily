@@ -11,9 +11,11 @@ function newCategory(name){
 }
 
 
-function newUser(name){
+function newUser(name,password,user_type){
 	insert({
     	"name":name,
+    	"password":password,
+    	"user_type":user_type,
     	"type":"user"
     });
 }
@@ -43,7 +45,7 @@ function newTrash(pallet_id,amount,user_id){
     	"amount":amount,
     	"user_id":user_id,
     	"type":"trash"
-	},true);
+	});
 }
 
 function newPallet(product_id,supplier_id,amount,user_id){	
@@ -53,7 +55,7 @@ function newPallet(product_id,supplier_id,amount,user_id){
     	"amount":amount,
     	"user_id":user_id,
     	"type":"pallet"
-	},true);
+	});
 }
 
 function newOutput(pallet_id,amount,user_id){	
@@ -62,18 +64,13 @@ function newOutput(pallet_id,amount,user_id){
     	"amount":amount,
     	"user_id":user_id,
     	"type":"output"
-	},true);
+	});
 }
 
 
 function insert(json,tablet){
-	if(tablet){
-		var url= "../helper/insert.php";
-	}else{
-		var url= "/helper/insert.php";
-	}
 	$.ajax({
-        url: url,
+        url: "../helper/insert.php",
         type: "post",
         data: JSON.stringify(json) ,
         cache: false,
@@ -98,11 +95,20 @@ function updateCategory(id,name){
 	});
 }
 
-function updateUser(id,name){
+function updateUserName(id,name){
 	update({
 		"id":id,
 		"name":name,
-		"type":"user"
+		"type":"user_name"
+	});
+}
+
+
+function updateUserPass(id,password){
+	update({
+		"id":id,
+		"password":password,
+		"type":"user_password"
 	});
 }
 
@@ -163,7 +169,7 @@ function updateOutput(id,pallet_id,amount,time,user_id){
 function update(json){
 	
 	$.ajax({
-        url: "/helper/update.php",
+        url: "../helper/update.php",
         type: "post",
         data: JSON.stringify(json) ,
         cache: false,
@@ -227,7 +233,7 @@ function deleteOutput(id){
 function Delete(json){
 	
 	$.ajax({
-        url: "/helper/delete.php",
+        url: "../helper/delete.php",
         type: "post",
         data: JSON.stringify(json) ,
         cache: false,
