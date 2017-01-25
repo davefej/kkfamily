@@ -5,7 +5,7 @@
 			(isset($_POST["username"]) && isset($_POST["password"]) && 
 			$_POST["username"] == "admin" && $_POST["password"] == "kkpass")
 			){
-				header('Location: admin.php');
+				header('Location: admin/admin.php');
 				
 
 	}else

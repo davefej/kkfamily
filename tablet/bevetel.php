@@ -1,7 +1,7 @@
 <?php
 	$selected = "tablet";
 	$selector = "bevetel";
-	require("../header.php");
+	require("../common/header.php");
 	
 	require('../helper/mysqli.php');
 ?>
@@ -36,12 +36,17 @@
 					<input class="form-control" id="suly" type="number" />
 				</td>
 			</tr>
+			<tr>
+				<td colspan="4">
+					<button class="btn btn-primary btn-block" onclick="input()">Mentés</button>
+				</td>
+			</tr>
 		</table>
-		<button class="btn btn-primary btn-block" onclick="input()">Mentés</button>
+		
 	</div>
 </div>
 
 
 <?php 
-require("../footer.php");
+require("../common/footer.php");
 ?>

@@ -1,7 +1,7 @@
 <?php
 $selected ="admin";
-require("header.php");
-require('helper/mysqli.php');
+require("../common/header.php");
+require('../helper/mysqli.php');
 ?>
   
   <div class="panel-group">
@@ -158,5 +158,5 @@ require('helper/mysqli.php');
 		</div>
 	</div>
 <?php 
-require("footer.php");
+require("../common/footer.php");
 ?>
