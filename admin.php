@@ -2,6 +2,7 @@
 $selected ="admin";
 $selector = "admin";
 require("header.php");
+require('helper/mysqli.php');
 ?>
   
   <div class="panel-group">
@@ -16,14 +17,13 @@ require("header.php");
 		  		A bevétel leírási adatokat lehetne ide írni.
 		  	</div>
 		  	<div class="row" style="width:95%">
-		  		<div class="col-md-6">
+		  		<div class="col-md-6-1">
 		  			<table class="table">
 				  		<tr>
 					  		<td>
 								<div>
-								<?php 			
-									require('helper/mysqli.php');
-									listnapibevetel();			
+								<?php 											
+									dailyInput();			
 								?>
 								</div>
 							</td>
@@ -31,7 +31,7 @@ require("header.php");
 		  			</table>
 		  		</div>
 		  		
-		  		<div class="col-md-6">
+		  		<div class="col-md-6-2">
 		  			<div class="centerBlock">
 			  			<canvas id="myDoughnutChart" width="300" height="280">
 		                    <script>
@@ -103,7 +103,7 @@ require("header.php");
 			  		<td>
 						<div>
 						<?php 			
-							listnapikiadas();
+							dailyOutput();
 						?>
 						</div>
 					</td>
@@ -127,7 +127,7 @@ require("header.php");
 			  		<td>
 						<div>
 						<?php 			
-							listlejar();
+							listOld();
 						?>
 						</div>
 					</td>
@@ -148,7 +148,7 @@ require("header.php");
 			  		<td>
 						<div>
 						<?php 			
-							listlejar();
+							listUser();
 						?>
 						</div>
 					</td>

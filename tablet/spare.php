@@ -4,7 +4,7 @@ $selector="spare";
 require("../header.php");
 
 require('../helper/mysqli.php');
-listkiadas('paprika');
+	palletSpare('paprika');
 
 require("../footer.php");
 ?>
