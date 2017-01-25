@@ -10,6 +10,7 @@
 			<ul class="nav navbar-nav navbar-left">
 				<li <?php if($selector == "product"){ echo "class=\"active\"";} ?>><a href="product.php">Beszállítók</a></li>
 				<li <?php if($selector == "supplier"){ echo "class=\"active\"";} ?>><a href="supplier.php">Alapanyagok</a></li>
+				<li <?php if($selector == "storage"){ echo "class=\"active\"";} ?>><a href="storage.php">Raktár</a></li>
 			</ul>
 			<form class="navbar-form navbar-left">
 				<div class="form-group">
@@ -17,7 +18,7 @@
 				</div>
 			</form>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="index.html">Kijelentkezés</a></li>
+				<li><a href="../index.html">Kijelentkezés</a></li>
 			</ul>
 		</div><!-- /.navbar-collapse -->
 	</div><!-- /.container-fluid -->
