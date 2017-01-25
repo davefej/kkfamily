@@ -1,47 +1,38 @@
 <?php
-
 require('configuration.php');
-
 function connect(){
-	
+
 	$mysql_host = getconfig('dbhost');
 	$mysql_database = getconfig('dbname');
 	$mysql_user = getconfig('dbuser');
 	$mysql_password = getconfig('dbpass');
 	$db = new mysqli($mysql_host, $mysql_user, $mysql_password, $mysql_database);
-
 	if($db->connect_errno > 0){
 		errorlog('error not connected to database');
 	}
-	
+
 	if(!mysqli_set_charset($db, "utf8")){
 		errorlog('error charset not loading');
 	}
 	return $db;
 }
-
-
 function insert($sql){
 	$mysqli = connect();
 	$var = $mysqli->query($sql);
-	return $var; 
+	return $var;
 }
-
 function update($sql){
 	$mysqli = connect();
 	$var = $mysqli->query($sql);
 	return $var;
 }
-
-
 function listallraklap(){
 	$mysqli = connect();
 	$results = $mysqli->query(
-			"SELECT r.id as a1, a.nev as a2,s.name as a3 
-			, r.idopont as a4, r.mennyiseg as a5, r.statusz 
-			as a6 FROM supplier s, raklap r, alapanyag a 
+			"SELECT r.id as a1, a.nev as a2,s.name as a3
+			, r.idopont as a4, r.mennyiseg as a5, r.statusz
+			as a6 FROM supplier s, raklap r, alapanyag a
 			where a.id=r.alapanyag_id and r.beszallito_id = s.id order by a1");
-
 	print '<table align="center"class="raklaptable" border="1">';
 	print '<tr>';
 	print '<th>ID</th>';
@@ -50,7 +41,7 @@ function listallraklap(){
 	print '<th>Beérkezés ideje</th>';
 	print '<th>Mennyiség</th>';
 	print '<th>Hely</th>';
-	
+
 	print '</tr>';
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
@@ -59,111 +50,93 @@ function listallraklap(){
 		print '<td>'.$row["a3"].'</td>';
 		print '<td>'.$row["a4"].'</td>';
 		print '<td>'.$row["a5"].'</td>';
-		
+
 		if($row["a6"] == "0"){
 			print '<td>Raktar</td>';
 		}else{
 			print '<td>Ăśzem</td>';
 		}
-		
-		
+
+
 		print '</tr>';
 	}
 	print '</table>';
-
 	// Frees the memory associated with a result
 	$results->free();
 	// close connection
 	$mysqli->close();
 }
-
 function listallalapanyag(){
 	$mysqli = connect();
-	$results = $mysqli->query("SELECT * FROM alapanyag");
-
-
-	print '<table class="table table-hover">';
-	print '<thead class="thead-inverse">';
+	$results = $mysqli->query("SELECT p.id as id, p.name as name, c.name as cat FROM product p, category c WHERE c.id = p.category_id");
+	print '<table align="center"class="alapanyagtable" border="1">';
 	print '<tr>';
 	print '<th>Alapanyag Neve</th>';
-	print '<th>Kategória</th>';
-	print '<th><button class="btn btn-sm" onclick="ujalap()">Új alapanyag</button></th>';
+	print '<th>KategĂłria</th>';
+	print '<th><button onclick="ujalap()">Ăšj alapanyag</button></th>';
 	print '</tr>';
-	print '</thead>';
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
-		print '<td id="alapnev_'.$row["id"].'">'.$row["nev"].'</td>';
-		print '<td id="alapkat_'.$row["id"].'">'.$row["kategoria"].'</td>';
-		print '<td><button class="btn btn-sm" onclick="editalap('.$row["id"].')">Szerkeszt</button></td>';
+		print '<td id="alapnev_'.$row["id"].'">'.$row["name"].'</td>';
+		print '<td id="alapkat_'.$row["id"].'">'.$row["cat"].'</td>';
+		print '<td><button onclick="editalap('.$row["id"].')">Szerkeszt</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
-
 	// Frees the memory associated with a result
 	$results->free();
 	// close connection
 	$mysqli->close();
 }
-
 function listallsupplier(){
 	$mysqli = connect();
 	$results = $mysqli->query("SELECT * FROM supplier");
-
-	print '<table class="table table-hover">';
-	print '<thead class="thead-inverse">';
+	print '<table align="center" class="suppliertable" border="1">';
 	print '<tr>';
-	print '<th>Beszállító Neve</th>';
-	print '<th>Beszállító Címe</th>';
-	print '<th><button class="btn btn-sm" onclick="ujbesz()">Új Beszállitó</button></th>';
+	print '<th>BeszĂˇllĂ­tĂł Neve</th>';
+	print '<th>BeszĂˇllĂ­tĂł CĂ­me</th>';
+	print '<th><button onclick="ujbesz()">Ăšj Beszallito</button></th>';
 	print '</tr>';
-	print '</thead>';
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
 		print '<td id="besznev_'.$row["id"].'">'.$row["name"].'</td>';
 		print '<td id="beszcim_'.$row["id"].'">'.$row["address"].'</td>';
-		print '<td ><button class="btn btn-sm" onclick="editbeszallito('.$row["id"].')">szerkeszt</button></td>';
+		print '<td ><button onclick="editbeszallito('.$row["id"].')">szerkeszt</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
-
 	// Frees the memory associated with a result
 	$results->free();
 	// close connection
 	$mysqli->close();
 }
-
-
 function tablegen($results,$type,$headers){
 	print '<table  align="center" class="'.$type.'table" border="1">';
 	print '<tr>';
-		for($i = 0; $i < count($headers); $i++){
-			print '<th>'.$headers[$i].'</th>';
-		}
-		
+	for($i = 0; $i < count($headers); $i++){
+		print '<th>'.$headers[$i].'</th>';
+	}
+
 	print '</tr>';
 	while($row = $results->fetch_assoc()) {
-		print '<tr>';		
-		for($i = 0; $i < count($headers); $i++){			
+		print '<tr>';
+		for($i = 0; $i < count($headers); $i++){
 			print '<td>'.$row["a".strval($i)].'</td>';
-		}		
-		
+		}
+
 		print '</tr>';
 	}
 	print '</table>';
 }
-
-
-
-function listkiadas($alapanyag){
+function palletOutput($alapanyag){
 	$mysqli = connect();
 	$results = $mysqli->query(
-			"SELECT r.id as a1, a.nev as a2,s.name as a3
-			, r.idopont as a4, r.mennyiseg as a5, r.statusz
-			as a6 FROM supplier s, raklap r, alapanyag a
-			where a.id=r.alapanyag_id and r.beszallito_id = s.id  
-			 and r.statusz = 0  order by a1");
+			"SELECT p.id as a0, pr.name as a1, s.name as a2, p.amount as a3,
+ 				p.time as a4 FROM supplier s, pallet p, product pr
+			where pr.id=p.product_id and p.supplier_id = s.id
+			and p.deleted = 0 and pr.deleted = 0
+			order by a2");
 	//and a.nev='".$alapanyag."'
-
 	print '<table class="table table-hover">';
 	print '<thead>';
 	print '<tr>';
@@ -172,29 +145,86 @@ function listkiadas($alapanyag){
 	print '<th>Beszállító Neve</th>';
 	print '<th>Beérkezés ideje</th>';
 	print '<th>Mennyiség</th>';
-	print '<th>Hely</th>';
 	print '<th>Kiad</th>';
 	print '</tr>';
 	print '</thead>';
-	
+
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
+		print '<td>'.$row["a0"].'</td>';
 		print '<td>'.$row["a1"].'</td>';
 		print '<td>'.$row["a2"].'</td>';
-		print '<td>'.$row["a3"].'</td>';
 		print '<td>'.$row["a4"].'</td>';
-		print '<td>'.$row["a5"].'</td>';
+		print '<td>'.$row["a3"].'</td>';
 
-		if($row["a6"] == "0"){
-			print '<td>Raktár</td>';
-		}else{
-			print '<td>Ăśzem</td>';
-		}
-		print '<td><button class="button" onclick="kiad('.$row["a1"].')">Kiadás</button></td>';
-
+		print '<td><button class="button" onclick="output('.$row["a0"].','.$row["a3"].')">Kiadás</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
+	// Frees the memory associated with a result
+	$results->free();
+	// close connection
+	$mysqli->close();
+}
+function palletSpare($alapanyag){
+	$mysqli = connect();
+	$results = $mysqli->query(
+			"SELECT p.id as a0, pr.name as a1, s.name as a2, p.amount as a3,
+ 				p.time as a4 FROM supplier s, pallet p, product pr
+			where pr.id=p.product_id and p.supplier_id = s.id
+			and p.deleted = 0 and pr.deleted = 0
+			order by a2");
+	//and a.nev='".$alapanyag."'
+	print '<table class="table table-hover">';
+	print '<thead>';
+	print '<tr>';
+	print '<th>ID</th>';
+	print '<th>Alapanyag név</th>';
+	print '<th>Beszállító Neve</th>';
+	print '<th>Beérkezés ideje</th>';
+	print '<th>Mennyiség</th>';
+	print '<th>Kiad</th>';
+	print '</tr>';
+	print '</thead>';
+	while($row = $results->fetch_assoc()) {
+		print '<tr>';
+		print '<td>'.$row["a0"].'</td>';
+		print '<td>'.$row["a1"].'</td>';
+		print '<td>'.$row["a2"].'</td>';
+		print '<td>'.$row["a4"].'</td>';
+		print '<td>'.$row["a3"].'</td>';
+		print '<td><button class="button" onclick="trash('.$row["a0"].','.$row["a3"].')">Kiadás</button></td>';
+		print '</tr>';
+	}
+	print '</table>';
+	// Frees the memory associated with a result
+	$results->free();
+	// close connection
+	$mysqli->close();
+}
+function supplierOption(){
+	$mysqli = connect();
+	$results = $mysqli->query("SELECT * FROM supplier order by name");
+	print '<select id="besz" class="form-control">';
+	while($row = $results->fetch_assoc()) {
+		print '<option value="'.$row["id"].'">'.$row["name"].'</option>';
+	}
+	print '</select>';
+
+	// Frees the memory associated with a result
+	$results->free();
+	// close connection
+	$mysqli->close();
+}
+function productOption(){
+
+	$mysqli = connect();
+	$results = $mysqli->query("SELECT * FROM product order by name");
+	print '<select id="alap" class="form-control">';
+	while($row = $results->fetch_assoc()) {
+		print '<option  value="'.$row["id"].'">'.$row["name"].'</option>';
+	}
+	print '</select>';
 
 	// Frees the memory associated with a result
 	$results->free();
@@ -202,47 +232,14 @@ function listkiadas($alapanyag){
 	$mysqli->close();
 }
 
-
-function beszallitokoption(){
-	$mysqli = connect();
-	$results = $mysqli->query("SELECT * FROM supplier order by name");
-	print '<select id="besz" class="form-control">';
-	while($row = $results->fetch_assoc()) {
-		print '<option value="'.$row["id"].'">'.$row["name"].'</option>';		
-	}
-	print '</select>';
-	
-// Frees the memory associated with a result
-	$results->free();
-	// close connection
-	$mysqli->close();
-}
-
-function alapanyagoption(){
-	
-		$mysqli = connect();
-		$results = $mysqli->query("SELECT * FROM alapanyag order by nev");
-		print '<select id="alap" class="form-control">';
-		while($row = $results->fetch_assoc()) {
-			print '<option  value="'.$row["id"].'">'.$row["nev"].'</option>';
-		}
-		print '</select>';
-	
-		// Frees the memory associated with a result
-		$results->free();
-		// close connection
-		$mysqli->close();
-	}
-	
-function listnapibevetel(){
+function dailyInput(){
 	$mysqli = connect();
 	$results = $mysqli->query(
-			"SELECT r.id as a1, a.nev as a2,s.name as a3
-			, r.idopont as a4, r.mennyiseg as a5, r.statusz
-			as a6 FROM supplier s, raklap r, alapanyag a
-			where a.id=r.alapanyag_id and r.beszallito_id = s.id
-			 and r.statusz = 0 and idopont >= CURDATE()  order by a2");
-	
+			"SELECT p.id as a0, pr.name as a1, s.name as a2, p.amount as a3
+ 				FROM supplier s, pallet p, product pr
+			where pr.id=p.product_id and p.supplier_id = s.id
+			 and p.time >= CURDATE()  order by a2");
+
 	print '<table class="table table-inverse">';
 	print '<tr>';
 	print '<th>Alapanyag</th>';
@@ -251,28 +248,25 @@ function listnapibevetel(){
 	print '</tr>';
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
+		print '<td>'.$row["a1"].'</td>';
 		print '<td>'.$row["a2"].'</td>';
-		print '<td>'.$row["a3"].'</td>';		
-		print '<td>'.$row["a5"].'</td>';
+		print '<td>'.$row["a3"].'</td>';
 		print '</tr>';
 	}
 	print '</table>';
-	
+
 	// Frees the memory associated with a result
 	$results->free();
 	// close connection
 	$mysqli->close();
 }
-
-function listnapikiadas(){
+function dailyOutput(){
 	$mysqli = connect();
 	$results = $mysqli->query(
-			"SELECT r.id as a1, a.nev as a2,s.name as a3
-			, r.idopont as a4, r.mennyiseg as a5, r.kiadasido
-			as a6 FROM supplier s, raklap r, alapanyag a
-			where a.id=r.alapanyag_id and r.beszallito_id = s.id
-			 and r.statusz = 1 and idopont >= CURDATE()  order by a2");
-
+			"SELECT p.id as a0, pr.name as a1, p.amount as a2, o.time as a3
+ 				FROM  pallet p, product pr, output o
+			where pr.id=p.product_id and o.pallet_id = p.id
+			 and o.time >= CURDATE()  order by a2");
 	print '<table class="table table-inverse">';
 	print '<tr>';
 	print '<th>ID</th>';
@@ -282,60 +276,57 @@ function listnapikiadas(){
 	print '</tr>';
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
+		print '<td>'.$row["a0"].'</td>';
 		print '<td>'.$row["a1"].'</td>';
 		print '<td>'.$row["a2"].'</td>';
-		print '<td>'.$row["a5"].'</td>';
-		print '<td>'.$row["a6"].'</td>';
+		print '<td>'.$row["a3"].'</td>';
 		print '</tr>';
 	}
 	print '</table>';
-
 	// Frees the memory associated with a result
 	$results->free();
 	// close connection
 	$mysqli->close();
 }
-
-function listlejar(){
+function listOld(){
 	$mysqli = connect();
 	$results = $mysqli->query(
-			"SELECT r.id as a1, a.nev as a2,s.name as a3
-			, r.idopont as a4, r.mennyiseg as a5, r.kiadasido
-			as a6 FROM supplier s, raklap r, alapanyag a
-			where a.id=r.alapanyag_id and r.beszallito_id = s.id
-			 and r.statusz = 1 and idopont <= CURDATE()-5  order by a2");
-	
+			"SELECT p.id as a0, pr.name as a1, p.amount as a2, p.time as a3
+ 				FROM  pallet p, product pr
+			where pr.id=p.product_id
+			 and p.time < CURDATE()-5  order by a3");
+
 	$str =  '<table class="table table-inverse">';
 	$str .= '<tr>';
 	$str .= '<th>ID</th>';
 	$str .= '<th>Alapanyag</th>';
 	$str .= '<th>Mennyiség</th>';
-	$str .= '<th>Kiadási idő</th>';
+	$str .= '<th>Bevétel ideje</th>';
 	$str .= '</tr>';
 	$i = false;
 	while($row = $results->fetch_assoc()) {
 		$i = true;
 		$str .= '<tr>';
+		$str .= '<td>'.$row["a0"].'</td>';
 		$str .= '<td>'.$row["a1"].'</td>';
 		$str .= '<td>'.$row["a2"].'</td>';
-		$str .= '<td>'.$row["a5"].'</td>';
-		$str .= '<td>'.$row["a6"].'</td>';
+		$str .= '<td>'.$row["a3"].'</td>';
 		$str .= '</tr>';
 	}
 	$str .= '</table>';
-	
+
 	if($i){
 		print $str;
 	}else{
 		print "<br/>NINCS LEJÁRÓ TERMÉK :)";
 	}
-	
+
 	// Frees the memory associated with a result
 	$results->free();
 	// close connection
 	$mysqli->close();
 }
-
+function listUser(){
+	print "TODO";
+}
 ?>
-
-
