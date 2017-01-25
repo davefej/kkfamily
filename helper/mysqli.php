@@ -69,17 +69,19 @@ function listallraklap(){
 function listallalapanyag(){
 	$mysqli = connect();
 	$results = $mysqli->query("SELECT p.id as id, p.name as name, c.name as cat FROM product p, category c WHERE c.id = p.category_id");
-	print '<table align="center"class="alapanyagtable" border="1">';
+	print '<table class="table table-hover">';
+	print '<thead>';
 	print '<tr>';
 	print '<th>Alapanyag Neve</th>';
-	print '<th>KategĂłria</th>';
-	print '<th><button onclick="ujalap()">Ăšj alapanyag</button></th>';
+	print '<th>Kategória</th>';
+	print '<th><button class="btn btn-sm" onclick="ujalap()">Új alapanyag</button></th>';
 	print '</tr>';
+	print '</thead>';
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
 		print '<td id="alapnev_'.$row["id"].'">'.$row["name"].'</td>';
 		print '<td id="alapkat_'.$row["id"].'">'.$row["cat"].'</td>';
-		print '<td><button onclick="editalap('.$row["id"].')">Szerkeszt</button></td>';
+		print '<td><button class="btn btn-sm" onclick="editalap('.$row["id"].')">Szerkeszt</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
@@ -91,17 +93,19 @@ function listallalapanyag(){
 function listallsupplier(){
 	$mysqli = connect();
 	$results = $mysqli->query("SELECT * FROM supplier");
-	print '<table align="center" class="suppliertable" border="1">';
+	print '<table class="table table-hover">';
+	print '<thead>';
 	print '<tr>';
-	print '<th>BeszĂˇllĂ­tĂł Neve</th>';
-	print '<th>BeszĂˇllĂ­tĂł CĂ­me</th>';
-	print '<th><button onclick="ujbesz()">Ăšj Beszallito</button></th>';
+	print '<th>Beszállító Neve</th>';
+	print '<th>Beszállító címe</th>';
+	print '<th><button class="btn btn-sm" onclick="ujbesz()">Új Beszállító</button></th>';
 	print '</tr>';
+	print '</thead>';
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
 		print '<td id="besznev_'.$row["id"].'">'.$row["name"].'</td>';
 		print '<td id="beszcim_'.$row["id"].'">'.$row["address"].'</td>';
-		print '<td ><button onclick="editbeszallito('.$row["id"].')">szerkeszt</button></td>';
+		print '<td ><button class="btn btn-sm" onclick="editbeszallito('.$row["id"].')">szerkeszt</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
