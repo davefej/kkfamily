@@ -24,20 +24,20 @@
 			<tr>
 				<td>
 					<?php 
-						beszallitokoption();
+						supplierOption();
 					?>
 				</td>
 			
 				<td>
 					<?php 
-						alapanyagoption();
+						productOption();
 					?>	
 				<td>
 					<input class="form-control" id="suly" type="number" />
 				</td>
 			</tr>
 		</table>
-		<button class="btn btn-primary btn-block" onclick="bevetel()">Mentés</button>
+		<button class="btn btn-primary btn-block" onclick="input()">Mentés</button>
 	</div>
 </div>
 

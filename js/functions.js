@@ -16,11 +16,11 @@ function ujalap(){
 			str += "</th>";
 			str += "<td>";
 			str += "<select id='ujalapkat'>";
-			str += "<option value='zöldség'>zöldség</option>";
-			str += "<option value='káposzta'>káposzta</option>";
-			str += "<option value='gyümölcs'>gyümölcs</option>";
-			str += "<option value='saláta'>saláta</option>";
-			str += "<option value='egyéb'>egyéb</option>";
+			str += "<option value='1'>zöldség</option>";
+			str += "<option value='2'>káposzta</option>";
+			str += "<option value='3'>gyümölcs</option>";
+			str += "<option value='4'>saláta</option>";
+			str += "<option value='5'>egyéb</option>";
 			str += "</select>";
 			str += "</td>";
 		str += "</tr>";
@@ -55,25 +55,25 @@ function ujbesz(){
 function bbsave(){
 	var tipus = $('#type').val();
 	if(tipus == "ujalap"){
-		var nev = $('#ujalapnev').val()
-		var kat = $('#ujalapkat').val()
-		ujalapment(nev,kat)
+		var name = $('#ujalapnev').val()
+		var category_id = $('#ujalapkat').val()
+		newProduct(name,category_id,0)
 		
 	}else if(tipus == "ujbesz"){
-		var nev = $('#ujbesznev').val()
-		var cim = $('#ujbeszcim').val()
-		ujbeszment(nev,cim)
+		var name = $('#ujbesznev').val()
+		var address = $('#ujbeszcim').val()
+		newSupplier(name,address)
 	
 	}else if(tipus == "editbesz"){
-		var nev = $('#editbesznev').val()
-		var cim = $('#editbeszcim').val()
+		var name = $('#editbesznev').val()
+		var address = $('#editbeszcim').val()
 		var id = $('#type').attr("id2");
-		editbeszment(id,nev,cim)
+		updateSupplier(id,name,address)
 	}else if(tipus == "editalap"){
-		var nev = $('#editalapnev').val()
-		var kat = $('#editalapkat').val()
+		var name = $('#editalapnev').val()
+		var category_id = $('#editalapkat').val()
 		var id = $('#type').attr("id2");
-		editalapment(id,nev,kat)
+		updateProduct(id,name,category_id,0)
 		
 	}
 	
@@ -127,27 +127,27 @@ function editalap(id){
 			str += "</th>";
 			str += "<td>";
 			str += "<select id='editalapkat'>";
-				str += "<option value='zöldség'"
+				str += "<option value='1'"
 				if(kat == 'zöldség'){
 					str += 'selected';
 				}
 				str+= ">zöldség</option>";
-				str += "<option value='káposzta'"
+				str += "<option value='2'"
 				if(kat == 'káposzta'){
 					str += 'selected';
 				}
 				str += ">káposzta</option>";
-				str += "<option value='gyümölcs'"
+				str += "<option value='3'"
 				if(kat == 'gyümölcs'){
 					str += 'selected';
 				}
 				str += ">gyümölcs</option>";
-				str += "<option value='saláta'"
+				str += "<option value='4'"
 					if(kat == 'saláta'){
 						str += 'selected';
 					}
 					str += ">saláta</option>";
-				str += "<option value='egyéb'"
+				str += "<option value='5'"
 				if(kat == 'egyéb'){
 					str += 'selected';
 				}

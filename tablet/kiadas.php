@@ -4,7 +4,7 @@ $selector="kiadas";
 require("../header.php");
 
 require('../helper/mysqli.php');
-	listkiadas('paprika');
+	palletOutput('paprika');
 
 require("../footer.php");
 ?>
