@@ -9,7 +9,7 @@ if(array_key_exists("type",$data)){
 	if($data["type"] == "category"){				
 		$sql = "INSERT INTO `category` (`id`, `name`, `deleted`) VALUES (NULL, '".$data['name']."', '0')";
 	}else if($data["type"] == "user"){
-		$sql = "INSERT INTO `user` (`id`, `name`, `deleted`) VALUES (NULL, '".$data['name']."', '0')";				
+		$sql = "INSERT INTO `user` (`id`, `name`, `password`, `type`, `deleted`) VALUES (NULL, '".$data['name']."', '".$data['password']."', '".$data['user_type']."' , '0')";				
 	}else if($data["type"] == "supplier"){
 		$sql = "INSERT INTO `supplier` (`id`, `name`, `address`, `deleted`) VALUES (NULL, '".$data['name']."', '".$data['address']."', '0')";
 	}else if($data["type"] == "product"){

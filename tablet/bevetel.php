@@ -3,7 +3,7 @@
 	$selector = "bevetel";
 	require("../common/header.php");
 	
-	require('../helper/mysqli.php');
+
 ?>
 <div class="container-fluid">
 	<div class="col-md-11">
