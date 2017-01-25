@@ -1,10 +1,12 @@
 body { 
-    background-color:cornsilk; 
-   
+    background: red; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(left top, #00767F, #00ffba); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(bottom right, #00767F, #00ffba); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(bottom right, #00767F, #00ffba); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to bottom right, #00767F, #00ffba); /* Standard syntax */ 
     background-repeat: no-repeat;
     background-attachment: fixed;
-    padding-top: 80px;
-    font-size:20px;
+    padding-top: 70px;
 }
 h1 {
     color: #fff3e0;
@@ -13,114 +15,62 @@ h1 {
 p{
     color: #fffdf9;
 }
-th{
-    line-height: 28px;
-     background-color:#3E2723;
-     color:white;
-}
-
-td{
-	font-size:120%;
-}
 
 a{
-	color: white;
-    text-decoration: none;
+	color: #0F003B;
+	font-weight: bold;
 }
 
-.thumbnail{
-    background: #fffdf9 !important;
+a:hover{
+	color: #0F003B;
+	text-decoration: none;
 }
+
+a:visited{
+	color: #0F003B;
+	text-decoration: none;
+}
+
+a:active{
+	color: #0F003B;
+	text-decoration: none;
+}
+
+.panel{
+	width:80%;
+	margin: 0 auto;
+    float: none;
+    margin-bottom: 10px;
+    max-height: 500px;
+    overflow-y: scroll;
+}
+
 .centerBlock {
-    display: table;
     margin: 0 auto;
     float: none;
 }
 
-
-.header{
-	height: 70px;
-    padding: 15px 10px 0;
-    box-sizing: border-box;
-    -webkit-box-shadow: 0px 0px 10px 2px #000000;
-    -moz-box-shadow: 0px 0px 10px 2px #000000;
-    box-shadow: 0px 0px 10px 2px #000000;
-    z-index: 2;
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    background-color: #3E2723;
+.panel-heading{
+	font-size: 18px;
 }
 
-.selheader{
-	
-	color: #ff8000;
-   
-	
+.col-md-6{
+	margin-bottom: 10px;
 }
 
-.headerspan{
-	color: white;
-	font-color: white;
-    margin-top: 10px;
-    margin-left: 25px;
-    margin-right: 15px;
-    font-size: 200%;
-    display: inline-block;
-    text-decoration: none;
+.table{
+	float: none;
+    margin: 0 auto;
+	width: 80%;
 }
 
-.logo{
-	height:70px;
-	position: fixed;    
-    right: 0;
-    top: 0;
-}
-
-.maintable{
-	width:95%;
-	border-collapse: collapse;
-}
-
-.mainth{
+thead{
 	text-align:center;
+	color:white;
 }
 
-.maintd{
-	width:33%;
-	height:350px;
-}
-
-.maintddiv{
-	height:95%;
-	overflow-y: scroll;
-	font-size:120%;
-	text-align:center;
-}
-
-.raklaptable{
-	width:90%;
-	text-align:center;
-	font-size:110%;
-	border-collapse: collapse;
-}
-.suppliertable{
-	width:90%;
-	text-align:center;
-	font-size:110%;
-	border-collapse: collapse;
-}
-
-.alapanyagtable{
-	width:90%;
-	text-align:center;
-	font-size:110%;
-	border-collapse: collapse;
-}
-
-.napibevettable{
-	border-collapse:collapse;
-	text-align:center;
-	width:95%;
+.navbar-inverse .navbar-brand:hover, 
+.navbar-inverse .navbar-brand:focus {
+  background-color: transparent;
+  color: #999999;
 }

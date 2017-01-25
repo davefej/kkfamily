@@ -1,10 +1,10 @@
 <?php
 $selected="tablet";
-$selector="kiadas";
+$selector="spare";
 require("../header.php");
 
 require('../helper/mysqli.php');
-	listkiadas('paprika');
+listkiadas('paprika');
 
 require("../footer.php");
 ?>

@@ -47,7 +47,7 @@ function listallraklap(){
 	print '<th>Alapanyag név</th>';
 	print '<th>Beszállító Neve</th>';
 	print '<th>Beérkezés ideje</th>';
-	print '<th>Mennyiseg</th>';
+	print '<th>Mennyiség</th>';
 	print '<th>Hely</th>';
 	
 	print '</tr>';
@@ -62,7 +62,7 @@ function listallraklap(){
 		if($row["a6"] == "0"){
 			print '<td>Raktar</td>';
 		}else{
-			print '<td>Üzem</td>';
+			print '<td>Ăśzem</td>';
 		}
 		
 		
@@ -84,8 +84,8 @@ function listallalapanyag(){
 	print '<table align="center"class="alapanyagtable" border="1">';
 	print '<tr>';
 	print '<th>Alapanyag Neve</th>';
-	print '<th>Kategória</th>';
-	print '<th><button onclick="ujalap()">Új alapanyag</button></th>';
+	print '<th>KategĂłria</th>';
+	print '<th><button onclick="ujalap()">Ăšj alapanyag</button></th>';
 	print '</tr>';
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
@@ -108,9 +108,9 @@ function listallsupplier(){
 
 	print '<table align="center" class="suppliertable" border="1">';
 	print '<tr>';
-	print '<th>Beszállító Neve</th>';
-	print '<th>Beszállító Címe</th>';
-	print '<th><button onclick="ujbesz()">Új Beszallito</button></th>';
+	print '<th>BeszĂˇllĂ­tĂł Neve</th>';
+	print '<th>BeszĂˇllĂ­tĂł CĂ­me</th>';
+	print '<th><button onclick="ujbesz()">Ăšj Beszallito</button></th>';
 	print '</tr>';
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
@@ -159,17 +159,19 @@ function listkiadas($alapanyag){
 			 and r.statusz = 0  order by a1");
 	//and a.nev='".$alapanyag."'
 
-	print '<table align="center" class="tablettable" border="1">';
+	print '<table class="table table-hover">';
+	print '<thead>';
 	print '<tr>';
 	print '<th>ID</th>';
 	print '<th>Alapanyag név</th>';
 	print '<th>Beszállító Neve</th>';
 	print '<th>Beérkezés ideje</th>';
-	print '<th>Mennyiseg</th>';
+	print '<th>Mennyiség</th>';
 	print '<th>Hely</th>';
 	print '<th>Kiad</th>';
-
 	print '</tr>';
+	print '</thead>';
+	
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
 		print '<td>'.$row["a1"].'</td>';
@@ -179,11 +181,11 @@ function listkiadas($alapanyag){
 		print '<td>'.$row["a5"].'</td>';
 
 		if($row["a6"] == "0"){
-			print '<td>Raktar</td>';
+			print '<td>Raktár</td>';
 		}else{
-			print '<td>Üzem</td>';
+			print '<td>Ăśzem</td>';
 		}
-		print '<td><button class="kiadbutton" onclick="kiad('.$row["a1"].')">Kiadás!</button></td>';
+		print '<td><button class="button" onclick="kiad('.$row["a1"].')">Kiadás</button></td>';
 
 		print '</tr>';
 	}
@@ -199,7 +201,7 @@ function listkiadas($alapanyag){
 function beszallitokoption(){
 	$mysqli = connect();
 	$results = $mysqli->query("SELECT * FROM supplier order by name");
-	print '<select id="besz" class="bevoption">';
+	print '<select id="besz" class="form-control">';
 	while($row = $results->fetch_assoc()) {
 		print '<option value="'.$row["id"].'">'.$row["name"].'</option>';		
 	}
@@ -215,7 +217,7 @@ function alapanyagoption(){
 	
 		$mysqli = connect();
 		$results = $mysqli->query("SELECT * FROM alapanyag order by nev");
-		print '<select id="alap" class="bevoption">';
+		print '<select id="alap" class="form-control">';
 		while($row = $results->fetch_assoc()) {
 			print '<option  value="'.$row["id"].'">'.$row["nev"].'</option>';
 		}
@@ -236,11 +238,11 @@ function listnapibevetel(){
 			where a.id=r.alapanyag_id and r.beszallito_id = s.id
 			 and r.statusz = 0 and idopont >= CURDATE()  order by a2");
 	
-	print '<table align="center" class="napibevettable" border="1">';
+	print '<table class="table table-inverse">';
 	print '<tr>';
 	print '<th>Alapanyag</th>';
 	print '<th>Beszállító Neve</th>';
-	print '<th>Mennyiseg</th>';
+	print '<th>Mennyiség</th>';
 	print '</tr>';
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
@@ -266,12 +268,12 @@ function listnapikiadas(){
 			where a.id=r.alapanyag_id and r.beszallito_id = s.id
 			 and r.statusz = 1 and idopont >= CURDATE()  order by a2");
 
-	print '<table align="center" class="napibevettable" border="1">';
+	print '<table class="table table-inverse">';
 	print '<tr>';
 	print '<th>ID</th>';
 	print '<th>Alapanyag</th>';
-	print '<th>Mennyiseg</th>';
-	print '<th>Kiadás idő</th>';
+	print '<th>Mennyiség</th>';
+	print '<th>Kiadási idő</th>';
 	print '</tr>';
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
@@ -298,12 +300,12 @@ function listlejar(){
 			where a.id=r.alapanyag_id and r.beszallito_id = s.id
 			 and r.statusz = 1 and idopont <= CURDATE()-5  order by a2");
 	
-	$str =  '<table align="center" class="napibevettable" border="1">';
+	$str =  '<table class="table table-inverse">';
 	$str .= '<tr>';
 	$str .= '<th>ID</th>';
 	$str .= '<th>Alapanyag</th>';
-	$str .= '<th>Mennyiseg</th>';
-	$str .= '<th>Kiadás idő</th>';
+	$str .= '<th>Mennyiség</th>';
+	$str .= '<th>Kiadási idő</th>';
 	$str .= '</tr>';
 	$i = false;
 	while($row = $results->fetch_assoc()) {

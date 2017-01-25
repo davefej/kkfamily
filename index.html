@@ -1,27 +1,46 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<link rel="stylesheet" type="text/css" href="adminstyle.css" >
 		<title>kkfamily admin</title>
 		<meta charset="UTF-8">
-		<script src="js/login.js"></script>
+		<link href="js/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Overpass+Mono:700" rel="stylesheet">	
 	</head>
-	<body style="text-align:center;background-color:#3E2723;color:white;">
-
-		<div id="loginmain" class="loginmain">
-		<span class="loginspan">ÜDVÖZÖLJÜK A KKFAMILY RAKTÁRNYILVÁNTARTÓ RENDSZERÉNEK TESZTVERZIÓJÁBAN</span>
-			<form action="index.php" method="POST">
-				<img src="img/logo.png"><br>
-				<label class="logintitle" ></label><br>
-				<input type="text" placeholder="USERNAME" name="username"  ></input><br>
-				 <br/>
-				<input type="password" placeholder="PASSWORD" name="password" ></input><br>
-				<br/>
-				<input id="login" type="submit" class="admin_button" value="Click to Login!"></input>		
-			</form>
+	<body style="text-align:center;background-color:#00767F;color:white;">
+		<!-- CSS-be átírni!! -->
+		<h2></h2>
+		<span style="font-family: 'Overpass Mono', monospace; color: #E8716D; font-size:16px;">ÜDVÖZÖLJÜK A KKFAMILY RAKTÁRNYILVÁNTARTÓ RENDSZERÉNEK TESZTVERZIÓJÁBAN!</span>
+		
+		<div class="container">
+			<div class="row">
+    			<div class="span2 well col-lg-5"  style="float: none; margin: 0 auto;">
+    				<legend>KK Family</legend>
+					<form class="form-signin" action="index.php" method="POST">
+						<div class="input-group input-group-lg">
+							<span class="glyphicon glyphicon-user input-group-addon"></span>
+					        <input type="text" class="form-control input-medium" placeholder="Felhasználó" name="username" required autofocus>
+					    </div>
+				        <div class="input-group input-group-lg">
+					        <span class="glyphicon glyphicon-lock input-group-addon"></span>
+					        <input type="password" class="form-control" placeholder="Jelszó" name="password" required>
+				        </div>
+				        <button class="btn btn-lg btn-primary btn-block" type="submit">Bejelentkezés</button>
+				     </form>
+				</div>
+			</div>                
 		</div>
-
+		
+		<footer class="footer navbar-fixed-bottom">
+            <div class="container text-center">
+                <p style="font-color: white;">made by <b>David Varga</b> &amp; <b>David Szanto</b> | Bootstrap 3</p>
+            </div>
+        </footer>
  
- 
+ 		<!-- Bootstrap core JavaScript
+	    ================================================== -->
+	    <!-- Placed at the end of the document so the pages load faster -->
+	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+	    <script src="js/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 	</body>
 </html>

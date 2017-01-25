@@ -1,30 +1,52 @@
 
 <html>
 	<head>
-		<title>admin</title>
+		<?php
+			if($selected == "admin")
+				echo "<title> Kezelőfelület | KK Family</title>";
+			else if($selector == "kiadas")
+				echo "<title> Kiadás | KK Family</title>";
+			else if($selector == "bevetel")
+				echo "<title> Bevétel | KK Family</title>";
+		?>
 		<meta http-equiv="cache-control" content="max-age=0" />
-  	<meta http-equiv="cache-control" content="no-cache" />
-  	<meta http-equiv="expires" content="0" />
-  	<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
-  	<meta http-equiv="pragma" content="no-cache" />
-		<meta charset="UTF-8">
-		<link rel="stylesheet" type="text/css" href="css/styles.css">
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	  	<meta http-equiv="cache-control" content="no-cache" />
+	  	<meta http-equiv="expires" content="0" />
+	  	<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+	  	<meta http-equiv="pragma" content="no-cache" />
+		<meta charset="utf-8">
 		
 		
-		<script src="js/jquery1.9.1.js" ></script>
-		<script src="js/bootbox.js" ></script>
-		 <script src="js/bootstrap.js"></script>
-		 <script src="js/functions.js" ></script>
-		<script src="js/server.js" ></script>		
+		
+		<?php 
+			if($selected == "admin"){
+				echo"	<link href=\"js/bootstrap-3.3.7-dist/css/bootstrap.min.css\" rel=\"stylesheet\">
+						<link rel=\"stylesheet\" type=\"text/css\" href=\"css/styles.css?v=<?php echo rand();?>\">
+						<script src=\"js/jquery1.9.1.js\" ></script>
+						<script src=\"js/bootbox.js\" ></script>
+						<script src=\"js/functions.js\" ></script>
+						<script src=\"js/server.js\" ></script>
+						<script src=\"js/Chart.js\"></script>";
+			}
+			else if($selected == "tablet"){
+						//TODO: kivenni a style.css után a random verziószámot
+						$version = rand();
+				echo"	<link href=\"../js/bootstrap-3.3.7-dist/css/bootstrap.min.css\" rel=\"stylesheet\">
+						<link rel=\"stylesheet\" type=\"text/css\" href=\"../css/tabletstyles.css?v=$version\">
+	  					<script src=\"../js/jquery1.9.1.js\" ></script>
+						<script src=\"../js/bootbox.js\" ></script>
+						<script src=\"../js/functions.js\" ></script>
+						<script src=\"../js/server.js\" ></script>
+						<script src=\"../js/Chart.js\"></script>
+						<script src=\"../js/tablet.js\"></script>";
+			}
+		?>
+				
 	</head>
 	<body class="admin">
-		<header class="header" id="indexheader" >
-			<div class="headerspancontainer">
-				<div class="headerspan"><a <?php if($selected =="index"){echo "class='selheader'";}?>  href="admin.php">Kezdőlap</a></div>
-				<div class="headerspan"><a <?php if($selected =="raktar"){echo "class='selheader'";}?>  href="raktar.php">Raklapok</a></div>
-				<div class="headerspan"><a <?php if($selected =="alapanyag"){echo "class='selheader'";}?>  href="alapanyag.php">Alapanyagok</a></div>
-				<div class="headerspan"><a <?php if($selected =="beszallito"){echo "class='selheader'";}?>  href="beszallito.php">Beszállítók</a></div>
-				<img class="logo"  src="img/logo.png"/>				
-			</div>		
-		</header>
+		<?php 
+			if($selected == "admin")
+				require("adminnavbar.php");
+			else
+				require("navbar.php");
+		?>
