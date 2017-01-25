@@ -1,5 +1,6 @@
 <?php
 $selected ="admin";
+$selector = "admin";
 require("header.php");
 ?>
   

@@ -59,12 +59,14 @@ a:active{
 }
 
 .table{
+	background-color: white;
 	float: none;
     margin: 0 auto;
 	width: 80%;
 }
 
 thead{
+	background-color: #555555;
 	text-align:center;
 	color:white;
 }

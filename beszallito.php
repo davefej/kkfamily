@@ -1,6 +1,7 @@
 
 <?php
-$selected ="beszallito";
+$selected ="admin";
+$selector = "beszallito";
 require("header.php");
 
 require('helper/mysqli.php');
