@@ -3,8 +3,7 @@ $selected ="admin";
 $selector = "storage";
 require("../common/header.php");
 
-require('../helper/mysqli.php');
-listAllInStore();
+listStore();
 ?>
 
 <!-- BAR CHART -->
