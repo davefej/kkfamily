@@ -1,7 +1,9 @@
 <?php
 $selected ="admin";
+$selector ="admin";
 require("../common/header.php");
 require('../helper/mysqli.php');
+
 ?>
   
   <div class="panel-group">

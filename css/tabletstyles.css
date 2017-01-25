@@ -82,8 +82,9 @@ a:active{
 }
 
 thead{
+	background-color: #555555;
 	text-align:center;
-	color: #777777;
+	color:white;
 }
 
 .btn-block{
