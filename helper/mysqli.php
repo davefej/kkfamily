@@ -33,6 +33,7 @@ function update($sql){
 	return $var;
 }
 
+
 function listallraklap(){
 	$mysqli = connect();
 	$results = $mysqli->query(
