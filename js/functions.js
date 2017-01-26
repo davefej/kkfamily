@@ -81,7 +81,8 @@ function bbsave(){
 function createProduct(){
 	
 	var str = '<input type="hidden" id="type" value="createProduct"/>';
-	str += "<table align='center'>";
+	str += '<table class = "table table-hover">';
+	str += "<thead>";
 		str += "<tr>";
 			str += "<th>";
 				str += "Név";
@@ -90,6 +91,7 @@ function createProduct(){
 				str += "Kategória";
 			str += "</th>";
 		str += "</tr>";
+	str += "</thead>";
 		str += "<tr>";
 			str += "<td>";
 				str += "<input type='text' maxlength='50' id='new_prod_name'>";
@@ -102,10 +104,10 @@ function createProduct(){
 	bootbox.alert(str);
 }
 
-
 function createSupplier(){
 	var str = '<input type="hidden" id="type" value="createSupplier"/>';
-	str += "<table align='center'>";
+	str += '<table class = "table table-hover">';
+	str += "<thead>";
 		str += "<tr>";
 			str += "<th>";
 				str += "Név";
@@ -114,6 +116,7 @@ function createSupplier(){
 				str += "Cím";
 			str += "</th>";
 		str += "</tr>";
+	str += "</thead>";
 		str += "<tr>";
 			str += "<td>";
 				str += "<input type='text' maxlength='50' id='new_supplier_name'>";
@@ -128,7 +131,8 @@ function createSupplier(){
 
 function createUser(){
 	var str = '<input type="hidden" id="type" value="createUser"/>';
-	str += "<table align='center'>";
+	str += '<table class = "table table-hover">';
+	str += "<thead>";
 		str += "<tr>";
 			str += "<th>";
 				str += "Név";
@@ -137,6 +141,7 @@ function createUser(){
 				str += "Jelszó";
 			str += "</th>";
 		str += "</tr>";
+	str += "</thead>";
 		str += "<tr>";
 			str += "<td>";
 				str += "<input type='text' maxlength='50' id='new_user_name'>";
@@ -157,13 +162,15 @@ function createUser(){
 
 function createCategory(){
 	var str = '<input type="hidden" id="type" value="createCategory"/>';
-	str += "<table align='center'>";
+	str += '<table class = "table table-hover">';
+	str += "<thead>";
 		str += "<tr>";
 			str += "<th>";
 				str += "Név";
 			str += "</th>";
 			
 		str += "</tr>";
+	str += "</thead>";
 		str += "<tr>";
 			str += "<td>";
 				str += "<input type='text' maxlength='50' id='new_category_name'>";
@@ -176,12 +183,14 @@ function createCategory(){
 
 function createOutput(pallet_id,full){
 	var str = '<input type="hidden" id="type" value="createOutput" id2="'+pallet_id+'"/>';
-	str += "<table align='center'>";
+	str += '<table class = "table table-hover">';
+	str += "<thead>";
 		str += "<tr>";
 			str += "<th>";
 				str += "Mennyiség";
 			str += "</th>";			
 		str += "</tr>";
+	str += "</thead>";
 		str += "<tr>";
 			str += "<td>";
 				str += "<input type='number' maxlength='50' value='"+full+"' id='output_amount'>";
@@ -195,12 +204,14 @@ function createOutput(pallet_id,full){
 
 function createTrash(pallet_id,full){
 	var str = '<input type="hidden" id="type" value="createTrash" id2="'+pallet_id+'"/>';
-	str += "<table align='center'>";
+	str += '<table class = "table table-hover">';
+	str += "<thead>";
 		str += "<tr>";
 			str += "<th>";
 				str += "Mennyiség";
 			str += "</th>";			
 		str += "</tr>";
+	str += "</thead>";
 		str += "<tr>";
 			str += "<td>";
 				str += "<input type='number' maxlength='50' value='"+full+"' id='trash_amount'>";
@@ -211,30 +222,32 @@ function createTrash(pallet_id,full){
 	bootbox.alert(str);
 	
 }
-/////////////EDIT///////////
 
+/////////////EDIT///////////
 
 function editSupplier(id){
 	var nev = $('#besznev_'+id).html();
 	var cim = $('#beszcim_'+id).html();
 	var str = '<input type="hidden" id="type" value="editSupplier" id2="'+id+'"/>';
-	str += "<table align='center'>";
-	str += "<tr>";
-		str += "<th>";
-			str += "Név";
-		str += "</th>";
-		str += "<th>";
-			str += "Cím";
-		str += "</th>";
-	str += "</tr>";
-	str += "<tr>";
-		str += "<td>";
-			str += "<input type='text' maxlength='50' value='"+nev+"' id='edit_supplier_name'>";
-		str += "</th>";
-		str += "<td>";
-		str += "<input type='text' maxlength='50' value='"+cim+"' id='edit_supplier_address'>";
-		str += "</td>";
-	str += "</tr>";
+	str += '<table class = "table table-hover">';
+	str += "<thead>";
+		str += "<tr>";
+			str += "<th>";
+				str += "Név";
+			str += "</th>";
+			str += "<th>";
+				str += "Cím";
+			str += "</th>";
+		str += "</tr>";
+	str += "</thead>";
+		str += "<tr>";
+			str += "<td>";
+				str += "<input type='text' maxlength='50' value='"+nev+"' id='edit_supplier_name'>";
+			str += "</th>";
+			str += "<td>";
+			str += "<input type='text' maxlength='50' value='"+cim+"' id='edit_supplier_address'>";
+			str += "</td>";
+		str += "</tr>";
 str += "</table>";
 	bootbox.alert(str);
 	
@@ -244,7 +257,8 @@ function editProduct(id){
 	var nev = $('#alapnev_'+id).html();
 	var kat = $('#alapkat_'+id).html();
 	var str = '<input type="hidden" id="type" value="editProduct" id2="'+id+'"/>';
-	str += "<table align='center'>";
+	str += '<table class = "table table-hover">';
+	str += "<thead>";
 		str += "<tr>";
 			str += "<th>";
 				str += "Név";
@@ -253,6 +267,7 @@ function editProduct(id){
 				str += "Kategória";
 			str += "</th>";
 		str += "</tr>";
+	str += "</thead>";
 		str += "<tr>";
 			str += "<td>";
 				str += "<input type='text' maxlength='50' value='"+nev+"' id='edit_prod_name'>";
@@ -270,13 +285,15 @@ function editUserName(id){
 	
 	var nev = $('#username_'+id).html();
 	var str = '<input type="hidden" id="type" value="editUserName" id2="'+id+'"/>';
-	str += "<table align='center'>";
+	str += '<table class = "table table-hover">';
+	str += "<thead>";
 		str += "<tr>";
 			str += "<th>";
 				str += "Név";
 			str += "</th>";
 			
 		str += "</tr>";
+	str += "</thead>";
 		str += "<tr>";
 			str += "<td>";
 				str += "<input type='text' maxlength='50' value='"+nev+"' id='edit_user_name'>";
@@ -292,13 +309,15 @@ function editUserPass(id){
 	
 
 	var str = '<input type="hidden" id="type" value="editUserPass" id2="'+id+'"/>';
-	str += "<table align='center'>";
+	str += '<table class = "table table-hover">';
+	str += "<thead>";
 		str += "<tr>";
 			str += "<th>";
 				str += "Jelszó";
 			str += "</th>";
-			
+	str += "</thead>";		
 		str += "</tr>";
+	
 		str += "<tr>";
 			str += "<td>";
 				str += "<input type='password' maxlength='50'  id='edit_user_pass'>";
@@ -313,13 +332,15 @@ function editUserPass(id){
 function editCategory(id){
 	var nev = $('#categoryname_'+id).html();
 	var str = '<input type="hidden" id="type" value="editCategory" id2="'+id+'"/>';
-	str += "<table align='center'>";
+	str += '<table class = "table table-hover">';
+	str += "<thead>";
 		str += "<tr>";
 			str += "<th>";
 				str += "Név";
 			str += "</th>";
 			
 		str += "</tr>";
+	str += "</thead>";
 		str += "<tr>";
 			str += "<td>";
 				str += "<input type='text' maxlength='50' value="+nev+" id='edit_category_name'>";

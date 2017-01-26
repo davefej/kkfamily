@@ -2,11 +2,10 @@
 $selected ="admin";
 $selector ="admin";
 require("../common/header.php");
-
-
 ?>
   
   <div class="panel-group">
+	  
 	  <div class="panel panel-info">
 	  	<div class="panel-heading">
 	  		<a data-toggle="collapse" href="#collapse1">
@@ -102,11 +101,9 @@ require("../common/header.php");
 		  	<table class="table">
 		  		<tr>
 			  		<td>
-						<div>
 						<?php 			
 							dailyOutput();
 						?>
-						</div>
 					</td>
 				</tr>
 		  	</table>
@@ -158,6 +155,7 @@ require("../common/header.php");
 			</div>
 		</div>
 	</div>
+
 <?php 
 require("../common/footer.php");
 ?>

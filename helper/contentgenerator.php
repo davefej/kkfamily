@@ -46,7 +46,7 @@ function listProduct(){
 	print '<tr>';
 	print '<th>Alapanyag Neve</th>';
 	print '<th>Kategória</th>';
-	print '<th><button class="btn btn-sm" onclick="createProduct()">Új alapanyag</button></th>';
+	print '<th><button class="btn btn-sm" id="newRetailer" onclick="createProduct()">Új alapanyag</button></th>';
 	print '<th>Törlés</th>';
 	print '</tr>';
 	print '</thead>';
@@ -55,7 +55,7 @@ function listProduct(){
 		print '<td id="alapnev_'.$row["id"].'">'.$row["name"].'</td>';
 		print '<td id="alapkat_'.$row["id"].'">'.$row["cat"].'</td>';
 		print '<td><button class="btn btn-sm" id="newRetailer"  onclick="editProduct('.$row["id"].')">Szerkeszt</button></td>';
-		print '<td><button class="btn btn-sm" id="newRetailer"  onclick="deleteProduct('.$row["id"].')">Töröl</button></td>';
+		print '<td><button class="btn btn-sm btn-danger" onclick="deleteProduct('.$row["id"].')">Töröl</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
@@ -73,7 +73,7 @@ function listSupplier(){
 	print '<tr>';
 	print '<th>Beszállító Neve</th>';
 	print '<th>Beszállító címe</th>';
-	print '<th><button class="btn btn-sm" onclick="createSupplier()">Új Beszállító</button></th>';
+	print '<th><button class="btn btn-sm" id="newRetailer" onclick="createSupplier()">Új Beszállító</button></th>';
 	print '<th>Törlés</th>';
 	print '</tr>';
 	print '</thead>';
@@ -82,7 +82,7 @@ function listSupplier(){
 		print '<td id="besznev_'.$row["id"].'">'.$row["name"].'</td>';
 		print '<td id="beszcim_'.$row["id"].'">'.$row["address"].'</td>';
 		print '<td ><button class="btn btn-sm" id="newRetailer" onclick="editSupplier('.$row["id"].')">Szerkeszt</button></td>';
-		print '<td ><button class="btn btn-sm" id="newRetailer" onclick="deleteSupplier('.$row["id"].')">Töröl</button></td>';
+		print '<td ><button class="btn btn-sm btn-danger" onclick="deleteSupplier('.$row["id"].')">Töröl</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
@@ -99,7 +99,7 @@ function listCategory(){
 	print '<thead>';
 	print '<tr>';
 	print '<th>Kategória Neve</th>';
-	print '<th><button class="btn btn-sm" onclick="createCategory()">Új Kategória</button></th>';
+	print '<th><button class="btn btn-sm" id="newRetailer" onclick="createCategory()">Új Kategória</button></th>';
 	print '<th>Törlés</th>';
 	print '</tr>';
 	print '</thead>';
@@ -107,7 +107,7 @@ function listCategory(){
 		print '<tr>';
 		print '<td id="categoryname_'.$row["id"].'">'.$row["name"].'</td>';		
 		print '<td ><button class="btn btn-sm" id="newRetailer" onclick="editCategory('.$row["id"].')">Szerkeszt</button></td>';
-		print '<td ><button class="btn btn-sm" id="newRetailer" onclick="deleteCategory('.$row["id"].')">Töröl</button></td>';
+		print '<td ><button class="btn btn-sm btn-danger" onclick="deleteCategory('.$row["id"].')">Töröl</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
@@ -170,7 +170,7 @@ HAVING rest > 0
 		print '<td>'.$row["time"].'</td>';
 		print '<td>'.$row["rest"].'</td>';
 
-		print '<td><button class="button" onclick="output('.$row["id"].','.$row["rest"].')">Kiadás</button></td>';
+		print '<td><button class="btn btn-sm btn-danger" onclick="output('.$row["id"].','.$row["rest"].')">Kiadás</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
@@ -236,7 +236,7 @@ HAVING rest > 0
 			print '<td>'.$row["supplier"].'</td>';
 			print '<td>'.$row["time"].'</td>';
 			print '<td>'.$row["rest"].'</td>';
-			print '<td><button class="button" onclick="trash('.$row["id"].','.$row["rest"].')">Selejt</button></td>';
+			print '<td><button class="btn btn-sm btn-danger" onclick="trash('.$row["id"].','.$row["rest"].')">Selejt</button></td>';
 			print '</tr>';
 		}
 		print '</table>';
@@ -307,12 +307,14 @@ function dailyInput(){
 				where pr.id=p.product_id and p.supplier_id = s.id
 				 and p.time >= CURDATE()  and p.deleted = false and pr.deleted = false order by a2")){
 	
-		print '<table class="table table-inverse">';
+		print '<table class="table table-hover">';
+		print '<thead>';
 		print '<tr>';
 		print '<th>Alapanyag</th>';
 		print '<th>Beszállító Neve</th>';
 		print '<th>Mennyiség</th>';
 		print '</tr>';
+		print '</thead>';
 		$i = false;
 		while($row = $results->fetch_assoc()) {
 			print '<tr>';
@@ -345,13 +347,15 @@ function dailyOutput(){
 	 				FROM  pallet p, product pr, output o
 				where pr.id=p.product_id and o.pallet_id = p.id
 				 and o.time >= CURDATE() and p.deleted = false and pr.deleted = false and o.deleted = false order by a2")){
-		$str =  '<table class="table table-inverse">';
+		$str =  '<table class="table table-hover">';
+		$str .= '<thead>';
 		$str .= '<tr>';
 		$str .= '<th>ID</th>';
 		$str .= '<th>Alapanyag</th>';
 		$str .= '<th>Mennyiség</th>';
 		$str .= '<th>Kiadási idő</th>';
 		$str .= '</tr>';
+		$str .= '</thead>';
 		$i =false;
 		while($row = $results->fetch_assoc()) {
 			$str .= '<tr>';
@@ -388,13 +392,15 @@ function listOld(){
 				where pr.id=p.product_id
 				and p.time < CURDATE() and p.deleted = false order by a3 ")){
 	
-		$str =  '<table class="table table-inverse">';
+		$str =  '<table class="table table-hover">';
+		$str .= '<thead>';
 		$str .= '<tr>';
 		$str .= '<th>ID</th>';
 		$str .= '<th>Alapanyag</th>';
 		$str .= '<th>Mennyiség</th>';
 		$str .= '<th>Bevétel ideje</th>';
 		$str .= '</tr>';
+		$str .= '</thead>';
 		$i = false;
 		while($row = $results->fetch_assoc()) {
 			$i = true;
@@ -433,7 +439,7 @@ function listUser(){
 	print '<th>Felhasználó Név</th>';
 	print '<th>Jogosultság</th>';
 	print '<th>Szerkeszt</th>';
-	print '<th><button class="btn btn-sm" onclick="createUser()">Új Felhasználó</button></th>';
+	print '<th><button class="btn btn-sm" id="newRetailer" onclick="createUser()">Új Felhasználó</button></th>';
 	print '<th>Törlés</th>';
 	print '</tr>';
 	print '</thead>';
@@ -447,7 +453,7 @@ function listUser(){
 		}
 		print '<td><button class="btn btn-sm" onclick="editUserName('.$row["id"].')">Név Szerkeszés</button></td>';
 		print '<td><button class="btn btn-sm" onclick="editUserPass('.$row["id"].')">Új Jelszó</button></td>';
-		print '<td><button class="btn btn-sm" onclick="deleteUser('.$row["id"].')">Törlés</button></td>';
+		print '<td><button class="btn btn-sm btn-danger" onclick="deleteUser('.$row["id"].')">Törlés</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
