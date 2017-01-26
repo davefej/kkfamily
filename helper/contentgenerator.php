@@ -328,7 +328,7 @@ function categoryOption(){
 
 	$mysqli = connect();
 	$results = $mysqli->query("SELECT * FROM category where deleted = false order by name");
-	print '<select id="category_option" class="form-control">';
+	print '<select id="#_#" class="form-control">';
 	while($row = $results->fetch_assoc()) {
 		print '<option  value="'.$row["id"].'">'.$row["name"].'</option>';
 	}

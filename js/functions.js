@@ -5,7 +5,7 @@ function bbsave(){
 	if(tipus == "createProduct"){
 		
 		var name = $('#new_prod_name').val()
-		var category_id = $('#category_option').val()
+		var category_id = $('#new_prod_cat').val()
 		newProduct(name,category_id,0)
 		
 	}else if(tipus == "createSupplier"){
@@ -48,7 +48,7 @@ function bbsave(){
 	}else if(tipus == "editProduct"){
 		
 		var name = $('#edit_prod_name').val()
-		var category_id = $('#category_option').val()
+		var category_id = $('#edit_prod_cat').val()
 		var id = $('#type').attr("id2");
 		updateProduct(id,name,category_id,0)
 		
@@ -97,7 +97,7 @@ function createProduct(){
 				str += "<input type='text' maxlength='50' id='new_prod_name'>";
 			str += "</th>";
 			str += "<td>";
-			str += $('#category_container').html();
+			str += $('#category_container').html().replace("#_#","new_prod_cat");
 			str += "</td>";
 		str += "</tr>";
 	str += "</table>";
@@ -273,7 +273,7 @@ function editProduct(id){
 				str += "<input type='text' maxlength='50' value='"+nev+"' id='edit_prod_name'>";
 			str += "</th>";
 			str += "<td>";
-			str += $('#category_container').html();
+			str += $('#category_container').html().replace("#_#","edit_prod_cat");
 			str += "</td>";
 		str += "</tr>";
 	str += "</table>";
