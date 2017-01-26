@@ -26,8 +26,15 @@ function listStore(){
 	print '</tr>';
 	print '</thead>';
 	while($row = $results->fetch_assoc()) {
-		array_push($labels,$row["a1"]);
-		array_push($data,(int)$row["a3"]);
+		if(in_array($row["a1"],$labels))
+		{
+			$key = array_search($row["a1"],$labels);
+			$data[$key] = $data[$key]+(int)$row["a3"]; 
+		}else{
+			array_push($labels,$row["a1"]);
+			array_push($data,(int)$row["a3"]);
+		}
+		
 		print '<tr>';
 		print '<td>'.$row["a0"].'</td>';
 		print '<td>'.$row["a1"].'</td>';
@@ -57,9 +64,10 @@ function listStore(){
 			"borderWidth" => 0,
 			"data" => $data
 	);
+	$datasetsarray = array($datasets);
 	$json = array(
 		"labels" => $labels,
-		"datasets" => $datasets
+		"datasets" => $datasetsarray
 	);
 	
 	$json_str = json_encode($json,True);
