@@ -92,6 +92,31 @@ function listSupplier(){
 	$mysqli->close();
 }
 
+function listCategory(){
+	$mysqli = connect();
+	$results = $mysqli->query("SELECT * FROM category where deleted = false");
+	print '<table class="table table-hover">';
+	print '<thead>';
+	print '<tr>';
+	print '<th>Kategória Neve</th>';
+	print '<th><button class="btn btn-sm" onclick="createCategory()">Új Kategória</button></th>';
+	print '<th>Törlés</th>';
+	print '</tr>';
+	print '</thead>';
+	while($row = $results->fetch_assoc()) {
+		print '<tr>';
+		print '<td id="categoryname_'.$row["id"].'">'.$row["name"].'</td>';		
+		print '<td ><button class="btn btn-sm" id="newRetailer" onclick="editCategory('.$row["id"].')">Szerkeszt</button></td>';
+		print '<td ><button class="btn btn-sm" id="newRetailer" onclick="deleteCategory('.$row["id"].')">Töröl</button></td>';
+		print '</tr>';
+	}
+	print '</table>';
+	// Frees the memory associated with a result
+	$results->free();
+	// close connection
+	$mysqli->close();
+}
+
 function palletOutput($alapanyag){
 	$mysqli = connect();
 	if($results = $mysqli->query(

@@ -10,6 +10,7 @@
 			<ul class="nav navbar-nav navbar-left">
 				<li <?php if($selector == "product"){ echo "class=\"active\"";} ?>><a href="product.php">Alapanyagok</a></li>
 				<li <?php if($selector == "supplier"){ echo "class=\"active\"";} ?>><a href="supplier.php">Beszállítók</a></li>
+				<li <?php if($selector == "supplier"){ echo "class=\"active\"";} ?>><a href="category.php">Kategória</a></li>
 				<li <?php if($selector == "storage"){ echo "class=\"active\"";} ?>><a href="storage.php">Raktár</a></li>
 			</ul>
 			<form class="navbar-form navbar-left">

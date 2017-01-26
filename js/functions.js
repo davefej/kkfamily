@@ -20,6 +20,12 @@ function bbsave(){
 		var pass = $('#new_user_pass').val()
 		newUser(name,pass)
 	
+	}else if(tipus == "createCategory"){
+		
+		var name = $('#new_category_name').val()		
+		
+		newCategory(name)
+		
 	}else if(tipus == "editSupplier"){
 		
 		var name = $('#edit_supplier_name').val()
@@ -45,6 +51,12 @@ function bbsave(){
 		var password = $('#edit_user_pass').val()		
 		var id = $('#type').attr("id2");
 		updateUserPass(id,password)
+		
+	}else if(tipus == "editCategory"){
+		
+		var name = $('#edit_category_name').val()		
+		var id = $('#type').attr("id2");
+		updateCategory(id,name)
 		
 	}
 	
@@ -131,6 +143,24 @@ function createUser(){
 	bootbox.alert(str);
 }
 
+function createCategory(){
+	var str = '<input type="hidden" id="type" value="createCategory"/>';
+	str += "<table align='center'>";
+		str += "<tr>";
+			str += "<th>";
+				str += "Név";
+			str += "</th>";
+			
+		str += "</tr>";
+		str += "<tr>";
+			str += "<td>";
+				str += "<input type='text' maxlength='50' id='new_category_name'>";
+			str += "</th>";
+			str += "<td>";
+		str += "</tr>";
+	str += "</table>";
+	bootbox.alert(str);
+}
 
 
 /////////////EDIT///////////
@@ -212,7 +242,7 @@ function editUserName(id){
 
 function editUserPass(id){	
 	
-	
+
 	var str = '<input type="hidden" id="type" value="editUserPass" id2="'+id+'"/>';
 	str += "<table align='center'>";
 		str += "<tr>";
@@ -232,3 +262,22 @@ function editUserPass(id){
 
 }
 
+function editCategory(id){
+	var nev = $('#categoryname_'+id).html();
+	var str = '<input type="hidden" id="type" value="editCategory" id2="'+id+'"/>';
+	str += "<table align='center'>";
+		str += "<tr>";
+			str += "<th>";
+				str += "Név";
+			str += "</th>";
+			
+		str += "</tr>";
+		str += "<tr>";
+			str += "<td>";
+				str += "<input type='text' maxlength='50' value="+nev+" id='edit_category_name'>";
+			str += "</th>";
+			str += "<td>";
+		str += "</tr>";
+	str += "</table>";
+	bootbox.alert(str);
+}
