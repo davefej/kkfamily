@@ -249,7 +249,7 @@ function dailyInput(){
 			"SELECT p.id as a0, pr.name as a1, s.name as a2, p.amount as a3
  				FROM supplier s, pallet p, product pr
 			where pr.id=p.product_id and p.supplier_id = s.id
-			 and p.time >= CURDATE()  and p.deleted = false and pr.deleted = false and order by a2");
+			 and p.time >= CURDATE()  and p.deleted = false and pr.deleted = false order by a2");
 
 	print '<table class="table table-inverse">';
 	print '<tr>';
