@@ -20,7 +20,7 @@ if(array_key_exists("type",$data)){
 	}else if($data["type"] == "trash"){
 		$sql = "INSERT INTO `trash` (`id`, `pallet_id`, `amount`, `time`, `user_id`, `deleted`) VALUES (NULL, '".$data['pallet_id']."', '".$data['amount']."', CURRENT_TIMESTAMP, '1', '0')";
 	}else if($data["type"] == "pallet"){
-		$sql = "INSERT INTO `pallet` (`id`, `product_id`, `supplier_id`, `time`, `amount`, `user_id`, `deleted`) VALUES (NULL, '".$data['product_id']."', '".$data['supplier_id']."', CURRENT_TIMESTAMP, '".$data['amount']."', '".$data['user_id']."', '0')";
+		$sql = "INSERT INTO `pallet` (`id`, `product_id`, `supplier_id`, `time`, `amount`, `user_id`, `deleted`) VALUES (NULL, '".$data['product_id']."', '".$data['supplier_id']."', CURRENT_TIMESTAMP, '".$data['amount']."', '1', '0')";
 	}else if($data["type"] == "output"){
 		$sql = "INSERT INTO `output` (`id`, `pallet_id`, `amount`, `time`, `user_id`, `deleted`) VALUES (NULL, '".$data['pallet_id']."', '".$data['amount']."', CURRENT_TIMESTAMP, '1', '0')";
 	}

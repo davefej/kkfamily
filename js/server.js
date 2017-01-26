@@ -52,7 +52,6 @@ function newPallet(product_id,supplier_id,amount,user_id){
     	"product_id":product_id,
     	"supplier_id":supplier_id,
     	"amount":amount,
-    	"user_id":user_id,
     	"type":"pallet"
 	});
 }

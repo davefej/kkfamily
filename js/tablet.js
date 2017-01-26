@@ -3,10 +3,10 @@ function goTo(url){
 }
 
 function input(){
-	var beszallito = $('#besz').val()
-	var alapanyag = $('#alap').val()
-	var suly = $('#suly').val()
-	newPallet(beszallito,alapanyag,suly,1)
+	var supplier = $('#besz').val()
+	var product = $('#alap').val()
+	var amount = $('#suly').val()
+	newPallet(product,supplier,amount)
 }
 
 function output(id,mennyiseg){	
