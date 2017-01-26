@@ -155,7 +155,6 @@ require("../common/header.php");
 					</td>
 				</tr>
 			  	</table>
-			  	
 			</div>
 		</div>
 	</div>
