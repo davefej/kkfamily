@@ -10,9 +10,9 @@ function input(){
 }
 
 function output(id,mennyiseg){	
-	newOutput(id,mennyiseg,1);
+	createOutput(id,mennyiseg);
 }
 
-function trash(){
-	newTrash(id,mennyiseg,1);
+function trash(id,mennyiseg){
+	createTrash(id,mennyiseg);
 }

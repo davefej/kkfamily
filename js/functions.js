@@ -26,6 +26,18 @@ function bbsave(){
 		
 		newCategory(name)
 		
+	}else if(tipus == "createOutput"){
+		var pallet_id = $('#type').attr("id2");
+		var amount = $('#output_amount').val()		
+		
+		newOutput(pallet_id,amount)
+		
+	}else if(tipus == "createTrash"){
+		var pallet_id = $('#type').attr("id2");
+		var amount = $('#trash_amount').val()		
+		
+		newTrash(pallet_id,amount)
+		
 	}else if(tipus == "editSupplier"){
 		
 		var name = $('#edit_supplier_name').val()
@@ -162,7 +174,43 @@ function createCategory(){
 	bootbox.alert(str);
 }
 
+function createOutput(pallet_id,full){
+	var str = '<input type="hidden" id="type" value="createOutput" id2="'+pallet_id+'"/>';
+	str += "<table align='center'>";
+		str += "<tr>";
+			str += "<th>";
+				str += "Mennyiség";
+			str += "</th>";			
+		str += "</tr>";
+		str += "<tr>";
+			str += "<td>";
+				str += "<input type='number' maxlength='50' value='"+full+"' id='output_amount'>";
+			str += "</th>";
+			str += "<td>";
+		str += "</tr>";
+	str += "</table>";
+	bootbox.alert(str);
+	
+}
 
+function createTrash(pallet_id,full){
+	var str = '<input type="hidden" id="type" value="createTrash" id2="'+pallet_id+'"/>';
+	str += "<table align='center'>";
+		str += "<tr>";
+			str += "<th>";
+				str += "Mennyiség";
+			str += "</th>";			
+		str += "</tr>";
+		str += "<tr>";
+			str += "<td>";
+				str += "<input type='number' maxlength='50' value='"+full+"' id='trash_amount'>";
+			str += "</th>";
+			str += "<td>";
+		str += "</tr>";
+	str += "</table>";
+	bootbox.alert(str);
+	
+}
 /////////////EDIT///////////
 
 
@@ -281,3 +329,4 @@ function editCategory(id){
 	str += "</table>";
 	bootbox.alert(str);
 }
+

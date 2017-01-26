@@ -39,11 +39,10 @@ function newProduct(name,category_id,product_type){
 }
 
 
-function newTrash(pallet_id,amount,user_id){	
+function newTrash(pallet_id,amount){	
 	insert({
     	"pallet_id":pallet_id,
-    	"amount":amount,
-    	"user_id":user_id,
+    	"amount":amount,   	
     	"type":"trash"
 	});
 }
@@ -58,11 +57,10 @@ function newPallet(product_id,supplier_id,amount,user_id){
 	});
 }
 
-function newOutput(pallet_id,amount,user_id){	
+function newOutput(pallet_id,amount){	
 	insert({
     	"pallet_id":pallet_id,
     	"amount":amount,
-    	"user_id":user_id,
     	"type":"output"
 	});
 }
