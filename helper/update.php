@@ -6,12 +6,12 @@ $entityBody = file_get_contents('php://input');
 $data = json_decode($entityBody,True);
 
 if(array_key_exists("type",$data)){
-if($data["type"] == "category"){				
+	if($data["type"] == "category"){				
 		$sql = "UPDATE `category` SET `name` = '".$data['name']."' WHERE `category`.`id` = ".$data['id'];
 	}else if($data["type"] == "user_name"){
-		$sql = "UPDATE `username` SET `name` = '".$data['name']."' WHERE `user`.`id` = ".$data['id'];				
+		$sql = "UPDATE `user` SET `name` = '".$data['name']."' WHERE `user`.`id` = ".$data['id'];				
 	}else if($data["type"] == "user_password"){
-		$sql = "UPDATE `username` SET `password` = '".$data['password']."' WHERE `user`.`id` = ".$data['id'];				
+		$sql = "UPDATE `user` SET `password` = '".$data['password']."' WHERE `user`.`id` = ".$data['id'];				
 	}else if($data["type"] == "supplier"){
 		$sql = "UPDATE `supplier` SET `name` = '".$data['name']."', `address` = '".$data['address']."' WHERE `id` = ".$data['id'];
 	}else if($data["type"] == "product"){

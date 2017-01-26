@@ -1,6 +1,62 @@
-function ujalap(){
+
+function bbsave(){
+	var tipus = $('#type').val();
 	
-	var str = '<input type="hidden" id="type" value="ujalap"/>';
+	if(tipus == "createProduct"){
+		
+		var name = $('#new_prod_name').val()
+		var category_id = $('#category_option').val()
+		newProduct(name,category_id,0)
+		
+	}else if(tipus == "createSupplier"){
+		
+		var name = $('#new_supplier_name').val()
+		var address = $('#new_supplier_address').val()
+		newSupplier(name,address)
+	
+	}else if(tipus == "createUser"){
+		
+		var name = $('#new_user_name').val()
+		var pass = $('#new_user_pass').val()
+		newUser(name,pass)
+	
+	}else if(tipus == "editSupplier"){
+		
+		var name = $('#edit_supplier_name').val()
+		var address = $('#edit_supplier_address').val()
+		var id = $('#type').attr("id2");
+		updateSupplier(id,name,address)
+		
+	}else if(tipus == "editProduct"){
+		
+		var name = $('#edit_prod_name').val()
+		var category_id = $('#category_option').val()
+		var id = $('#type').attr("id2");
+		updateProduct(id,name,category_id,0)
+		
+	}else if(tipus == "editUserName"){
+		
+		var name = $('#edit_user_name').val()		
+		var id = $('#type').attr("id2");
+		updateUserName(id,name)
+		
+	}else if(tipus == "editUserPass"){
+		
+		var password = $('#edit_user_pass').val()		
+		var id = $('#type').attr("id2");
+		updateUserPass(id,password)
+		
+	}
+	
+}
+
+
+/////////////CREATE///////////
+
+
+function createProduct(){
+	
+	var str = '<input type="hidden" id="type" value="createProduct"/>';
 	str += "<table align='center'>";
 		str += "<tr>";
 			str += "<th>";
@@ -12,25 +68,19 @@ function ujalap(){
 		str += "</tr>";
 		str += "<tr>";
 			str += "<td>";
-				str += "<input type='text' maxlength='50' id='ujalapnev'>";
+				str += "<input type='text' maxlength='50' id='new_prod_name'>";
 			str += "</th>";
 			str += "<td>";
-			str += "<select id='ujalapkat'>";
-			str += "<option value='1'>zöldség</option>";
-			str += "<option value='2'>káposzta</option>";
-			str += "<option value='3'>gyümölcs</option>";
-			str += "<option value='4'>saláta</option>";
-			str += "<option value='5'>egyéb</option>";
-			str += "</select>";
+			str += $('#category_container').html();
 			str += "</td>";
 		str += "</tr>";
 	str += "</table>";
-	bootbox.alert("Hello");
+	bootbox.alert(str);
 }
 
 
-function ujbesz(){
-	var str = '<input type="hidden" id="type" value="ujbesz"/>';
+function createSupplier(){
+	var str = '<input type="hidden" id="type" value="createSupplier"/>';
 	str += "<table align='center'>";
 		str += "<tr>";
 			str += "<th>";
@@ -42,50 +92,54 @@ function ujbesz(){
 		str += "</tr>";
 		str += "<tr>";
 			str += "<td>";
-				str += "<input type='text' maxlength='50' id='ujbesznev'>";
+				str += "<input type='text' maxlength='50' id='new_supplier_name'>";
 			str += "</th>";
 			str += "<td>";
-			str += "<input type='text' maxlength='50' id='ujbeszcim'>";
+			str += "<input type='text' maxlength='50' id='new_supplier_address'>";
 			str += "</td>";
 		str += "</tr>";
 	str += "</table>";
 	bootbox.alert(str);
 }
 
-function bbsave(){
-	var tipus = $('#type').val();
-	if(tipus == "ujalap"){
-		var name = $('#ujalapnev').val()
-		var category_id = $('#ujalapkat').val()
-		newProduct(name,category_id,0)
-		
-	}else if(tipus == "ujbesz"){
-		var name = $('#ujbesznev').val()
-		var address = $('#ujbeszcim').val()
-		newSupplier(name,address)
-	
-	}else if(tipus == "editbesz"){
-		var name = $('#editbesznev').val()
-		var address = $('#editbeszcim').val()
-		var id = $('#type').attr("id2");
-		updateSupplier(id,name,address)
-	}else if(tipus == "editalap"){
-		var name = $('#editalapnev').val()
-		var category_id = $('#editalapkat').val()
-		var id = $('#type').attr("id2");
-		updateProduct(id,name,category_id,0)
-		
-	}
-	
-	
-	
+function createUser(){
+	var str = '<input type="hidden" id="type" value="createUser"/>';
+	str += "<table align='center'>";
+		str += "<tr>";
+			str += "<th>";
+				str += "Név";
+			str += "</th>";
+			str += "<th>";
+				str += "Jelszó";
+			str += "</th>";
+		str += "</tr>";
+		str += "<tr>";
+			str += "<td>";
+				str += "<input type='text' maxlength='50' id='new_user_name'>";
+			str += "</th>";
+			str += "<td>";
+			str += "<input type='name' maxlength='50' id='new_user_pass'>";
+			str += "</td>";
+			str += "<td>";
+				str += "<select id='new_user_type'>";
+					str += "<option val='0'>Admin</option>";
+					str += "<option val='1'>Raktáros</option>";
+				str += "</select>";
+			str += "</td>";
+		str += "</tr>";
+	str += "</table>";
+	bootbox.alert(str);
 }
 
 
-function editbeszallito(id){
+
+/////////////EDIT///////////
+
+
+function editSupplier(id){
 	var nev = $('#besznev_'+id).html();
 	var cim = $('#beszcim_'+id).html();
-	var str = '<input type="hidden" id="type" value="editbesz" id2="'+id+'"/>';
+	var str = '<input type="hidden" id="type" value="editSupplier" id2="'+id+'"/>';
 	str += "<table align='center'>";
 	str += "<tr>";
 		str += "<th>";
@@ -97,10 +151,10 @@ function editbeszallito(id){
 	str += "</tr>";
 	str += "<tr>";
 		str += "<td>";
-			str += "<input type='text' maxlength='50' value='"+nev+"' id='editbesznev'>";
+			str += "<input type='text' maxlength='50' value='"+nev+"' id='edit_supplier_name'>";
 		str += "</th>";
 		str += "<td>";
-		str += "<input type='text' maxlength='50' value='"+cim+"' id='editbeszcim'>";
+		str += "<input type='text' maxlength='50' value='"+cim+"' id='edit_supplier_address'>";
 		str += "</td>";
 	str += "</tr>";
 str += "</table>";
@@ -108,10 +162,10 @@ str += "</table>";
 	
 }
 
-function editalap(id){
+function editProduct(id){
 	var nev = $('#alapnev_'+id).html();
 	var kat = $('#alapkat_'+id).html();
-	var str = '<input type="hidden" id="type" value="editalap" id2="'+id+'"/>';
+	var str = '<input type="hidden" id="type" value="editProduct" id2="'+id+'"/>';
 	str += "<table align='center'>";
 		str += "<tr>";
 			str += "<th>";
@@ -123,40 +177,58 @@ function editalap(id){
 		str += "</tr>";
 		str += "<tr>";
 			str += "<td>";
-				str += "<input type='text' maxlength='50' value='"+nev+"' id='editalapnev'>";
+				str += "<input type='text' maxlength='50' value='"+nev+"' id='edit_prod_name'>";
 			str += "</th>";
 			str += "<td>";
-			str += "<select id='editalapkat'>";
-				str += "<option value='1'"
-				if(kat == 'zöldség'){
-					str += 'selected';
-				}
-				str+= ">zöldség</option>";
-				str += "<option value='2'"
-				if(kat == 'káposzta'){
-					str += 'selected';
-				}
-				str += ">káposzta</option>";
-				str += "<option value='3'"
-				if(kat == 'gyümölcs'){
-					str += 'selected';
-				}
-				str += ">gyümölcs</option>";
-				str += "<option value='4'"
-					if(kat == 'saláta'){
-						str += 'selected';
-					}
-					str += ">saláta</option>";
-				str += "<option value='5'"
-				if(kat == 'egyéb'){
-					str += 'selected';
-				}
-				str += ">egyéb</option>";				
-			str += "</select>";
+			str += $('#category_container').html();
 			str += "</td>";
 		str += "</tr>";
 	str += "</table>";
 	bootbox.alert(str);
+
+}
+
+function editUserName(id){
 	
+	var nev = $('#username_'+id).html();
+	var str = '<input type="hidden" id="type" value="editUserName" id2="'+id+'"/>';
+	str += "<table align='center'>";
+		str += "<tr>";
+			str += "<th>";
+				str += "Név";
+			str += "</th>";
+			
+		str += "</tr>";
+		str += "<tr>";
+			str += "<td>";
+				str += "<input type='text' maxlength='50' value='"+nev+"' id='edit_user_name'>";
+			str += "</th>";
+			
+		str += "</tr>";
+	str += "</table>";
+	bootbox.alert(str);
+
+}
+
+function editUserPass(id){	
+	
+	
+	var str = '<input type="hidden" id="type" value="editUserPass" id2="'+id+'"/>';
+	str += "<table align='center'>";
+		str += "<tr>";
+			str += "<th>";
+				str += "Jelszó";
+			str += "</th>";
+			
+		str += "</tr>";
+		str += "<tr>";
+			str += "<td>";
+				str += "<input type='password' maxlength='50'  id='edit_user_pass'>";
+			str += "</th>";
+			
+		str += "</tr>";
+	str += "</table>";
+	bootbox.alert(str);
+
 }
 

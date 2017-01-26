@@ -110,3 +110,7 @@ thead{
 #newRetailer{
 	color: #555555;
 }
+
+.hiddendiv{
+	display:none;
+}

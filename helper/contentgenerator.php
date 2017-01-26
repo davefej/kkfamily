@@ -46,14 +46,16 @@ function listProduct(){
 	print '<tr>';
 	print '<th>Alapanyag Neve</th>';
 	print '<th>Kategória</th>';
-	print '<th><button class="btn btn-sm" onclick="ujalap()">Új alapanyag</button></th>';
+	print '<th><button class="btn btn-sm" onclick="createProduct()">Új alapanyag</button></th>';
+	print '<th>Törlés</th>';
 	print '</tr>';
 	print '</thead>';
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
 		print '<td id="alapnev_'.$row["id"].'">'.$row["name"].'</td>';
 		print '<td id="alapkat_'.$row["id"].'">'.$row["cat"].'</td>';
-		print '<td><button class="btn btn-sm" id="newRetailer"  onclick="editproduct('.$row["id"].')">Szerkeszt</button></td>';
+		print '<td><button class="btn btn-sm" id="newRetailer"  onclick="editProduct('.$row["id"].')">Szerkeszt</button></td>';
+		print '<td><button class="btn btn-sm" id="newRetailer"  onclick="deleteProduct('.$row["id"].')">Töröl</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
@@ -71,14 +73,16 @@ function listSupplier(){
 	print '<tr>';
 	print '<th>Beszállító Neve</th>';
 	print '<th>Beszállító címe</th>';
-	print '<th><button class="btn btn-sm" onclick="ujbesz()">Új Beszállító</button></th>';
+	print '<th><button class="btn btn-sm" onclick="createSupplier()">Új Beszállító</button></th>';
+	print '<th>Törlés</th>';
 	print '</tr>';
 	print '</thead>';
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
 		print '<td id="besznev_'.$row["id"].'">'.$row["name"].'</td>';
 		print '<td id="beszcim_'.$row["id"].'">'.$row["address"].'</td>';
-		print '<td ><button class="btn btn-sm" id="newRetailer" onclick="editbeszallito('.$row["id"].')">Szerkeszt</button></td>';
+		print '<td ><button class="btn btn-sm" id="newRetailer" onclick="editSupplier('.$row["id"].')">Szerkeszt</button></td>';
+		print '<td ><button class="btn btn-sm" id="newRetailer" onclick="deleteSupplier('.$row["id"].')">Töröl</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
@@ -254,6 +258,22 @@ function productOption(){
 	$mysqli->close();
 }
 
+function categoryOption(){
+
+	$mysqli = connect();
+	$results = $mysqli->query("SELECT * FROM category where deleted = false order by name");
+	print '<select id="category_option" class="form-control">';
+	while($row = $results->fetch_assoc()) {
+		print '<option  value="'.$row["id"].'">'.$row["name"].'</option>';
+	}
+	print '</select>';
+
+	// Frees the memory associated with a result
+	$results->free();
+	// close connection
+	$mysqli->close();
+}
+
 function dailyInput(){
 	$mysqli = connect();
 	if($results = $mysqli->query(
@@ -388,12 +408,13 @@ function listUser(){
 	print '<th>Felhasználó Név</th>';
 	print '<th>Jogosultság</th>';
 	print '<th>Szerkeszt</th>';
-	print '<th><button class="btn btn-sm" onclick="newUser()">Új Felhasználó</button></th>';
+	print '<th><button class="btn btn-sm" onclick="createUser()">Új Felhasználó</button></th>';
+	print '<th>Törlés</th>';
 	print '</tr>';
 	print '</thead>';
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
-		print '<td id="usernev_'.$row["id"].'">'.$row["name"].'</td>';
+		print '<td id="username_'.$row["id"].'">'.$row["name"].'</td>';
 		if($row["type"] === "0"){
 			print '<td id="usertype_'.$row["id"].'">Admin</td>';
 		}else if($row["type"] === "1"){
@@ -401,6 +422,7 @@ function listUser(){
 		}
 		print '<td><button class="btn btn-sm" onclick="editUserName('.$row["id"].')">Név Szerkeszés</button></td>';
 		print '<td><button class="btn btn-sm" onclick="editUserPass('.$row["id"].')">Új Jelszó</button></td>';
+		print '<td><button class="btn btn-sm" onclick="deleteUser('.$row["id"].')">Törlés</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
