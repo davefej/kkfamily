@@ -34,7 +34,7 @@ require("../common/header.php");
 		  		
 		  		<div class="col-md-6-2">
 		  			<div class="centerBlock">
-			  			<canvas id="myDoughnutChart" width="300" height="280">
+			  			<canvas id="myDoughnutChart" width="300" height="150">
 		                    <script>
 		                    //TODO: dinamikussá tenni.
 		                        var ctx = document.getElementById("myDoughnutChart");

@@ -28,7 +28,7 @@ function listStore(){
 		print '<td>'.$row["a2"].'</td>';
 		print '<td>'.$row["a4"].'</td>';
 		print '<td>'.$row["a3"].'</td>';
-		print '<td><button class="button" onclick="trash('.$row["a0"].','.$row["a3"].')">Selejt</button></td>';
+		print '<td><button class="btn btn-sm btn-danger" onclick="trash('.$row["a0"].','.$row["a3"].')">Selejt</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
@@ -53,7 +53,7 @@ function listProduct(){
 		print '<tr>';
 		print '<td id="alapnev_'.$row["id"].'">'.$row["name"].'</td>';
 		print '<td id="alapkat_'.$row["id"].'">'.$row["cat"].'</td>';
-		print '<td><button class="btn btn-sm" onclick="editproduct('.$row["id"].')">Szerkeszt</button></td>';
+		print '<td><button class="btn btn-sm" id="newRetailer"  onclick="editproduct('.$row["id"].')">Szerkeszt</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
@@ -78,7 +78,7 @@ function listSupplier(){
 		print '<tr>';
 		print '<td id="besznev_'.$row["id"].'">'.$row["name"].'</td>';
 		print '<td id="beszcim_'.$row["id"].'">'.$row["address"].'</td>';
-		print '<td ><button class="btn btn-sm" onclick="editbeszallito('.$row["id"].')">szerkeszt</button></td>';
+		print '<td ><button class="btn btn-sm" id="newRetailer" onclick="editbeszallito('.$row["id"].')">Szerkeszt</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
@@ -118,7 +118,7 @@ LEFT JOIN (
 		ON t2.id = t3.id 
  ) t1 
  on p.id = t1.id
-
+HAVING rest > 0
 			");
 	//and a.nev='".$alapanyag."'
 	print '<table class="table table-hover">';
@@ -181,7 +181,7 @@ LEFT JOIN (
 		ON t2.id = t3.id 
  ) t1 
  on p.id = t1.id
-
+HAVING rest > 0
 			");
 	//and a.nev='".$alapanyag."'
 	print '<table class="table table-hover">';

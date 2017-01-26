@@ -1,8 +1,6 @@
 <?php
 require('configuration.php');
-
 function connect(){
-
 	$mysql_host = getconfig('dbhost');
 	$mysql_database = getconfig('dbname');
 	$mysql_user = getconfig('dbuser');
@@ -11,26 +9,21 @@ function connect(){
 	if($db->connect_errno > 0){
 		errorlog('error not connected to database');
 	}
-
 	if(!mysqli_set_charset($db, "utf8")){
 		errorlog('error charset not loading');
 	}
 	return $db;
 }
-
-
 function insert($sql){
 	$mysqli = connect();
 	$var = $mysqli->query($sql);
 	return $var;
 }
-
 function update($sql){
 	$mysqli = connect();
 	$var = $mysqli->query($sql);
 	return $var;
 }
-
 function login($user,$pass){
 	$mysqli = connect();
 	$ret = -1;
@@ -39,19 +32,20 @@ function login($user,$pass){
 		/* bind result variables */
 		$stmt->bind_param("ss", $user, $pass);
 		$stmt->execute();
-		$stmt->bind_result($type);	
-		
+
+		$stmt->bind_result($type);
+
 		/* fetch values */
 		while ($stmt->fetch()) {
-			$ret = (int)$type;			
-		}		
+			$ret = (int)$type;
+		}
 		/* close statement */
 		$stmt->close();
 	}
-	
+
 	// close connection
 	$mysqli->close();
 	return $ret;
 }
-	
+
 ?>
