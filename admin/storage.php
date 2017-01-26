@@ -12,7 +12,14 @@ listStore();
 	<canvas id="myBarChart" width="600" height="300">
 		<script>
 		var ctx = document.getElementById("myBarChart");
-		var data = {
+		var data = document.getElementById('storage_json').innerHTML; 
+		try{
+			data = JSON.parse(data);
+		}catch(err){
+			cosole.log(err);
+		}
+		
+			/*{
 			    labels: ["Sárga Répa", "Zeller", "Fejes Káposzta", "Fehér Répa", "Petrezselyem", "Saláta", "Paradicsom"],
 			    datasets: [
 			        { 
@@ -29,7 +36,7 @@ listStore();
 			            data: [65, 59, 80, 81, 56, 55, 40],
 			        }
 			    ]
-			};
+			};*/
 		var myBarChart = new Chart(ctx, {
 			type: 'bar',
 		    data: data,

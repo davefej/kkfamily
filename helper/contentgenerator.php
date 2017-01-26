@@ -2,6 +2,10 @@
 require('mysqli.php');
 
 function listStore(){
+	
+	
+	$labels = array();
+	$data = array();
 	$mysqli = connect();
 	$results = $mysqli->query(
 			"SELECT p.id as a0, pr.name as a1, s.name as a2, p.amount as a3,
@@ -22,6 +26,8 @@ function listStore(){
 	print '</tr>';
 	print '</thead>';
 	while($row = $results->fetch_assoc()) {
+		array_push($labels,$row["a1"]);
+		array_push($data,(int)$row["a3"]);
 		print '<tr>';
 		print '<td>'.$row["a0"].'</td>';
 		print '<td>'.$row["a1"].'</td>';
@@ -32,6 +38,33 @@ function listStore(){
 		print '</tr>';
 	}
 	print '</table>';
+	
+	$colors = array( 'rgba(255, 99, 132, 0.8)',
+			'rgba(54, 162, 235, 0.8)',
+			'rgba(255, 206, 86, 0.8)',
+			'rgba(75, 192, 192, 0.8)',
+			'rgba(153, 102, 255, 0.8)');
+	
+	$backgroundColor = array();
+	for($i=0; $i < count($labels); $i++){
+		$num = $i%count($colors);
+		array_push($backgroundColor,$colors[$num]);
+	}
+	
+	$datasets = array(
+			"label" => "Raktárkészletek",
+			"backgroundColor" => $backgroundColor,
+			"borderWidth" => 0,
+			"data" => $data
+	);
+	$json = array(
+		"labels" => $labels,
+		"datasets" => $datasets
+	);
+	
+	$json_str = json_encode($json,True);
+	
+	print '<div id="storage_json" class="hiddendiv">'.$json_str.'</div>';
 	// Frees the memory associated with a result
 	$results->free();
 	// close connection

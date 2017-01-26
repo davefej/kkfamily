@@ -1,0 +1,5 @@
+
+2017-01-26 05:18:09pm
+error not connected to databaseerror not connected to database
+2017-01-26 05:18:09pm
+error charset not loadingerror charset not loading
