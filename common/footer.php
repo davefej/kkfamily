@@ -11,5 +11,6 @@
 	    <!-- Placed at the end of the document so the pages load faster -->
 	    <script src="../js/jquery1.12.4.js"></script>	    
 	    <script src="../js/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+	    <script src="../js/bootbox.js" ></script>
 	</body>
 </html>

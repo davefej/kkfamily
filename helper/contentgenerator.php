@@ -40,7 +40,7 @@ function listStore(){
 
 function listProduct(){
 	$mysqli = connect();
-	$results = $mysqli->query("SELECT p.id as id, p.name as name, c.name as cat FROM product p, category c WHERE c.id = p.category_id");
+	$results = $mysqli->query("SELECT p.id as id, p.name as name, c.name as cat FROM product p, category c WHERE c.id = p.category_id and p.deleted = false");
 	print '<table class="table table-hover">';
 	print '<thead>';
 	print '<tr>';
@@ -65,7 +65,7 @@ function listProduct(){
 
 function listSupplier(){
 	$mysqli = connect();
-	$results = $mysqli->query("SELECT * FROM supplier");
+	$results = $mysqli->query("SELECT * FROM supplier where deleted = false");
 	print '<table class="table table-hover">';
 	print '<thead>';
 	print '<tr>';
@@ -88,33 +88,38 @@ function listSupplier(){
 	$mysqli->close();
 }
 
-function tablegen($results,$type,$headers){
-	print '<table  align="center" class="'.$type.'table" border="1">';
-	print '<tr>';
-	for($i = 0; $i < count($headers); $i++){
-		print '<th>'.$headers[$i].'</th>';
-	}
-
-	print '</tr>';
-	while($row = $results->fetch_assoc()) {
-		print '<tr>';
-		for($i = 0; $i < count($headers); $i++){
-			print '<td>'.$row["a".strval($i)].'</td>';
-		}
-
-		print '</tr>';
-	}
-	print '</table>';
-}
-
 function palletOutput($alapanyag){
 	$mysqli = connect();
 	$results = $mysqli->query(
-			"SELECT p.id as a0, pr.name as a1, s.name as a2, p.amount as a3,
- 				p.time as a4 FROM supplier s, pallet p, product pr
-			where pr.id=p.product_id and p.supplier_id = s.id
-			and p.deleted = 0 and pr.deleted = 0
-			order by a2");
+			"select p.id as id, pr.name as product, s.name as supplier,p.time as time, 
+IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0) as rest 
+from pallet p 
+INNER JOIN product pr on p.product_id = pr.id
+INNER JOIN supplier s on s.id = p.supplier_id
+LEFT JOIN (
+    select t2.id as id ,t3.amount as trash,t2.amount as output from 
+		(
+           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
+        ) t2 
+		LEFT JOIN 
+		(
+           SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
+        ) t3 
+		ON t2.id = t3.id 
+		UNION
+	select t2.id as id ,t3.amount as trash,t2.amount as output from 
+		(
+            SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
+        ) t2 
+		RIGHT JOIN 
+		(
+            SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
+        ) t3 
+		ON t2.id = t3.id 
+ ) t1 
+ on p.id = t1.id
+
+			");
 	//and a.nev='".$alapanyag."'
 	print '<table class="table table-hover">';
 	print '<thead>';
@@ -130,13 +135,13 @@ function palletOutput($alapanyag){
 
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
-		print '<td>'.$row["a0"].'</td>';
-		print '<td>'.$row["a1"].'</td>';
-		print '<td>'.$row["a2"].'</td>';
-		print '<td>'.$row["a4"].'</td>';
-		print '<td>'.$row["a3"].'</td>';
+		print '<td>'.$row["id"].'</td>';
+		print '<td>'.$row["product"].'</td>';
+		print '<td>'.$row["supplier"].'</td>';
+		print '<td>'.$row["time"].'</td>';
+		print '<td>'.$row["rest"].'</td>';
 
-		print '<td><button class="button" onclick="output('.$row["a0"].','.$row["a3"].')">Kiadás</button></td>';
+		print '<td><button class="button" onclick="output('.$row["id"].','.$row["rest"].')">Kiadás</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
@@ -149,11 +154,35 @@ function palletOutput($alapanyag){
 function palletSpare($alapanyag){
 	$mysqli = connect();
 	$results = $mysqli->query(
-			"SELECT p.id as a0, pr.name as a1, s.name as a2, p.amount as a3,
- 				p.time as a4 FROM supplier s, pallet p, product pr
-			where pr.id=p.product_id and p.supplier_id = s.id
-			and p.deleted = 0 and pr.deleted = 0
-			order by a2");
+			"select p.id as id, pr.name as product, s.name as supplier,p.time as time, 
+IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0) as rest 
+from pallet p 
+INNER JOIN product pr on p.product_id = pr.id
+INNER JOIN supplier s on s.id = p.supplier_id
+LEFT JOIN (
+    select t2.id as id ,t3.amount as trash,t2.amount as output from 
+		(
+           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
+        ) t2 
+		LEFT JOIN 
+		(
+           SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
+        ) t3 
+		ON t2.id = t3.id 
+		UNION
+	select t2.id as id ,t3.amount as trash,t2.amount as output from 
+		(
+            SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
+        ) t2 
+		RIGHT JOIN 
+		(
+            SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
+        ) t3 
+		ON t2.id = t3.id 
+ ) t1 
+ on p.id = t1.id
+
+			");
 	//and a.nev='".$alapanyag."'
 	print '<table class="table table-hover">';
 	print '<thead>';
@@ -168,12 +197,12 @@ function palletSpare($alapanyag){
 	print '</thead>';
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
-		print '<td>'.$row["a0"].'</td>';
-		print '<td>'.$row["a1"].'</td>';
-		print '<td>'.$row["a2"].'</td>';
-		print '<td>'.$row["a4"].'</td>';
-		print '<td>'.$row["a3"].'</td>';
-		print '<td><button class="button" onclick="trash('.$row["a0"].','.$row["a3"].')">Selejt</button></td>';
+		print '<td>'.$row["id"].'</td>';
+		print '<td>'.$row["product"].'</td>';
+		print '<td>'.$row["supplier"].'</td>';
+		print '<td>'.$row["time"].'</td>';
+		print '<td>'.$row["rest"].'</td>';
+		print '<td><button class="button" onclick="trash('.$row["id"].','.$row["rest"].')">Selejt</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
@@ -185,7 +214,7 @@ function palletSpare($alapanyag){
 
 function supplierOption(){
 	$mysqli = connect();
-	$results = $mysqli->query("SELECT * FROM supplier order by name");
+	$results = $mysqli->query("SELECT * FROM supplier WHERE deleted = false order by name");
 	print '<select id="besz" class="form-control">';
 	while($row = $results->fetch_assoc()) {
 		print '<option value="'.$row["id"].'">'.$row["name"].'</option>';
@@ -201,7 +230,7 @@ function supplierOption(){
 function productOption(){
 
 	$mysqli = connect();
-	$results = $mysqli->query("SELECT * FROM product order by name");
+	$results = $mysqli->query("SELECT * FROM product where deleted = false order by name");
 	print '<select id="alap" class="form-control">';
 	while($row = $results->fetch_assoc()) {
 		print '<option  value="'.$row["id"].'">'.$row["name"].'</option>';
@@ -220,7 +249,7 @@ function dailyInput(){
 			"SELECT p.id as a0, pr.name as a1, s.name as a2, p.amount as a3
  				FROM supplier s, pallet p, product pr
 			where pr.id=p.product_id and p.supplier_id = s.id
-			 and p.time >= CURDATE()  order by a2");
+			 and p.time >= CURDATE()  and p.deleted = false and pr.deleted = false and order by a2");
 
 	print '<table class="table table-inverse">';
 	print '<tr>';
@@ -249,7 +278,7 @@ function dailyOutput(){
 			"SELECT p.id as a0, pr.name as a1, p.amount as a2, o.time as a3
  				FROM  pallet p, product pr, output o
 			where pr.id=p.product_id and o.pallet_id = p.id
-			 and o.time >= CURDATE()  order by a2");
+			 and o.time >= CURDATE() and p.deleted = false and pr.deleted = false and output.deleted = false order by a2");
 	print '<table class="table table-inverse">';
 	print '<tr>';
 	print '<th>ID</th>';
@@ -278,7 +307,7 @@ function listOld(){
 			"SELECT p.id as a0, pr.name as a1, p.amount as a2, p.time as a3
  				FROM  pallet p, product pr
 			where pr.id=p.product_id
-			 and p.time < CURDATE()-5  order by a3");
+			 and p.time < CURDATE()-5 where p.deleted = false and pr.deleted = false order by a3");
 
 	$str =  '<table class="table table-inverse">';
 	$str .= '<tr>';
@@ -313,7 +342,7 @@ function listOld(){
 
 function listUser(){
 	$mysqli = connect();
-	$results = $mysqli->query("SELECT * from User");
+	$results = $mysqli->query("SELECT * from User where deleted = false");
 	print '<table class="table table-hover">';
 	print '<thead>';
 	print '<tr>';

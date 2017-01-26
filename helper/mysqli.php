@@ -33,13 +33,14 @@ function update($sql){
 
 function login($user,$pass){
 	$mysqli = connect();
+	$ret = -1;
+	
 	if($stmt = $mysqli->prepare("SELECT type FROM user WHERE name = ? and password = ?") ){
 		/* bind result variables */
 		$stmt->bind_param("ss", $user, $pass);
 		$stmt->execute();
-		$stmt->bind_result($type);
+		$stmt->bind_result($type);	
 		
-		$ret = -1; 
 		/* fetch values */
 		while ($stmt->fetch()) {
 			$ret = (int)$type;			
