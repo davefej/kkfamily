@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<?php
+		session_start();
 		$version = rand();
 			if($selected == "admin")
 				echo "<title> Kezelőfelület | KK Family</title>";

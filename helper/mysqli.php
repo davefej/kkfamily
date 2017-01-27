@@ -1,4 +1,9 @@
 <?php
+
+if (session_status() == PHP_SESSION_NONE) {
+	session_start();
+}
+
 require('configuration.php');
 function connect(){
 	$mysql_host = getconfig('dbhost');
@@ -27,17 +32,19 @@ function update($sql){
 function login($user,$pass){
 	$mysqli = connect();
 	$ret = -1;
+	$id = 0; 
 	
-	if($stmt = $mysqli->prepare("SELECT type FROM user WHERE name = ? and password = ?") ){
+	if($stmt = $mysqli->prepare("SELECT id,type FROM user WHERE name = ? and password = ?") ){
 		/* bind result variables */
 		$stmt->bind_param("ss", $user, $pass);
 		$stmt->execute();
 
-		$stmt->bind_result($type);
+		$stmt->bind_result($id,$type);
 
 		/* fetch values */
 		while ($stmt->fetch()) {
-			$ret = (int)$type;
+			$ret = $type;
+			
 		}
 		/* close statement */
 		$stmt->close();
@@ -45,7 +52,7 @@ function login($user,$pass){
 
 	// close connection
 	$mysqli->close();
-	return $ret;
+	return $ret.'_'.$id;
 }
 
 ?>

@@ -8,11 +8,12 @@ function listStore(){
 	$data = array();
 	$mysqli = connect();
 	$results = $mysqli->query(
-			"select p.id as id, pr.name as product, s.name as supplier,p.time as time, 
+			"select p.id as id, pr.name as product, s.name as supplier,p.time as time, u.name as user,
 IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0) as rest 
 from pallet p 
 INNER JOIN product pr on p.product_id = pr.id
 INNER JOIN supplier s on s.id = p.supplier_id
+INNER JOIN user u on u.id = p.user_id
 LEFT JOIN (
     select t2.id as id ,t3.amount as trash,t2.amount as output from 
 		(
@@ -45,7 +46,7 @@ HAVING rest > 0");
 	print '<th>Beszállító Neve</th>';
 	print '<th>Beérkezés ideje</th>';
 	print '<th>Mennyiség</th>';
-	print '<th>Kiad</th>';
+	print '<th>Raktáros</th>';
 	print '</tr>';
 	print '</thead>';
 	while($row = $results->fetch_assoc()) {
@@ -64,7 +65,7 @@ HAVING rest > 0");
 		print '<td>'.$row["supplier"].'</td>';
 		print '<td>'.$row["time"].'</td>';
 		print '<td>'.$row["rest"].'</td>';
-		print '<td><button class="btn btn-sm btn-danger" onclick="trash('.$row["id"].','.$row["rest"].')">Selejt</button></td>';
+		print '<td>'.$row["user"].'</td>';
 		print '</tr>';
 	}
 	print '</table>';
@@ -369,9 +370,9 @@ function dailyInput(){
 	
 	$mysqli = connect();
 	if($results = $mysqli->query(
-				"SELECT p.id as id, pr.name as product, s.name as supplier, p.amount as amount
-	 				FROM supplier s, pallet p, product pr
-				where pr.id=p.product_id and p.supplier_id = s.id
+				"SELECT p.id as id, pr.name as product, s.name as supplier, p.amount as amount, u.name as user
+	 				FROM supplier s, pallet p, product pr, user u
+				where pr.id=p.product_id and p.supplier_id = s.id and u.id = p.user_id 
 				 and p.time >= CURDATE()  and p.deleted = false and pr.deleted = false order by supplier")){
 	
 		print '<table class="table table-hover">';
@@ -380,6 +381,7 @@ function dailyInput(){
 		print '<th>Alapanyag</th>';
 		print '<th>Beszállító Neve</th>';
 		print '<th>Mennyiség</th>';
+		print '<th>Raktáros</th>';
 		print '</tr>';
 		print '</thead>';
 		$i = false;
@@ -396,6 +398,7 @@ function dailyInput(){
 			print '<td>'.$row["product"].'</td>';
 			print '<td>'.$row["supplier"].'</td>';
 			print '<td>'.$row["amount"].'</td>';
+			print '<td>'.$row["user"].'</td>';
 			print '</tr>';
 			$i = true;
 		}
@@ -451,9 +454,9 @@ function dailyInput(){
 function dailyOutput(){
 	$mysqli = connect();
 	if($results = $mysqli->query(
-				"SELECT p.id as a0, pr.name as a1, p.amount as a2, o.time as a3
-	 				FROM  pallet p, product pr, output o
-				where pr.id=p.product_id and o.pallet_id = p.id
+				"SELECT p.id as a0, pr.name as a1, p.amount as a2, o.time as a3, u.name as a4
+	 				FROM  pallet p, product pr, output o, user u
+				where pr.id=p.product_id and o.pallet_id = p.id and p.user_id = u.id
 				 and o.time >= CURDATE() and p.deleted = false and pr.deleted = false and o.deleted = false order by a2")){
 		$str =  '<table class="table table-hover">';
 		$str .= '<thead>';
@@ -462,6 +465,7 @@ function dailyOutput(){
 		$str .= '<th>Alapanyag</th>';
 		$str .= '<th>Mennyiség</th>';
 		$str .= '<th>Kiadási idő</th>';
+		$str .= '<th>Raktáros</th>';
 		$str .= '</tr>';
 		$str .= '</thead>';
 		$i =false;
@@ -471,6 +475,7 @@ function dailyOutput(){
 			$str .= '<td>'.$row["a1"].'</td>';
 			$str .= '<td>'.$row["a2"].'</td>';
 			$str .= '<td>'.$row["a3"].'</td>';
+			$str .= '<td>'.$row["a4"].'</td>';
 			$str .= '</tr>';
 			$i =true;
 		}

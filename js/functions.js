@@ -18,7 +18,11 @@ function bbsave(){
 		
 		var name = $('#new_user_name').val()
 		var pass = $('#new_user_pass').val()
-		newUser(name,pass)
+		var type = $('#new_user_type').val()
+		if(type == "Raktáros"){
+			type = 1;
+		}
+		newUser(name,pass,type)
 	
 	}else if(tipus == "createCategory"){
 		
