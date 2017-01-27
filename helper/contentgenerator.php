@@ -540,33 +540,38 @@ function listOld(){
 
 function listUser(){
 	$mysqli = connect();
-	$results = $mysqli->query("SELECT * from User where deleted = false");
-	print '<table class="table table-hover">';
-	print '<thead>';
-	print '<tr>';
-	print '<th>Felhasználó Név</th>';
-	print '<th>Jogosultság</th>';
-	print '<th>Szerkeszt</th>';
-	print '<th><button class="btn btn-sm btn-default" id="newRetailer" onclick="createUser()">Új Felhasználó</button></th>';
-	print '<th>Törlés</th>';
-	print '</tr>';
-	print '</thead>';
-	while($row = $results->fetch_assoc()) {
+	if($results = $mysqli->query("SELECT * from user where deleted = false")){
+		print '<table class="table table-hover">';
+		print '<thead>';
 		print '<tr>';
-		print '<td id="username_'.$row["id"].'">'.$row["name"].'</td>';
-		if($row["type"] === "0"){
-			print '<td id="usertype_'.$row["id"].'">Admin</td>';
-		}else if($row["type"] === "1"){
-			print '<td id="usertype_'.$row["id"].'">Raktáros</td>';
-		}
-		print '<td><button class="btn btn-sm btn-default" onclick="editUserName('.$row["id"].')">Név Szerkeszés</button></td>';
-		print '<td><button class="btn btn-sm btn-default" onclick="editUserPass('.$row["id"].')">Új Jelszó</button></td>';
-		print '<td><button class="btn btn-sm btn-danger" onclick="deleteUser('.$row["id"].')">Törlés</button></td>';
+		print '<th>Felhasználó Név</th>';
+		print '<th>Jogosultság</th>';
+		print '<th>Szerkeszt</th>';
+		print '<th><button class="btn btn-sm btn-default" id="newRetailer" onclick="createUser()">Új Felhasználó</button></th>';
+		print '<th>Törlés</th>';
 		print '</tr>';
+		print '</thead>';
+		while($row = $results->fetch_assoc()) {
+			print '<tr>';
+			print '<td id="username_'.$row["id"].'">'.$row["name"].'</td>';
+			if($row["type"] === "0"){
+				print '<td id="usertype_'.$row["id"].'">Admin</td>';
+			}else if($row["type"] === "1"){
+				print '<td id="usertype_'.$row["id"].'">Raktáros</td>';
+			}
+			print '<td><button class="btn btn-sm btn-default" onclick="editUserName('.$row["id"].')">Név Szerkeszés</button></td>';
+			print '<td><button class="btn btn-sm btn-default" onclick="editUserPass('.$row["id"].')">Új Jelszó</button></td>';
+			print '<td><button class="btn btn-sm btn-danger" onclick="deleteUser('.$row["id"].')">Törlés</button></td>';
+			print '</tr>';
+		}
+		print '</table>';
+		// Frees the memory associated with a result
+		$results->free();
+
+	}else{
+		print mysqli_error($mysqli);
+		print ("HIBA");
 	}
-	print '</table>';
-	// Frees the memory associated with a result
-	$results->free();
 	// close connection
 	$mysqli->close();
 }
