@@ -21,8 +21,8 @@
 		<link href="../js/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="../css/styles.css?v=<?php echo $version;?>">
 		
-		<script src="../js/functions.js" ></script>
-		<script src="../js/server.js" ></script>
+		<script src="../js/functions.js?v=<?php echo $version;?>" ></script>
+		<script src="../js/server.js?v=<?php echo $version;?>" ></script>
 		<script src="../js/Chart.js"></script>
 		
 	<?php  if($selected == "tablet"){	//TODO css rand		?>							
