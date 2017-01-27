@@ -449,12 +449,15 @@ function dailyInput(){
 }
 
 function dailyOutput(){
+	$labels = array();
+	$data = array();
+	
 	$mysqli = connect();
 	if($results = $mysqli->query(
-				"SELECT p.id as a0, pr.name as a1, p.amount as a2, o.time as a3
+				"SELECT p.id as id, pr.name as product, o.amount as amount, o.time as time
 	 				FROM  pallet p, product pr, output o
 				where pr.id=p.product_id and o.pallet_id = p.id
-				 and o.time >= CURDATE() and p.deleted = false and pr.deleted = false and o.deleted = false order by a2")){
+				 and o.time >= CURDATE() and p.deleted = false and pr.deleted = false and o.deleted = false order by amount")){
 		$str =  '<table class="table table-hover">';
 		$str .= '<thead>';
 		$str .= '<tr>';
@@ -466,11 +469,19 @@ function dailyOutput(){
 		$str .= '</thead>';
 		$i =false;
 		while($row = $results->fetch_assoc()) {
+			if(in_array($row["product"],$labels))
+			{
+				$key = array_search($row["product"],$labels);
+				$data[$key] = $data[$key]+(int)$row["amount"];
+			}else{
+				array_push($labels,$row["product"]);
+				array_push($data,(int)$row["amount"]);
+			}
 			$str .= '<tr>';
-			$str .= '<td>'.$row["a0"].'</td>';
-			$str .= '<td>'.$row["a1"].'</td>';
-			$str .= '<td>'.$row["a2"].'</td>';
-			$str .= '<td>'.$row["a3"].'</td>';
+			$str .= '<td>'.$row["id"].'</td>';
+			$str .= '<td>'.$row["product"].'</td>';
+			$str .= '<td>'.$row["amount"].'</td>';
+			$str .= '<td>'.$row["time"].'</td>';
 			$str .= '</tr>';
 			$i =true;
 		}
@@ -482,7 +493,40 @@ function dailyOutput(){
 		}else{
 			print ("Ma még semmmit nem adtak ki a raktárból");
 		}
-				
+		
+		$colors = array( 'rgba(255, 99, 132, 0.8)',
+				'rgba(54, 162, 235, 0.8)',
+				'rgba(255, 206, 86, 0.8)',
+				'rgba(75, 192, 192, 0.8)',
+				'rgba(153, 102, 255, 0.8)');
+		
+		$backgroundColor = array();
+		for($i=0; $i < count($labels); $i++){
+			$num = $i%count($colors);
+			array_push($backgroundColor,$colors[$num]);
+		}
+		
+		$hoverBackgroundColor = array();
+		for($i=0; $i < count($labels); $i++){
+			$num = $i%count($colors);
+			array_push($hoverBackgroundColor,$colors[$num]);
+		}
+		
+		$datasets = array(
+				"data" => $data,
+				"backgroundColor" => $backgroundColor,
+				"hoverBackgroundColor" => $hoverBackgroundColor
+		);
+		$datasetsarray = array($datasets);
+		$json = array(
+				"labels" => $labels,
+				"datasets" => $datasetsarray
+		);
+		
+		$json_str = json_encode($json,True);
+		
+		print '<div id="dailyOutput_json" class="hiddendiv">'.$json_str.'</div>';
+		
 		$results->free();
 	}else{
 		print mysqli_error($mysqli);

@@ -19,24 +19,6 @@ listStore();
 			cosole.log(err);
 		}
 		
-			/*{
-			    labels: ["Sárga Répa", "Zeller", "Fejes Káposzta", "Fehér Répa", "Petrezselyem", "Saláta", "Paradicsom"],
-			    datasets: [
-			        { 
-			            label: "Raktárkészletek",
-			            backgroundColor: [
-			                'rgba(255, 99, 132, 0.8)',
-			                'rgba(54, 162, 235, 0.8)',
-			                'rgba(255, 206, 86, 0.8)',
-			                'rgba(75, 192, 192, 0.8)',
-			                'rgba(153, 102, 255, 0.8)',
-			                'rgba(255, 159, 64, 0.8)'
-			            ],
-			            borderWidth: 0,
-			            data: [65, 59, 80, 81, 56, 55, 40],
-			        }
-			    ]
-			};*/
 		var myBarChart = new Chart(ctx, {
 			type: 'bar',
 		    data: data,
