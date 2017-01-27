@@ -37,8 +37,8 @@ LEFT JOIN (
  ) t1 
  on p.id = t1.id
 HAVING rest > 0");
-	//and a.nev='".$alapanyag."'
-	print '<table class="table table-hover">';
+	
+	print '<table class="table table-hover sortable">';
 	print '<thead>';
 	print '<tr>';
 	print '<th>ID</th>';
@@ -106,7 +106,7 @@ HAVING rest > 0");
 function listProduct(){
 	$mysqli = connect();
 	$results = $mysqli->query("SELECT p.id as id, p.name as name, c.name as cat FROM product p, category c WHERE c.id = p.category_id and p.deleted = false");
-	print '<table class="table table-hover">';
+	print '<table class="table table-hover sortable">';
 	print '<thead>';
 	print '<tr>';
 	print '<th>Alapanyag Neve</th>';
@@ -133,7 +133,7 @@ function listProduct(){
 function listSupplier(){
 	$mysqli = connect();
 	$results = $mysqli->query("SELECT * FROM supplier where deleted = false");
-	print '<table class="table table-hover">';
+	print '<table class="table table-hover sortable">';
 	print '<thead>';
 	print '<tr>';
 	print '<th>Beszállító Neve</th>';
@@ -160,7 +160,7 @@ function listSupplier(){
 function listCategory(){
 	$mysqli = connect();
 	$results = $mysqli->query("SELECT * FROM category where deleted = false");
-	print '<table class="table table-hover">';
+	print '<table class="table table-hover sortable">';
 	print '<thead>';
 	print '<tr>';
 	print '<th>Kategória Neve</th>';
@@ -215,7 +215,7 @@ LEFT JOIN (
 HAVING rest > 0
 			")){
 	//and a.nev='".$alapanyag."'
-	print '<table class="table table-hover">';
+	print '<table class="table table-hover sortable">';
 	print '<thead>';
 	print '<tr>';
 	print '<th>ID</th>';
@@ -283,7 +283,7 @@ function palletSpare($alapanyag){
 HAVING rest > 0
 			")){
 	//and a.nev='".$alapanyag."'
-		print '<table class="table table-hover">';
+		print '<table class="table table-hover sortable">';
 		print '<thead>';
 		print '<tr>';
 		print '<th>ID</th>';
@@ -370,188 +370,176 @@ function dailyInput(){
 	
 	$mysqli = connect();
 	if($results = $mysqli->query(
-				"SELECT p.id as id, pr.name as product, s.name as supplier, p.amount as amount, u.name as user
-	 				FROM supplier s, pallet p, product pr, user u
-				where pr.id=p.product_id and p.supplier_id = s.id and u.id = p.user_id 
+			"SELECT p.id as id, pr.name as product, s.name as supplier, p.amount as amount
+	 				FROM supplier s, pallet p, product pr
+				where pr.id=p.product_id and p.supplier_id = s.id
 				 and p.time >= CURDATE()  and p.deleted = false and pr.deleted = false order by supplier")){
 	
-
-		print '<table class="table table-hover">';
-		print '<thead>';
-		print '<tr>';
-		print '<th>Alapanyag</th>';
-		print '<th>Beszállító Neve</th>';
-		print '<th>Mennyiség</th>';
-		print '<th>Raktáros</th>';
-		print '</tr>';
-		print '</thead>';
-
-		$i = false;
-		while($row = $results->fetch_assoc()) {
-			if(in_array($row["product"],$labels))
-			{
-				$key = array_search($row["product"],$labels);
-				$data[$key] = $data[$key]+(int)$row["amount"];
-			}else{
-				array_push($labels,$row["product"]);
-				array_push($data,(int)$row["amount"]);
-			}
-
-			print '<tr>';
-			print '<td>'.$row["product"].'</td>';
-			print '<td>'.$row["supplier"].'</td>';
-			print '<td>'.$row["amount"].'</td>';
-			print '<td>'.$row["user"].'</td>';
-			print '</tr>';
-			$i = true;
-
-		}
-		print '</table>';
+					 $str =  '<table class="table table-hover sortable">';
+					 $str .= '<thead>';
+					 $str .= '<tr>';
+					 $str .= '<th>ID</th>';
+					 $str .= '<th>Alapanyag</th>';
+					 $str .= '<th>Mennyiség</th>';
+					 $str .= '</tr>';
+					 $str .= '</thead>';
+					 $i = false;
+					 while($row = $results->fetch_assoc()) {
+					 	if(in_array($row["product"],$labels))
+					 	{
+					 		$key = array_search($row["product"],$labels);
+					 		$data[$key] = $data[$key]+(int)$row["amount"];
+					 	}else{
+					 		array_push($labels,$row["product"]);
+					 		array_push($data,(int)$row["amount"]);
+					 	}
+					 	$str .= '<tr>';
+					 	$str .= '<td>'.$row["id"].'</td>';
+					 	$str .= '<td>'.$row["product"].'</td>';
+					 	$str .= '<td>'.$row["amount"].'</td>';
+					 	$str .= '</tr>';
+					 	$i =true;
+					 }
+					 print '</table>';
 	
-		if($i){
-			print $str;
-		}
-		else{
-			print('Ma még nem érkezett be semmi a raktárba');
-		}
-		
-		$colors = array( 'rgba(255, 99, 132, 0.8)',
-				'rgba(54, 162, 235, 0.8)',
-				'rgba(255, 206, 86, 0.8)',
-				'rgba(75, 192, 192, 0.8)',
-				'rgba(153, 102, 255, 0.8)');
-		
-		$backgroundColor = array();
-		for($i=0; $i < count($labels); $i++){
-			$num = $i%count($colors);
-			array_push($backgroundColor,$colors[$num]);
-		}
-		
-		$hoverBackgroundColor = array();
-		for($i=0; $i < count($labels); $i++){
-			$num = $i%count($colors);
-			array_push($hoverBackgroundColor,$colors[$num]);
-		}
-		
-		$datasets = array(
-				"data" => $data,
-				"backgroundColor" => $backgroundColor,
-				"hoverBackgroundColor" => $hoverBackgroundColor
-		);
-		$datasetsarray = array($datasets);
-		$json = array(
-				"labels" => $labels,
-				"datasets" => $datasetsarray
-		);
-		
-		$json_str = json_encode($json,True);
-		
-		print '<div id="dailyInput_json" class="hiddendiv">'.$json_str.'</div>';
-		
-		// Frees the memory associated with a result
-		$results->free();
+					 if($i){
+					 	print $str;
+					 }
+					 else{
+					 	print('Ma még nem érkezett be semmi a raktárba');
+					 }
+	
+					 $colors = array( 'rgba(255, 99, 132, 0.8)',
+					 		'rgba(54, 162, 235, 0.8)',
+					 		'rgba(255, 206, 86, 0.8)',
+					 		'rgba(75, 192, 192, 0.8)',
+					 		'rgba(153, 102, 255, 0.8)');
+	
+					 $backgroundColor = array();
+					 for($i=0; $i < count($labels); $i++){
+					 	$num = $i%count($colors);
+					 	array_push($backgroundColor,$colors[$num]);
+					 }
+	
+					 $hoverBackgroundColor = array();
+					 for($i=0; $i < count($labels); $i++){
+					 	$num = $i%count($colors);
+					 	array_push($hoverBackgroundColor,$colors[$num]);
+					 }
+	
+					 $datasets = array(
+					 		"data" => $data,
+					 		"backgroundColor" => $backgroundColor,
+					 		"hoverBackgroundColor" => $hoverBackgroundColor
+					 );
+					 $datasetsarray = array($datasets);
+					 $json = array(
+					 		"labels" => $labels,
+					 		"datasets" => $datasetsarray
+					 );
+	
+					 $json_str = json_encode($json,True);
+	
+					 print '<div id="dailyInput_json" class="hiddendiv">'.$json_str.'</div>';
+	
+					 // Frees the memory associated with a result
+					 $results->free();
 	}else{
 		print "hiba";
 		print mysqli_error($mysqli);
 	}
 	// close connection
 	$mysqli->close();
-}
+	}
 
 function dailyOutput(){
 	$labels = array();
 	$data = array();
-	
+
 	$mysqli = connect();
 	if($results = $mysqli->query(
+			"SELECT p.id as id, pr.name as product, o.amount as amount, o.time as time
+ 				FROM  pallet p, product pr, output o
+			where pr.id=p.product_id and o.pallet_id = p.id
+			 and o.time >= CURDATE() and p.deleted = false and pr.deleted = false and o.deleted = false order by amount")){
+				 $str =  '<table class="table table-hover  sortable">';
+				 $str .= '<thead>';
+				 $str .= '<tr>';
+				 $str .= '<th>ID</th>';
+				 $str .= '<th>Alapanyag</th>';
+				 $str .= '<th>Mennyiség</th>';
+				 $str .= '<th>Kiadási idő</th>';
+				 $str .= '</tr>';
+				 $str .= '</thead>';
+				 $i =false;
+				 while($row = $results->fetch_assoc()) {
+				 	if(in_array($row["product"],$labels))
+				 	{
+				 		$key = array_search($row["product"],$labels);
+				 		$data[$key] = $data[$key]+(int)$row["amount"];
+				 	}else{
+				 		array_push($labels,$row["product"]);
+				 		array_push($data,(int)$row["amount"]);
+				 	}
+				 	$str .= '<tr>';
+				 	$str .= '<td>'.$row["id"].'</td>';
+				 	$str .= '<td>'.$row["product"].'</td>';
+				 	$str .= '<td>'.$row["amount"].'</td>';
+				 	$str .= '<td>'.$row["time"].'</td>';
+				 	$str .= '</tr>';
+				 	$i =true;
+				 }
+				 print '</table>';
 
-			"SELECT p.id as a0, pr.name as a1, p.amount as a2, o.time as a3, u.name as a4
- 				FROM  pallet p, product pr, output o, user u
-			where pr.id=p.product_id and o.pallet_id = p.id and p.user_id = u.id
-			 and o.time >= CURDATE() and p.deleted = false and pr.deleted = false and o.deleted = false order by a2")){
-			 
-		$str =  '<table class="table table-hover">';
-		$str .= '<thead>';
-		$str .= '<tr>';
-		$str .= '<th>ID</th>';
-		$str .= '<th>Alapanyag</th>';
-		$str .= '<th>Mennyiség</th>';
-		$str .= '<th>Kiadási idő</th>';
-		$str .= '<th>Raktáros</th>';
-		$str .= '</tr>';
-		$str .= '</thead>';
-		$i =false;
-		while($row = $results->fetch_assoc()) {
-			if(in_array($row["product"],$labels))
-			{
-				$key = array_search($row["product"],$labels);
-				$data[$key] = $data[$key]+(int)$row["amount"];
-			}else{
-				array_push($labels,$row["product"]);
-				array_push($data,(int)$row["amount"]);
-			}
-			$str .= '<tr>';
+				 if($i){
+				 	print $str;
+				 		
+				 }else{
+				 	print ("Ma még semmmit nem adtak ki a raktárból");
+				 }
 
-			$str .= '<td>'.$row["a0"].'</td>';
-			$str .= '<td>'.$row["a1"].'</td>';
-			$str .= '<td>'.$row["a2"].'</td>';
-			$str .= '<td>'.$row["a3"].'</td>';
-			$str .= '<td>'.$row["a4"].'</td>';
+				 $colors = array( 'rgba(255, 99, 132, 0.8)',
+				 		'rgba(54, 162, 235, 0.8)',
+				 		'rgba(255, 206, 86, 0.8)',
+				 		'rgba(75, 192, 192, 0.8)',
+				 		'rgba(153, 102, 255, 0.8)');
 
-			$str .= '</tr>';
-			$i =true;
-		}
-		print '</table>';
-		
-		if($i){
-			print $str;
-			
-		}else{
-			print ("Ma még semmmit nem adtak ki a raktárból");
-		}
-		
-		$colors = array( 'rgba(255, 99, 132, 0.8)',
-				'rgba(54, 162, 235, 0.8)',
-				'rgba(255, 206, 86, 0.8)',
-				'rgba(75, 192, 192, 0.8)',
-				'rgba(153, 102, 255, 0.8)');
-		
-		$backgroundColor = array();
-		for($i=0; $i < count($labels); $i++){
-			$num = $i%count($colors);
-			array_push($backgroundColor,$colors[$num]);
-		}
-		
-		$hoverBackgroundColor = array();
-		for($i=0; $i < count($labels); $i++){
-			$num = $i%count($colors);
-			array_push($hoverBackgroundColor,$colors[$num]);
-		}
-		
-		$datasets = array(
-				"data" => $data,
-				"backgroundColor" => $backgroundColor,
-				"hoverBackgroundColor" => $hoverBackgroundColor
-		);
-		$datasetsarray = array($datasets);
-		$json = array(
-				"labels" => $labels,
-				"datasets" => $datasetsarray
-		);
-		
-		$json_str = json_encode($json,True);
-		
-		print '<div id="dailyOutput_json" class="hiddendiv">'.$json_str.'</div>';
-		
-		$results->free();
+				 $backgroundColor = array();
+				 for($i=0; $i < count($labels); $i++){
+				 	$num = $i%count($colors);
+				 	array_push($backgroundColor,$colors[$num]);
+				 }
+
+				 $hoverBackgroundColor = array();
+				 for($i=0; $i < count($labels); $i++){
+				 	$num = $i%count($colors);
+				 	array_push($hoverBackgroundColor,$colors[$num]);
+				 }
+
+				 $datasets = array(
+				 		"data" => $data,
+				 		"backgroundColor" => $backgroundColor,
+				 		"hoverBackgroundColor" => $hoverBackgroundColor
+				 );
+				 $datasetsarray = array($datasets);
+				 $json = array(
+				 		"labels" => $labels,
+				 		"datasets" => $datasetsarray
+				 );
+
+				 $json_str = json_encode($json,True);
+
+				 print '<div id="dailyOutput_json" class="hiddendiv">'.$json_str.'</div>';
+
+				 $results->free();
 	}else{
 		print mysqli_error($mysqli);
 		print ("HIBA");
 	}
-	
+
 	$mysqli->close();
 }
-
+	
 function listOld(){
 	$mysqli = connect();
 	if($results = $mysqli->query(
@@ -560,7 +548,7 @@ function listOld(){
 				where pr.id=p.product_id
 				and p.time < CURDATE() and p.deleted = false order by a3 ")){
 	
-		$str =  '<table class="table table-hover">';
+		$str =  '<table class="table table-hover  sortable">';
 		$str .= '<thead>';
 		$str .= '<tr>';
 		$str .= '<th>ID</th>';
