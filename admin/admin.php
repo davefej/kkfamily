@@ -33,44 +33,23 @@ require("../common/header.php");
 		  		
 		  		<div class="col-md-6-2">
 		  			<div class="centerBlock">
-			  			<canvas id="myDoughnutChart" width="300" height="150">
+			  			<canvas id="myDoughnutChart" width="300" height="270">
 		                    <script>
-		                    //TODO: dinamikussá tenni.
 		                        var ctx = document.getElementById("myDoughnutChart");
-		                        var data = {
-		                            labels: [
-		                                "Káposzta",
-		                                "Saláta",
-		                                "Répa",
-		                                "Cékla",
-		                                "Uborka"
-		                            ],
-		                            datasets: [
-		                                {
-		                                    data: [14, 9, 4, 2, 0],
-		                                    backgroundColor: [
-		                                        "#FF6384",
-		                                        "#36A2EB",
-		                                        "#FFCE56",
-		                                        "#93ff93",
-		                                        "#e397ff"
-		                                    ],
-		                                    hoverBackgroundColor: [
-		                                        "#FF6384",
-		                                        "#36A2EB",
-		                                        "#FFCE56",
-		                                        "#93ff93",
-		                                        "#e397ff"
-		                                    ]
-		                                }]
-		                        };
+		                        var data = document.getElementById('dailyInput_json').innerHTML;
+
+		                        try{
+		                			data = JSON.parse(data);
+		                		}catch(err){
+		                			cosole.log(err);
+		                		}
+		                        
 		                        var myDoughnutChart = new Chart(ctx, {
 		                            type: 'doughnut',
 		                            data: data,
 		                            options: {
-		                                responsive: false,
 		                                legend: {
-		                                display: false
+		                                display: true
 		                                },
 		                                title: {
 		                                    display: true,
@@ -137,7 +116,7 @@ require("../common/header.php");
 		<div class="panel panel-success">
 			<div class="panel-heading">
 				<a data-toggle="collapse" href="#collapse4">
-	  				Munkások Statisztikái
+	  				Munkások
 	  			</a>
 			</div>
 			<div id="collapse4" class="panel-collapse collapse">
