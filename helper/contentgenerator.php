@@ -8,11 +8,34 @@ function listStore(){
 	$data = array();
 	$mysqli = connect();
 	$results = $mysqli->query(
-			"SELECT p.id as a0, pr.name as a1, s.name as a2, p.amount as a3,
- 				p.time as a4 FROM supplier s, pallet p, product pr
-			where pr.id=p.product_id and p.supplier_id = s.id
-			and p.deleted = 0 and pr.deleted = 0
-			order by a2");
+			"select p.id as id, pr.name as product, s.name as supplier,p.time as time, 
+IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0) as rest 
+from pallet p 
+INNER JOIN product pr on p.product_id = pr.id
+INNER JOIN supplier s on s.id = p.supplier_id
+LEFT JOIN (
+    select t2.id as id ,t3.amount as trash,t2.amount as output from 
+		(
+           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
+        ) t2 
+		LEFT JOIN 
+		(
+           SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
+        ) t3 
+		ON t2.id = t3.id 
+		UNION
+	select t2.id as id ,t3.amount as trash,t2.amount as output from 
+		(
+            SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
+        ) t2 
+		RIGHT JOIN 
+		(
+            SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
+        ) t3 
+		ON t2.id = t3.id 
+ ) t1 
+ on p.id = t1.id
+HAVING rest > 0");
 	//and a.nev='".$alapanyag."'
 	print '<table class="table table-hover">';
 	print '<thead>';
@@ -26,22 +49,22 @@ function listStore(){
 	print '</tr>';
 	print '</thead>';
 	while($row = $results->fetch_assoc()) {
-		if(in_array($row["a1"],$labels))
+		if(in_array($row["product"],$labels))
 		{
-			$key = array_search($row["a1"],$labels);
-			$data[$key] = $data[$key]+(int)$row["a3"]; 
+			$key = array_search($row["product"],$labels);
+			$data[$key] = $data[$key]+(int)$row["rest"]; 
 		}else{
-			array_push($labels,$row["a1"]);
-			array_push($data,(int)$row["a3"]);
+			array_push($labels,$row["product"]);
+			array_push($data,(int)$row["rest"]);
 		}
 		
 		print '<tr>';
-		print '<td>'.$row["a0"].'</td>';
-		print '<td>'.$row["a1"].'</td>';
-		print '<td>'.$row["a2"].'</td>';
-		print '<td>'.$row["a4"].'</td>';
-		print '<td>'.$row["a3"].'</td>';
-		print '<td><button class="btn btn-sm btn-danger" onclick="trash('.$row["a0"].','.$row["a3"].')">Selejt</button></td>';
+		print '<td>'.$row["id"].'</td>';
+		print '<td>'.$row["product"].'</td>';
+		print '<td>'.$row["supplier"].'</td>';
+		print '<td>'.$row["time"].'</td>';
+		print '<td>'.$row["rest"].'</td>';
+		print '<td><button class="btn btn-sm btn-danger" onclick="trash('.$row["id"].','.$row["rest"].')">Selejt</button></td>';
 		print '</tr>';
 	}
 	print '</table>';
