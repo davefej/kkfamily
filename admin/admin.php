@@ -6,6 +6,7 @@ require("../common/header.php");
   
   <div class="panel-group">
 	  
+	  <!-- DAILY INPUT -->
 	  <div class="panel panel-info">
 	  	<div class="panel-heading">
 	  		<a data-toggle="collapse" href="#collapse1">
@@ -21,11 +22,9 @@ require("../common/header.php");
 		  			<table class="table">
 				  		<tr>
 					  		<td>
-								<div>
 								<?php 											
 									dailyInput();			
 								?>
-								</div>
 							</td>
 						</tr>
 		  			</table>
@@ -33,9 +32,9 @@ require("../common/header.php");
 		  		
 		  		<div class="col-md-6-2">
 		  			<div class="centerBlock">
-			  			<canvas id="myDoughnutChart" width="300" height="270">
+			  			<canvas id="dailyInputChart" width="300" height="270">
 		                    <script>
-		                        var ctx = document.getElementById("myDoughnutChart");
+		                        var ctx = document.getElementById("dailyInputChart");
 		                        var data = document.getElementById('dailyInput_json').innerHTML;
 
 		                        try{
@@ -67,6 +66,7 @@ require("../common/header.php");
 		  </div>
 		</div>
 	  
+	  <!-- DAILY OUTPUT -->
 	  <div class="panel panel-info">
 	  	<div class="panel-heading">
 	  		<a data-toggle="collapse" href="#collapse2">
@@ -77,18 +77,55 @@ require("../common/header.php");
 		  	<div class="panel-body">
 		  		A kiadási adatokat lehetne ide írni.
 		  	</div>
-		  	<table class="table">
-		  		<tr>
-			  		<td>
-						<?php 			
-							dailyOutput();
-						?>
-					</td>
-				</tr>
-		  	</table>
+		  	<div class="row" style="width:95%">
+		  		<div class="col-md-6-1">
+				  	<table class="table">
+				  		<tr>
+					  		<td>
+								<?php 			
+									dailyOutput();
+								?>
+							</td>
+						</tr>
+				  	</table>
+				</div>
+		  	<div class="col-md-6-2">
+		  		<div class="centerBlock">
+			  			<canvas id="dailyOutputChart" width="300" height="270">
+		                    <script>
+		                        var ctx = document.getElementById("dailyOutputChart");
+		                        var data = document.getElementById('dailyOutput_json').innerHTML;
+
+		                        try{
+		                			data = JSON.parse(data);
+		                		}catch(err){
+		                			cosole.log(err);
+		                		}
+		                        
+		                        var myDoughnutChart = new Chart(ctx, {
+		                            type: 'doughnut',
+		                            data: data,
+		                            options: {
+		                                legend: {
+		                                display: true
+		                                },
+		                                title: {
+		                                    display: true,
+		                                    text: 'Raktárkészlet',
+		                                    fontColor: "#FFFFFF",
+		                                    fontSize: 18
+		                                }
+		                            }
+		                        });
+		                    </script>
+		                </canvas>
+	           </div>
+		  	</div>
 		 </div>
 	  </div>
+	  </div>
 	  
+	  <!-- SOON BE EXPIRED PRODUCTS -->
 	  <div class="panel panel-danger">
 	  	<div class="panel-heading">
 	  		<a data-toggle="collapse" href="#collapse3">
@@ -113,6 +150,7 @@ require("../common/header.php");
 		  </div>
 		</div>
 		
+		<!-- WORKERS / USERS -->
 		<div class="panel panel-success">
 			<div class="panel-heading">
 				<a data-toggle="collapse" href="#collapse4">
