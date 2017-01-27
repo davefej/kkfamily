@@ -374,14 +374,14 @@ function dailyInput(){
 				where pr.id=p.product_id and p.supplier_id = s.id
 				 and p.time >= CURDATE()  and p.deleted = false and pr.deleted = false order by supplier")){
 	
-		print '<table class="table table-hover">';
-		print '<thead>';
-		print '<tr>';
-		print '<th>Alapanyag</th>';
-		print '<th>Beszállító Neve</th>';
-		print '<th>Mennyiség</th>';
-		print '</tr>';
-		print '</thead>';
+		 $str =  '<table class="table table-hover">';
+		 $str .= '<thead>';
+		 $str .= '<tr>';
+		 $str .= '<th>ID</th>';
+		 $str .= '<th>Alapanyag</th>';
+		 $str .= '<th>Mennyiség</th>';
+		 $str .= '</tr>';
+		 $str .= '</thead>';
 		$i = false;
 		while($row = $results->fetch_assoc()) {
 			if(in_array($row["product"],$labels))
@@ -392,16 +392,19 @@ function dailyInput(){
 				array_push($labels,$row["product"]);
 				array_push($data,(int)$row["amount"]);
 			}
-			print '<tr>';
-			print '<td>'.$row["product"].'</td>';
-			print '<td>'.$row["supplier"].'</td>';
-			print '<td>'.$row["amount"].'</td>';
-			print '</tr>';
-			$i = true;
+			$str .= '<tr>';
+			$str .= '<td>'.$row["id"].'</td>';
+			$str .= '<td>'.$row["product"].'</td>';
+			$str .= '<td>'.$row["amount"].'</td>';
+			$str .= '</tr>';
+			$i =true;
 		}
 		print '</table>';
 	
-		if(!$i){
+		if($i){
+			print $str;
+		}
+		else{
 			print('Ma még nem érkezett be semmi a raktárba');
 		}
 		

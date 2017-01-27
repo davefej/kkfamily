@@ -9,7 +9,7 @@ listStore();
 <!-- BAR CHART -->
 <!-- TODO: Dinamikussá tenni a grafikonokat -->
 <div class="container-fluid" id="barChartContainer">
-	<canvas id="myBarChart" width="600" height="300">
+	<canvas id="myBarChart" width="600" height="150">
 		<script>
 		var ctx = document.getElementById("myBarChart");
 		var data = document.getElementById('storage_json').innerHTML; 
@@ -23,6 +23,9 @@ listStore();
 			type: 'bar',
 		    data: data,
 		    options: {
+		    	legend: {
+                    display: false
+                },
 		        scales: {
 		            yAxes: [{
 		                ticks: {

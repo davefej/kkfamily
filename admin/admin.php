@@ -22,11 +22,9 @@ require("../common/header.php");
 		  			<table class="table">
 				  		<tr>
 					  		<td>
-								<div>
 								<?php 											
 									dailyInput();			
 								?>
-								</div>
 							</td>
 						</tr>
 		  			</table>
