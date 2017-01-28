@@ -27,7 +27,7 @@ require("../common/header.php");
 		  		
 		  		<div class="col-md-6-2">
 		  			<div class="centerBlock">
-			  			<canvas id="dailyInputChart" width="300" height="270">
+			  			<canvas id="dailyInputChart" width="300" height="250">
 		                    <script>
 		                        var ctx = document.getElementById("dailyInputChart");
 		                        var data = document.getElementById('dailyInput_json').innerHTML;
@@ -81,7 +81,7 @@ require("../common/header.php");
 				</div>
 		  	<div class="col-md-6-2">
 		  		<div class="centerBlock">
-			  			<canvas id="dailyOutputChart" width="300" height="270">
+			  			<canvas id="dailyOutputChart" width="300" height="250">
 		                    <script>
 		                        var ctx = document.getElementById("dailyOutputChart");
 		                        var data = document.getElementById('dailyOutput_json').innerHTML;
