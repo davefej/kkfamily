@@ -364,7 +364,7 @@ function dailyOutput(){
 	var month = $('#date_month').val()
 	var year  = new Date().getFullYear();
 	
-	window.location = "output.php?day="+year+"-"+month+"-"+day;
+	window.location = "output.php?type=day&day="+year+"-"+month+"-"+day;
 }
 
 
@@ -373,7 +373,28 @@ function dailyInput(){
 	var month = $('#date_month').val()
 	var year  = new Date().getFullYear();
 	
-	window.location = "input.php?day="+year+"-"+month+"-"+day;
+	window.location = "input.php?type=day&day="+year+"-"+month+"-"+day;
+}
+
+function monthlyOutput(){
+	var day = $('#date_day').val()
+	var month = $('#date_month').val()
+	var year  = new Date().getFullYear();
+	
+	window.location = "output.php?type=month&month="+year+"-"+month+"-01";
 }
 
 
+function monthlyInput(){
+	var day = $('#date_day').val()
+	var month = $('#date_month').val()
+	var year  = new Date().getFullYear();
+	
+	window.location = "input.php?type=month&month="+year+"-"+month+"-01";
+}
+
+function filterProd(){
+	var prod_id = $('#prod_select').val();
+	window.location = "storage.php?filter=prod&id="+prod_id;
+	
+}

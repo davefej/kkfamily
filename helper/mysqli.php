@@ -34,7 +34,7 @@ function login($user,$pass){
 	$ret = -1;
 	$id = 0; 
 	
-	if($stmt = $mysqli->prepare("SELECT id,type FROM user WHERE name = ? and password = ?") ){
+	if($stmt = $mysqli->prepare("SELECT id,type FROM user WHERE name = ? and password = ? and deleted = false") ){
 		/* bind result variables */
 		$stmt->bind_param("ss", $user, $pass);
 		$stmt->execute();

@@ -12,12 +12,14 @@
 				<li <?php if($selector == "supplier"){ echo "class=\"active\"";} ?>><a href="supplier.php">Beszállítók</a></li>
 				<li <?php if($selector == "category"){ echo "class=\"active\"";} ?>><a href="category.php">Kategória</a></li>
 				<li <?php if($selector == "storage"){ echo "class=\"active\"";} ?>><a href="storage.php">Raktár</a></li>
+				<li <?php if($selector == "category"){ echo "class=\"active\"";} ?>><a href="input.php">Bevétel</a></li>
+				<li <?php if($selector == "storage"){ echo "class=\"active\"";} ?>><a href="output.php">Kiadás</a></li>
 			</ul>
-			<form class="navbar-form navbar-left">
+			<!-- <form class="navbar-form navbar-left">
 				<div class="form-group">
 					<input type="text" class="form-control" placeholder="Keresés">
 				</div>
-			</form>
+			</form> -->
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="../index.html">Kijelentkezés</a></li>
 			</ul>

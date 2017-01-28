@@ -3,7 +3,15 @@ $selected ="admin";
 $selector = "storage";
 require("../common/header.php");
 
-listStore();
+if(isset($_GET["filter"])){
+	if($_GET["filter"] == "prod"){
+		listStore($_GET["id"]);
+	}
+	
+}else{
+	listStore("");
+}
+
 ?>
 
 <!-- BAR CHART -->

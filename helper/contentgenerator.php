@@ -2,17 +2,23 @@
 require('mysqli.php');
 require('datepicker.php');
 
-function listStore(){
+function listStore($id){
+	
+	if($id === ""){
+		$filter  = "";
+	}else{
+		$filter  = "and pr.id = '".$id."' ";
+	}
 	
 	
 	$labels = array();
 	$data = array();
 	$mysqli = connect();
-	$results = $mysqli->query(
+	if($results = $mysqli->query(
 			"select p.id as id, pr.name as product, s.name as supplier,p.time as time, u.name as user,
 IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0) as rest 
 from pallet p 
-INNER JOIN product pr on p.product_id = pr.id
+INNER JOIN product pr on p.product_id = pr.id ".$filter."
 INNER JOIN supplier s on s.id = p.supplier_id
 INNER JOIN user u on u.id = p.user_id
 LEFT JOIN (
@@ -37,13 +43,15 @@ LEFT JOIN (
 		ON t2.id = t3.id 
  ) t1 
  on p.id = t1.id
-HAVING rest > 0");
+HAVING rest > 0")){
 	
 	print '<table class="table table-hover sortable">';
 	print '<thead>';
 	print '<tr>';
 	print '<th>ID</th>';
-	print '<th>Alapanyag név</th>';
+	print '<th>';
+	productOptionStore($id);
+	print 'Alapanyag név</th>';
 	print '<th>Beszállító Neve</th>';
 	print '<th>Beérkezés ideje</th>';
 	print '<th>Mennyiség</th>';
@@ -100,6 +108,11 @@ HAVING rest > 0");
 	print '<div id="storage_json" class="hiddendiv">'.$json_str.'</div>';
 	// Frees the memory associated with a result
 	$results->free();
+	
+	}else{
+		print mysqli_error($mysqli);
+		print "hiba";
+	}
 	// close connection
 	$mysqli->close();
 }
@@ -349,6 +362,28 @@ function productOption(){
 	$mysqli->close();
 }
 
+function productOptionStore($filter){
+	$mysqli = connect();
+	$results = $mysqli->query("SELECT * FROM product where deleted = false order by name");
+	print '<select id="prod_select" onchange="filterProd()" class="form-control">';
+	print '<option  value=""> - </option>';
+	print '<option  value=""> Összes </option>';
+	while($row = $results->fetch_assoc()) {
+		if($filter === $row["id"]){
+			print '<option value="'.$row["id"].'" selected>'.$row["name"].'</option>';
+		}else{
+			print '<option  value="'.$row["id"].'">'.$row["name"].'</option>';
+		}
+		
+	}
+	print '</select>';
+	
+	// Frees the memory associated with a result
+	$results->free();
+	// close connection
+	$mysqli->close();
+}
+
 function categoryOption(){
 
 	$mysqli = connect();
@@ -528,13 +563,17 @@ function dailyOutput(){
 			$str .= '<td>'.$row["amount"].'</td>';
 			$str .= '<td>'.$row["time"].'</td>';
 			$str .= '<td>'.$row["user"].'</td>';
-}
-				 if($i){
-				 	print $str;
-				 		
-				 }else{
-				 	print ("Ma még semmmit nem adtak ki a raktárból");
-				 }
+			$str .= '</tr>';
+			$i = true;
+		}
+		
+		$str.= "</table>";
+		 if($i){
+		 	print $str;
+		 		
+		 }else{
+		 	print ("Ma még semmmit nem adtak ki a raktárból");
+		 }
 
 				 $colors = array( 'rgba(255, 99, 132, 0.8)',
 				 		'rgba(54, 162, 235, 0.8)',
@@ -580,10 +619,13 @@ function dailyOutput(){
 }
 
 
-function dailyOutputByDay($day){
+function periodOutput($day,$last){
 	$labels = array();
 	$data = array();
 
+	
+	
+	
 	$mysqli = connect();
 	if($results = $mysqli->query(
 
@@ -592,16 +634,16 @@ function dailyOutputByDay($day){
 			where pr.id=p.product_id and o.pallet_id = p.id and p.user_id = u.id
 			 and 
 			o.time >= '".$day." 00:00:00' and
-			o.time <= '".$day." 23:59:59' 
+			o.time <= '".$last." 23:59:59' 
 			and p.deleted = false and pr.deleted = false and o.deleted = false order by product")){
 
 			 $str =  '<table class="table table-hover">';
 			 $str .= '<thead>';
 			 $str .= '<tr>';
-			 $str .= '<th>Dátum</th>';
+			 $str .= '<th>'.$day." -> ".$last.'</th>';
 			 $str .= '<th class="dateth">'.datepicker(true) .'</th>';
-			 $str .= '<th><button onclick="dailyOutput()">Választ</button></th>';
-			 $str .= '<th></th>';
+			 $str .= '<th><button class="btn btn-sm btn-default"  onclick="dailyOutput()">Napi</button></th>';
+			 $str .= '<th><button class="btn btn-sm btn-default"  onclick="monthlyOutput()">Havi</button></th>';
 			 $str .= '<th></th>';
 			 $str .= '</tr>';
 			 $str .= '<tr>';
@@ -689,28 +731,30 @@ function dailyOutputByDay($day){
 	$mysqli->close();
 }
 
-function dailyInputByDay($day){
+function periodInput($day,$last){
 	$labels = array();
 	$data = array();
 
+	
+	
 	$mysqli = connect();
 	if($results = $mysqli->query(
 			"SELECT p.id as id, pr.name as product, s.name as supplier, p.amount as amount, u.name as user
 	 				FROM supplier s, pallet p, product pr, user u
 				where pr.id=p.product_id and p.supplier_id = s.id and u.id = p.user_id
 				 and  p.time >= '".$day." 00:00:00' and
-			p.time <= '".$day." 23:59:59' 
+			p.time <= '".$last." 23:59:59' 
 			and p.deleted = false and pr.deleted = false order by supplier")){
 
 
 				 $str = '<table class="table table-hover">';
 				 $str .= '<thead>';
 				 $str .= '<tr>';
-				 $str .= '<th>Dátum</th>';
+				 $str .= '<th>'.$day." -> ".$last.'</th>';
 				 $str .= '<th class="dateth">'.datepicker(true) .'</th>';
-				 $str .= '<th><button onclick="dailyInput()">Választ</button></th>';
-				 $str .= '<th></th>';
-				 $str .= '<th></th>';
+				 $str .= '<th><button class="btn btn-sm btn-default" onclick="dailyInput()">Napi</button></th>';
+				 $str .= '<th><button class="btn btn-sm btn-default"  onclick="monthlyInput()">Havi</button></th>';
+				
 				 $str .= '</tr>';
 				 $str .= '<tr>';
 				 $str .= '<th>Alapanyag</th>';
