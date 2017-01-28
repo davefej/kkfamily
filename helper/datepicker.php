@@ -4,7 +4,7 @@ function datepicker($bool){
 
 
 	
-	return '<select id="date_month">
+	return '<select class="form-control" id="date_month">
 		      <option value="">Month</option>
 		      <option value="">-----</option>
 		      <option value="01">January</option>
@@ -20,7 +20,7 @@ function datepicker($bool){
 		      <option value="11">November</option>
 		      <option value="12">December</option>
 		    </select>
-			<select id="date_day">
+			<select class="form-control" id="date_day">
 		      <option value="">Day</option>
 		      <option value="">---</option>
 		      <option value="01">01</option>

@@ -3,6 +3,7 @@ $selected ="admin";
 $selector = "storage";
 require("../common/header.php");
 
+
 if(isset($_GET["filter"])){
 	if($_GET["filter"] == "prod"){
 		listStore($_GET["id"]);
@@ -11,6 +12,7 @@ if(isset($_GET["filter"])){
 }else{
 	listStore("");
 }
+
 
 ?>
 

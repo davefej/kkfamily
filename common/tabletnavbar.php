@@ -9,7 +9,7 @@
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </button>
-      		<a class="navbar-brand" href="#">KK Family</a>
+      		<a class="navbar-brand" href=""><img alt="KK Family" src="../img/kkfamily_logo.png"></a>
     	</div>
 			
 		<!-- Collect the nav links, forms, and other content for toggling -->
@@ -21,18 +21,7 @@
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="../index.php">Kijelentkezés</a></li>
-			</ul>
-			<?php
-			if($selector == "kiadas"){
-				echo "	<form class=\"navbar-form navbar-right\">
-							<div class=\"form-group\">
-								<input type=\"text\" class=\"form-control\" placeholder=\"Keresés\">
-							</div>
-						</form>";
-			}
-				
-			?>
-			
+			</ul>		
 		</div><!-- /.navbar-collapse -->
 	</div><!-- /.container-fluid -->
 </nav>
