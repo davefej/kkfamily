@@ -114,3 +114,13 @@ thead{
 table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after { 
     content: " \25B4\25BE" 
 }
+
+.panel-info > .panel-heading {
+    background-color: #C8E8E8;
+    color: white;
+}
+
+.panel-danger > .panel-heading {
+    background-color: #FFD5D8;
+    color: white;
+}

@@ -282,7 +282,7 @@ function palletSpare($alapanyag){
  on p.id = t1.id
 HAVING rest > 0
 			")){
-	//and a.nev='".$alapanyag."'
+			
 		print '<table class="table table-hover sortable">';
 		print '<thead>';
 		print '<tr>';
@@ -406,7 +406,7 @@ function dailyInput(){
 					 	print $str;
 					 }
 					 else{
-					 	print('Ma még nem érkezett be semmi a raktárba');
+					 	print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 90%><strong>Ma még nem érkezett be semmi a raktárba</strong></div>';
 					 }
 	
 					 $colors = array( 'rgba(255, 99, 132, 0.8)',
@@ -495,7 +495,7 @@ function dailyOutput(){
 				 	print $str;
 				 		
 				 }else{
-				 	print ("Ma még semmmit nem adtak ki a raktárból");
+				 	print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 90%"><strong>Ma még semmmit nem adtak ki a raktárból!</strong></div>';
 				 }
 
 				 $colors = array( 'rgba(255, 99, 132, 0.8)',

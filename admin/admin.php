@@ -14,9 +14,6 @@ require("../common/header.php");
 	  		</a>
 	  	</div>
 	  	<div id="collapse1" class="panel-collapse collapse in">
-		  	<div class="panel-body">
-		  		A bevétel leírási adatokat lehetne ide írni.
-		  	</div>
 		  	<div class="row" style="width:95%">
 		  		<div class="col-md-6-1">
 		  			<table class="table">
@@ -73,10 +70,7 @@ require("../common/header.php");
 	  			Napi Kiadás (Raktár)
 	  		</a>
 	  	</div>
-	  	<div id="collapse2" class="panel-collapse collapse">
-		  	<div class="panel-body">
-		  		A kiadási adatokat lehetne ide írni.
-		  	</div>
+	  	<div id="collapse2" class="panel-collapse collapse in">
 		  	<div class="row" style="width:95%">
 		  		<div class="col-md-6-1">
 				  	<table class="table">
@@ -133,9 +127,6 @@ require("../common/header.php");
 	  		</a>
 	  	</div>
 	  	<div id="collapse3" class="panel-collapse collapse">
-		  	<div class="panel-body">
-		  		lejáró termékek statisztikáit lehetne ide írni
-		  	</div>
 		  	<table class="table">
 		  		<tr>
 			  		<td>
