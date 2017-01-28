@@ -111,10 +111,16 @@ thead{
 	display:none;
 }
 
+
+.dateth{
+	color: #555555;
+}
+
 table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after { 
     content: " \25B4\25BE" 
 }
 
+<<<<<<< HEAD
 .panel-info > .panel-heading {
     background-color: #C8E8E8;
     color: white;
@@ -124,3 +130,5 @@ table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sor
     background-color: #FFD5D8;
     color: white;
 }
+=======
+>>>>>>> origin/master
