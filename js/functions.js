@@ -355,3 +355,25 @@ function editCategory(id){
 	bootbox.alert(str);
 }
 
+
+
+
+
+function dailyOutput(){
+	var day = $('#date_day').val()
+	var month = $('#date_month').val()
+	var year  = new Date().getFullYear();
+	
+	window.location = "output.php?day="+year+"-"+month+"-"+day;
+}
+
+
+function dailyInput(){
+	var day = $('#date_day').val()
+	var month = $('#date_month').val()
+	var year  = new Date().getFullYear();
+	
+	window.location = "input.php?day="+year+"-"+month+"-"+day;
+}
+
+
