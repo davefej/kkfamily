@@ -449,7 +449,7 @@ function dailyInput(){
 		 	print $str;
 		 }
 		 else{
-		 	print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 90%><strong>Ma még nem érkezett be semmi a raktárba</strong></div>';
+		 	print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 90%"><strong>Ma még nem érkezett be semmi a raktárba</strong></div>';
 		 }
 	
 		 $colors = array( 'rgba(255, 99, 132, 0.8)',
@@ -540,7 +540,7 @@ function dailyOutput(){
 			$i = true;
 		}
 		
-		$str.= "</table>";
+			$str.= "</table>";
 		 if($i){
 		 	print $str;
 		 		
@@ -849,7 +849,7 @@ function listOld(){
 		if($i){
 			print $str;
 		}else{
-			print "<br/>NINCS LEJÁRÓ TERMÉK :)";
+			print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 90%"><strong>Nincs lejáró termék</strong></div>';
 		}
 	
 		// Frees the memory associated with a result

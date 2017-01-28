@@ -33,15 +33,23 @@ function bbsave(){
 	}else if(tipus == "createOutput"){
 		var pallet_id = $('#type').attr("id2");
 		var amount = $('#output_amount').val()		
+		var max = $('#type').attr("max");
+		if(max < amount){
+			bootbox.alert("Túl Nagy mennyiség, max:"+max);
+		}else{
+			newOutput(pallet_id,amount)
+		}
 		
-		newOutput(pallet_id,amount)
 		
 	}else if(tipus == "createTrash"){
 		var pallet_id = $('#type').attr("id2");
 		var amount = $('#trash_amount').val()		
-		
-		newTrash(pallet_id,amount)
-		
+		var max = $('#type').attr("max");
+		if(max < amount){
+			bootbox.alert("Túl Nagy mennyiség, max:"+max);
+		}else{
+			newTrash(pallet_id,amount)
+		}
 	}else if(tipus == "editSupplier"){
 		
 		var name = $('#edit_supplier_name').val()
@@ -186,7 +194,7 @@ function createCategory(){
 }
 
 function createOutput(pallet_id,full){
-	var str = '<input type="hidden" id="type" value="createOutput" id2="'+pallet_id+'"/>';
+	var str = '<input type="hidden" id="type" value="createOutput" id2="'+pallet_id+'" max="'+full+'"/>';
 	str += '<table class = "table table-hover">';
 	str += "<thead>";
 		str += "<tr>";
@@ -207,7 +215,7 @@ function createOutput(pallet_id,full){
 }
 
 function createTrash(pallet_id,full){
-	var str = '<input type="hidden" id="type" value="createTrash" id2="'+pallet_id+'"/>';
+	var str = '<input type="hidden" id="type" value="createTrash" id2="'+pallet_id+'" max="'+full+'"/>';
 	str += '<table class = "table table-hover">';
 	str += "<thead>";
 		str += "<tr>";
