@@ -2,7 +2,7 @@
 require('mysqli.php');
 require('datepicker.php');
 
-function listStore(){
+function listStorage(){
 	
 	
 	$labels = array();
@@ -377,7 +377,7 @@ function dailyInput(){
 				
 				 and p.time >= CURDATE()  and p.deleted = false and pr.deleted = false order by supplier")){
 	
-		$str = '<table class="table table-hover">';
+		$str = '<table class="table table-hover sortable">';
 		$str .= '<thead>';
 		$str .= '<tr>';
 		$str .= '<th>Alapanyag</th>';
@@ -408,78 +408,49 @@ function dailyInput(){
 
 		}
 		$str .= '</table>';
-
-/*
-					 $str =  '<table class="table table-hover sortable">';
-					 $str .= '<thead>';
-					 $str .= '<tr>';
-					 $str .= '<th>ID</th>';
-					 $str .= '<th>Alapanyag</th>';
-					 $str .= '<th>Mennyiség</th>';
-					 $str .= '</tr>';
-					 $str .= '</thead>';
-					 $i = false;
-					 while($row = $results->fetch_assoc()) {
-					 	if(in_array($row["product"],$labels))
-					 	{
-					 		$key = array_search($row["product"],$labels);
-					 		$data[$key] = $data[$key]+(int)$row["amount"];
-					 	}else{
-					 		array_push($labels,$row["product"]);
-					 		array_push($data,(int)$row["amount"]);
-					 	}
-					 	$str .= '<tr>';
-					 	$str .= '<td>'.$row["id"].'</td>';
-					 	$str .= '<td>'.$row["product"].'</td>';
-					 	$str .= '<td>'.$row["amount"].'</td>';
-					 	$str .= '</tr>';
-					 	$i =true;
-					 }
-					 print '</table>';
-*/
 	
-					 if($i){
-					 	print $str;
-					 }
-					 else{
-					 	print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 90%><strong>Ma még nem érkezett be semmi a raktárba</strong></div>';
-					 }
+		 if($i){
+		 	print $str;
+		 }
+		 else{
+		 	print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 90%><strong>Ma még nem érkezett be semmi a raktárba</strong></div>';
+		 }
 	
-					 $colors = array( 'rgba(255, 99, 132, 0.8)',
-					 		'rgba(54, 162, 235, 0.8)',
-					 		'rgba(255, 206, 86, 0.8)',
-					 		'rgba(75, 192, 192, 0.8)',
-					 		'rgba(153, 102, 255, 0.8)');
+		 $colors = array( 'rgba(255, 99, 132, 0.8)',
+		 		'rgba(54, 162, 235, 0.8)',
+		 		'rgba(255, 206, 86, 0.8)',
+		 		'rgba(75, 192, 192, 0.8)',
+		 		'rgba(153, 102, 255, 0.8)');
 	
-					 $backgroundColor = array();
-					 for($i=0; $i < count($labels); $i++){
-					 	$num = $i%count($colors);
-					 	array_push($backgroundColor,$colors[$num]);
-					 }
+		 $backgroundColor = array();
+		 for($i=0; $i < count($labels); $i++){
+		 	$num = $i%count($colors);
+		 	array_push($backgroundColor,$colors[$num]);
+		 }
 	
-					 $hoverBackgroundColor = array();
-					 for($i=0; $i < count($labels); $i++){
-					 	$num = $i%count($colors);
-					 	array_push($hoverBackgroundColor,$colors[$num]);
-					 }
+		 $hoverBackgroundColor = array();
+		 for($i=0; $i < count($labels); $i++){
+		 	$num = $i%count($colors);
+		 	array_push($hoverBackgroundColor,$colors[$num]);
+		 }
 	
-					 $datasets = array(
-					 		"data" => $data,
-					 		"backgroundColor" => $backgroundColor,
-					 		"hoverBackgroundColor" => $hoverBackgroundColor
-					 );
-					 $datasetsarray = array($datasets);
-					 $json = array(
-					 		"labels" => $labels,
-					 		"datasets" => $datasetsarray
-					 );
+		 $datasets = array(
+		 		"data" => $data,
+		 		"backgroundColor" => $backgroundColor,
+		 		"hoverBackgroundColor" => $hoverBackgroundColor
+		 );
+		 $datasetsarray = array($datasets);
+		 $json = array(
+		 		"labels" => $labels,
+		 		"datasets" => $datasetsarray
+		 );
 	
-					 $json_str = json_encode($json,True);
+		 $json_str = json_encode($json,True);
 	
-					 print '<div id="dailyInput_json" class="hiddendiv">'.$json_str.'</div>';
+		 print '<div id="dailyInput_json" class="hiddendiv">'.$json_str.'</div>';
 	
-					 // Frees the memory associated with a result
-					 $results->free();
+		 // Frees the memory associated with a result
+		 $results->free();
 	}else{
 		print "hiba";
 		print mysqli_error($mysqli);
@@ -528,12 +499,14 @@ function dailyOutput(){
 			$str .= '<td>'.$row["amount"].'</td>';
 			$str .= '<td>'.$row["time"].'</td>';
 			$str .= '<td>'.$row["user"].'</td>';
-}
+			$i=true;
+		}
+		$str .= '</table>';
 				 if($i){
 				 	print $str;
 				 		
 				 }else{
-				 	print ("Ma még semmmit nem adtak ki a raktárból");
+				 	print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 90%"><strong>Ma még semmmit nem adtak ki a raktárból</strong></div>';
 				 }
 
 				 $colors = array( 'rgba(255, 99, 132, 0.8)',
@@ -579,7 +552,6 @@ function dailyOutput(){
 	$mysqli->close();
 }
 
-
 function dailyOutputByDay($day){
 	$labels = array();
 	$data = array();
@@ -600,7 +572,7 @@ function dailyOutputByDay($day){
 			 $str .= '<tr>';
 			 $str .= '<th>Dátum</th>';
 			 $str .= '<th class="dateth">'.datepicker(true) .'</th>';
-			 $str .= '<th><button onclick="dailyOutput()">Választ</button></th>';
+			 $str .= '<th><button class="btn btn-primary" onclick="dailyOutput()">Választ</button></th>';
 			 $str .= '<th></th>';
 			 $str .= '<th></th>';
 			 $str .= '</tr>';
@@ -641,9 +613,7 @@ function dailyOutputByDay($day){
 			 	print $str;
 			 		
 			 }else{
-			 	$str .= '<tr><td>Semmmit nem adtak ki a raktárból</td></tr>';
-			 	$str .= '</table>';
-			 	print $str;
+			 	print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 90%"><strong>Semmmit nem adtak ki a raktárból!</strong></div>';
 			 	
 			 }
 
@@ -708,7 +678,7 @@ function dailyInputByDay($day){
 				 $str .= '<tr>';
 				 $str .= '<th>Dátum</th>';
 				 $str .= '<th class="dateth">'.datepicker(true) .'</th>';
-				 $str .= '<th><button onclick="dailyInput()">Választ</button></th>';
+				 $str .= '<th><button class="btn btn-primary" onclick="dailyInput()">Választ</button></th>';
 				 $str .= '<th></th>';
 				 $str .= '<th></th>';
 				 $str .= '</tr>';
@@ -748,14 +718,8 @@ function dailyInputByDay($day){
 				 	print $str;
 			 		
 				 }else{
-<<<<<<< HEAD
+
 				 	print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 90%"><strong>Ma még semmmit nem adtak ki a raktárból!</strong></div>';
-=======
-				 	$str .= '<tr><td>Semmmit nem adtak ki a raktárból</td></tr>';
-				 	$str .= '</table>';
-				 	print $str;
-				 	
->>>>>>> origin/master
 				 }
 				 
 				 $colors = array( 'rgba(255, 99, 132, 0.8)',

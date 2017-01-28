@@ -120,7 +120,7 @@ table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sor
     content: " \25B4\25BE" 
 }
 
-<<<<<<< HEAD
+
 .panel-info > .panel-heading {
     background-color: #C8E8E8;
     color: white;
@@ -130,5 +130,22 @@ table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sor
     background-color: #FFD5D8;
     color: white;
 }
-=======
->>>>>>> origin/master
+
+#date_month{
+	display: inline;
+	width: 45%;
+}
+
+#date_day{
+	display: inline;
+	width: 45%;
+}
+
+.navbar-brand{
+	padding: 5px;
+}
+
+.navbar-brand>img {
+  height: 100%;
+  width: auto;
+}

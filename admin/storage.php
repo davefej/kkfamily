@@ -3,7 +3,7 @@ $selected ="admin";
 $selector = "storage";
 require("../common/header.php");
 
-listStore();
+listStorage();
 ?>
 
 <!-- BAR CHART -->

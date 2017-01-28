@@ -10,7 +10,7 @@
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	    </button>
-		<a class="navbar-brand" href="admin.php">KK Family Admin felület</a>
+			<a class="navbar-brand" href="admin.php"><img alt="KK Family" src="../img/kkfamily_logo.png"></a>
 		</div>
 			
 		<!-- Collect the nav links, forms, and other content for toggling -->
@@ -21,11 +21,6 @@
 				<li <?php if($selector == "category"){ echo "class=\"active\"";} ?>><a href="category.php">Kategória</a></li>
 				<li <?php if($selector == "storage"){ echo "class=\"active\"";} ?>><a href="storage.php">Raktár</a></li>
 			</ul>
-			<form class="navbar-form navbar-left">
-				<div class="form-group">
-					<input type="text" class="form-control" placeholder="Keresés">
-				</div>
-			</form>
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="../index.html">Kijelentkezés</a></li>
 			</ul>

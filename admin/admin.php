@@ -19,16 +19,10 @@ require("../common/header.php");
 	  	</div>
 	  	<div id="collapse1" class="panel-collapse collapse in">
 		  	<div class="row" style="width:95%">
-		  		<div class="col-md-6-1">
-		  			<table class="table">
-				  		<tr>
-					  		<td>
-								<?php 											
-									dailyInput();			
-								?>
-							</td>
-						</tr>
-		  			</table>
+		  		<div class="col-md-6-1" style="padding-top: 10px" >
+					<?php 											
+						dailyInput();			
+					?>
 		  		</div>
 		  		
 		  		<div class="col-md-6-2">
@@ -80,16 +74,10 @@ require("../common/header.php");
 	  	</div>
 	  	<div id="collapse2" class="panel-collapse collapse in">
 		  	<div class="row" style="width:95%">
-		  		<div class="col-md-6-1">
-				  	<table class="table">
-				  		<tr>
-					  		<td>
-								<?php 			
-									dailyOutput();
-								?>
-							</td>
-						</tr>
-				  	</table>
+		  		<div class="col-md-6-1" style="padding-top: 10px"> 
+					<?php 			
+						dailyOutput();
+					?>
 				</div>
 		  	<div class="col-md-6-2">
 		  		<div class="centerBlock">
