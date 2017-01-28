@@ -371,9 +371,10 @@ function dailyInput(){
 	
 	$mysqli = connect();
 	if($results = $mysqli->query(
-			"SELECT p.id as id, pr.name as product, s.name as supplier, p.amount as amount
-	 				FROM supplier s, pallet p, product pr
-				where pr.id=p.product_id and p.supplier_id = s.id
+			"SELECT p.id as id, pr.name as product, s.name as supplier, p.amount as amount, u.name as user
+	 				FROM supplier s, pallet p, product pr, user u
+				where pr.id=p.product_id and p.supplier_id = s.id and u.id = p.user_id 
+				
 				 and p.time >= CURDATE()  and p.deleted = false and pr.deleted = false order by supplier")){
 	
 		$str = '<table class="table table-hover">';
