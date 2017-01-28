@@ -32,7 +32,7 @@
 			</form> -->
 
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="../index.html">Kijelentkezés</a></li>
+				<li><a href="../logout.php">Kijelentkezés</a></li>
 			</ul>
 		</div><!-- /.navbar-collapse -->
 	</div><!-- /.container-fluid -->

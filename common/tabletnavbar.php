@@ -20,7 +20,7 @@
 				<li <?php if($selector =="spare"){ echo "class=\"active\"";} ?> ><a href="spare.php">Árueltávolítás</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="../index.php">Kijelentkezés</a></li>
+				<li><a href="../logout.php">Kijelentkezés</a></li>
 			</ul>		
 		</div><!-- /.navbar-collapse -->
 	</div><!-- /.container-fluid -->
