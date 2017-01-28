@@ -12,6 +12,10 @@ require("../common/header.php");
 	  		<a data-toggle="collapse" href="#collapse1">
 	  			Napi bevétel (Raktár)
 	  		</a>
+	  		&nbsp;&nbsp;&nbsp;&nbsp;
+	  		<a href="input.php">
+	  			Részletek
+	  		</a>
 	  	</div>
 	  	<div id="collapse1" class="panel-collapse collapse in">
 		  	<div class="panel-body">
@@ -71,6 +75,10 @@ require("../common/header.php");
 	  	<div class="panel-heading">
 	  		<a data-toggle="collapse" href="#collapse2">
 	  			Napi Kiadás (Raktár)
+	  		</a>
+	  		&nbsp;&nbsp;&nbsp;&nbsp;
+	  		<a href="output.php">
+	  			Részletek
 	  		</a>
 	  	</div>
 	  	<div id="collapse2" class="panel-collapse collapse">

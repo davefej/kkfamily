@@ -24,6 +24,7 @@
 		<script src="../js/functions.js?v=<?php echo $version;?>" ></script>
 		<script src="../js/server.js?v=<?php echo $version;?>" ></script>
 		<script src="../js/Chart.js"></script>
+		<script src="../js/sorttable.js"></script>
 		
 	<?php  if($selected == "tablet"){	//TODO css rand		?>							
 				

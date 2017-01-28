@@ -1,9 +1,9 @@
 body { 
     background: red; 
-    background: -webkit-linear-gradient(left top, #00767F, #00ffba);
-    background: -o-linear-gradient(bottom right, #00767F, #00ffba);
-    background: -moz-linear-gradient(bottom right, #00767F, #00ffba);
-    background: linear-gradient(to bottom right, #00767F, #00ffba);
+    background: -webkit-linear-gradient(left top, #00767F, #E3F9FF);
+    background: -o-linear-gradient(bottom right, #00767F, #E3F9FF);
+    background: -moz-linear-gradient(bottom right, #00767F, #E3F9FF);
+    background: linear-gradient(to bottom right, #00767F, #E3F9FF);
     background-repeat: no-repeat;
     
    /* background:url(../img/bg.jpg);
@@ -111,6 +111,12 @@ thead{
 	display:none;
 }
 
+
 .dateth{
 	color: #555555;
 }
+
+table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after { 
+    content: " \25B4\25BE" 
+}
+
