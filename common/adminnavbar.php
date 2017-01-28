@@ -12,8 +12,8 @@
 				<li <?php if($selector == "supplier"){ echo "class=\"active\"";} ?>><a href="supplier.php">Beszállítók</a></li>
 				<li <?php if($selector == "category"){ echo "class=\"active\"";} ?>><a href="category.php">Kategória</a></li>
 				<li <?php if($selector == "storage"){ echo "class=\"active\"";} ?>><a href="storage.php">Raktár</a></li>
-				<li <?php if($selector == "category"){ echo "class=\"active\"";} ?>><a href="input.php">Bevétel</a></li>
-				<li <?php if($selector == "storage"){ echo "class=\"active\"";} ?>><a href="output.php">Kiadás</a></li>
+				<li <?php if($selector == "input"){ echo "class=\"active\"";} ?>><a href="input.php">Bevétel</a></li>
+				<li <?php if($selector == "output"){ echo "class=\"active\"";} ?>><a href="output.php">Kiadás</a></li>
 			</ul>
 			<!-- <form class="navbar-form navbar-left">
 				<div class="form-group">

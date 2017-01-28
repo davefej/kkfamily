@@ -642,8 +642,8 @@ function periodOutput($day,$last){
 			 $str .= '<tr>';
 			 $str .= '<th>'.$day." -> ".$last.'</th>';
 			 $str .= '<th class="dateth">'.datepicker(true) .'</th>';
-			 $str .= '<th><button class="btn btn-sm btn-default"  onclick="dailyOutput()">Napi</button></th>';
-			 $str .= '<th><button class="btn btn-sm btn-default"  onclick="monthlyOutput()">Havi</button></th>';
+			 $str .= '<th><button class="btn btn-sm btn-default"  onclick="dailyOutput()">Napi Szűrés</button></th>';
+			 $str .= '<th><button class="btn btn-sm btn-default"  onclick="monthlyOutput()">Havi Szűrés</button></th>';
 			 $str .= '<th></th>';
 			 $str .= '</tr>';
 			 $str .= '<tr>';
@@ -752,8 +752,8 @@ function periodInput($day,$last){
 				 $str .= '<tr>';
 				 $str .= '<th>'.$day." -> ".$last.'</th>';
 				 $str .= '<th class="dateth">'.datepicker(true) .'</th>';
-				 $str .= '<th><button class="btn btn-sm btn-default" onclick="dailyInput()">Napi</button></th>';
-				 $str .= '<th><button class="btn btn-sm btn-default"  onclick="monthlyInput()">Havi</button></th>';
+				 $str .= '<th><button class="btn btn-sm btn-default" onclick="dailyInput()">Napi Szűrés</button></th>';
+				 $str .= '<th><button class="btn btn-sm btn-default"  onclick="monthlyInput()">Havi Szűrés</button></th>';
 				
 				 $str .= '</tr>';
 				 $str .= '<tr>';
