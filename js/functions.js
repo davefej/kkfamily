@@ -34,7 +34,7 @@ function bbsave(){
 		var pallet_id = $('#type').attr("id2");
 		var amount = $('#output_amount').val()		
 		var max = $('#type').attr("max");
-		if(max < amount){
+		if(parseInt(max) < parseInt(amount)){
 			bootbox.alert("Túl Nagy mennyiség, max:"+max);
 		}else{
 			newOutput(pallet_id,amount)
@@ -45,7 +45,7 @@ function bbsave(){
 		var pallet_id = $('#type').attr("id2");
 		var amount = $('#trash_amount').val()		
 		var max = $('#type').attr("max");
-		if(max < amount){
+		if(parseInt(max) < parseInt(amount)){
 			bootbox.alert("Túl Nagy mennyiség, max:"+max);
 		}else{
 			newTrash(pallet_id,amount)

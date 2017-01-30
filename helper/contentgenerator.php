@@ -502,9 +502,9 @@ function dailyOutput(){
 	$mysqli = connect();
 	if($results = $mysqli->query(
 			
-			"SELECT p.id as id, pr.name as product, p.amount as amount, o.time as time, u.name as user
+			"SELECT p.id as id, pr.name as product, o.amount as amount, o.time as time, u.name as user
  				FROM  pallet p, product pr, output o, user u
-			where pr.id=p.product_id and o.pallet_id = p.id and p.user_id = u.id
+			where pr.id=p.product_id and o.pallet_id = p.id and o.user_id = u.id
 			 and o.time >= CURDATE() and p.deleted = false and pr.deleted = false and o.deleted = false order by product")){
 			 
 		$str =  '<table class="table table-hover sortable">';
@@ -605,9 +605,9 @@ function periodOutput($day,$last){
 	$mysqli = connect();
 	if($results = $mysqli->query(
 
-			"SELECT p.id as id, pr.name as product, p.amount as amount, o.time as time, u.name as user
+			"SELECT p.id as id, pr.name as product, o.amount as amount, o.time as time, u.name as user
  				FROM  pallet p, product pr, output o, user u
-			where pr.id=p.product_id and o.pallet_id = p.id and p.user_id = u.id
+			where pr.id=p.product_id and o.pallet_id = p.id and o.user_id = u.id
 			 and 
 			o.time >= '".$day." 00:00:00' and
 			o.time <= '".$last." 23:59:59' 
