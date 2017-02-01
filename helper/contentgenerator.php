@@ -44,7 +44,7 @@ function listStore($id){
 		ON t2.id = t3.id 
  ) t1 
  on p.id = t1.id
-HAVING rest > 0")){
+HAVING rest > 0 order by product")){
 	
 	print '<table class="table table-hover sortable">';
 	print '<thead>';
@@ -706,6 +706,120 @@ function periodOutput($day,$last){
 
 	$mysqli->close();
 }
+
+
+
+function periodSpare($day,$last){
+
+	$labels = array();
+	$data = array();
+
+
+	$mysqli = connect();
+	if($results = $mysqli->query(
+
+			"SELECT p.id as id, pr.name as product, t.amount as amount, t.time as time, u.name as user
+ 				FROM  pallet p, product pr, trash t, user u
+			where pr.id=p.product_id and t.pallet_id = p.id and t.user_id = u.id
+			 and
+			t.time >= '".$day." 00:00:00' and
+			t.time <= '".$last." 23:59:59'
+			and p.deleted = false and pr.deleted = false and t.deleted = false order by product")){
+
+			$str =  '<table class="table table-hover">';
+			$str .= '<thead>';
+			$str .= '<tr>';
+			$str .= '<th>'.$day." -> ".$last.'</th>';
+			$str .= '<th class="dateth">'.datepicker(true) .'</th>';
+
+			$str .= '<th><button class="btn btn-sm btn-default"  onclick="dailySpare()">Napi Szűrés</button></th>';
+			$str .= '<th><button class="btn btn-sm btn-default"  onclick="monthlySpare()">Havi Szűrés</button></th>';
+
+			$str .= '<th></th>';
+			$str .= '</tr>';
+			$str .= '<tr>';
+			$str .= '<th>ID</th>';
+			$str .= '<th>Alapanyag</th>';
+			$str .= '<th>Mennyiség</th>';
+			$str .= '<th>Kiadási idő</th>';
+			$str .= '<th>Raktáros</th>';
+			$str .= '</tr>';
+			$str .= '</thead>';
+			$i =false;
+			while($row = $results->fetch_assoc()) {
+				if(in_array($row["product"],$labels))
+				{
+					$key = array_search($row["product"],$labels);
+					$data[$key] = $data[$key]+(int)$row["amount"];
+				}else{
+					array_push($labels,$row["product"]);
+					array_push($data,(int)$row["amount"]);
+				}
+				$str .= '<tr>';
+
+				$str .= '<td>'.$row["id"].'</td>';
+				$str .= '<td>'.$row["product"].'</td>';
+				$str .= '<td>'.$row["amount"].'</td>';
+				$str .= '<td>'.$row["time"].'</td>';
+				$str .= '<td>'.$row["user"].'</td>';
+					
+
+				$str .= '</tr>';
+				$i =true;
+			}
+				
+
+			if($i){
+				$str .= '</table>';
+				print $str;
+
+			}else{
+				print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 90%"><strong>Semmmit nem adtak ki a raktárból!</strong></div>';
+					
+			}
+
+			$colors = array( 'rgba(255, 99, 132, 0.8)',
+					'rgba(54, 162, 235, 0.8)',
+					'rgba(255, 206, 86, 0.8)',
+					'rgba(75, 192, 192, 0.8)',
+					'rgba(153, 102, 255, 0.8)');
+
+			$backgroundColor = array();
+			for($i=0; $i < count($labels); $i++){
+				$num = $i%count($colors);
+				array_push($backgroundColor,$colors[$num]);
+			}
+
+			$hoverBackgroundColor = array();
+			for($i=0; $i < count($labels); $i++){
+				$num = $i%count($colors);
+				array_push($hoverBackgroundColor,$colors[$num]);
+			}
+
+			$datasets = array(
+					"data" => $data,
+					"backgroundColor" => $backgroundColor,
+					"hoverBackgroundColor" => $hoverBackgroundColor
+			);
+			$datasetsarray = array($datasets);
+			$json = array(
+					"labels" => $labels,
+					"datasets" => $datasetsarray
+			);
+
+			$json_str = json_encode($json,True);
+
+			print '<div id="dailyOutput_json" class="hiddendiv">'.$json_str.'</div>';
+
+			$results->free();
+	}else{
+		print mysqli_error($mysqli);
+		print ("HIBA");
+	}
+
+	$mysqli->close();
+}
+
 
 function periodInput($day,$last){
 	$labels = array();

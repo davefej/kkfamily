@@ -384,6 +384,14 @@ function dailyInput(){
 	window.location = "input.php?type=day&day="+year+"-"+month+"-"+day;
 }
 
+function dailySpare(){
+	var day = $('#date_day').val()
+	var month = $('#date_month').val()
+	var year  = new Date().getFullYear();
+	
+	window.location = "spare.php?type=day&day="+year+"-"+month+"-"+day;
+}
+
 function monthlyOutput(){
 	var day = $('#date_day').val()
 	var month = $('#date_month').val()
@@ -399,6 +407,14 @@ function monthlyInput(){
 	var year  = new Date().getFullYear();
 	
 	window.location = "input.php?type=month&month="+year+"-"+month+"-01";
+}
+
+function monthlySpare(){
+	var day = $('#date_day').val()
+	var month = $('#date_month').val()
+	var year  = new Date().getFullYear();
+	
+	window.location = "spare.php?type=month&month="+year+"-"+month+"-01";
 }
 
 function filterProd(){

@@ -23,6 +23,7 @@
 				<li <?php if($selector == "storage"){ echo "class=\"active\"";} ?>><a href="storage.php">Raktár</a></li>
 				<li <?php if($selector == "input"){ echo "class=\"active\"";} ?>><a href="input.php">Bevétel</a></li>
 				<li <?php if($selector == "output"){ echo "class=\"active\"";} ?>><a href="output.php">Kiadás</a></li>
+				<li <?php if($selector == "spare"){ echo "class=\"active\"";} ?>><a href="spare.php">Selejt</a></li>
 			</ul>
 
 			<!-- <form class="navbar-form navbar-left">
