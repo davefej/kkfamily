@@ -16,9 +16,10 @@ function input(){
 	var palletQuality = $('#palletQuality').val()
 	var decision = $('#decision').val()
 	
-	newQualityForm(sumDifference, appearance, consistency, smell, color, clearness, palletQuality, decision)
+	newQualityForm(sumDifference, appearance, consistency, smell, color,
+			clearness, palletQuality, decision,product,supplier,amount)
 	
-	newPallet(product,supplier,amount)
+	//newpallet callbackben
 }
 
 function output(id,mennyiseg){	

@@ -7,7 +7,7 @@ function newCategory(name){
 	insert({
     	"name":name,
     	"type":"category"
-    });
+    },reload);
 }
 
 function newUser(name,password,user_type){
@@ -16,7 +16,7 @@ function newUser(name,password,user_type){
     	"password":password,
     	"user_type":user_type,
     	"type":"user"
-    });
+    },reload);
 }
 
 function newSupplier(name,address){
@@ -24,7 +24,7 @@ function newSupplier(name,address){
     	"name":name,
     	"address":address,
     	"type":"supplier"
-    });
+    },reload);
 	
 }
 
@@ -34,7 +34,7 @@ function newProduct(name,category_id,product_type){
     	"category_id":category_id,
     	"product_type":product_type,
     	"type":"product"
-	});
+	},reload);
 }
 
 
@@ -43,33 +43,37 @@ function newTrash(pallet_id,amount){
     	"pallet_id":pallet_id,
     	"amount":amount,   	
     	"type":"trash"
-	},'true');
+	},alertcallback);
 }
 
-function newPallet(product_id,supplier_id,amount,user_id){	
+function newPallet(product_id,supplier_id,amount,qualityForm){	
 	insert({
     	"product_id":product_id,
     	"supplier_id":supplier_id,
     	"amount":amount,
+    	"quality_form":qualityForm,
     	"type":"pallet"
-	});
+	},reload);
 }
 
-<<<<<<< HEAD
-function newOutput(pallet_id,amount, qualityForm){	
-=======
+
 function newOutput(pallet_id,amount,alert){	
->>>>>>> origin/master
+
 	insert({
     	"pallet_id":pallet_id,
-    	"amount":amount,
-    	"quality_form":qualityForm,
+    	"amount":amount,    	
     	"type":"output"
-	},alert);
+	},alertcallback);
 }
 
-<<<<<<< HEAD
-function newQualityForm(sumDifference, appearance, consistency, smell, color, clearness, palletQuality, decision){
+function alertcallback(json,response){
+	newAlert(
+			json.type,response,json.pallet_id							
+	);
+}
+
+function newQualityForm(sumDifference, appearance, consistency, smell, color,
+		clearness, palletQuality, decision,product,supplier,amount){
 	insert({
 		"sum_difference":sumDifference,
 		"appearance":appearance,
@@ -79,33 +83,43 @@ function newQualityForm(sumDifference, appearance, consistency, smell, color, cl
 		"clearness":clearness,
 		"pallet_quality":palletQuality,
 		"decision":decision,
-		"type":"quality_form"
-	});
-=======
+		"type":"quality_form",
+		"product":product,
+		"supplier":supplier,
+		"amount":amount
+	},palletcallback);
+}
+
+function palletcallback(json,response){
+	newPallet(json.product,json.supplier,json.amount,response)
+}
+
+function reload(){
+	location.reload();
+}
+
 function newAlert(alert_type,param,param2){
 	insert({
     	"alert_type":alert_type,
     	"param2":param2,
     	"param":param,
     	"type":"alert"
-    });
->>>>>>> origin/master
+    },reload);
+
 }
 
-function insert(json,alert){
+function insert(json,callback){
 	alert = (alert == 'true');
 	$.ajax({
         url: "../helper/insert.php",
         type: "post",
         data: JSON.stringify(json) ,
         cache: false,
-        success: function (response) {
-        	if(alert){        		
-        		newAlert(
-        				json.type,response,json.pallet_id							
-        		);
+        success: function (response) {        	
+        	if(callback && typeof callback === "function"){        		
+        		callback(json,response);
         	}
-        	location.reload();          
+        	          
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert.show(hiba);

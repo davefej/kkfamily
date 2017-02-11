@@ -17,7 +17,7 @@ if(array_key_exists("type",$data)){
 	}else if($data["type"] == "product"){
 		$sql = "INSERT INTO `product` (`id`, `name`, `category_id`, `type`, `deleted`) VALUES (NULL, '".$data['name']."', '".$data['category_id']."', '".$data['product_type']."', '0')";
 	}else if($data["type"] == "quality_form"){
-		$sql = "INSERT INTO `quality_form` (`id`, `sum_difference`, `appearance`, `consistency`, `smell`, `color`, `clearness`, `pallet_quality`, `decision`) VALUES (NULL, '".$data['sum_difference']."', '".$data['appearance']."', '".$data['consistency']."', '".$data['smell']."', '".$data['color']."', '".$data['clearness']."', '".$data['pallet_quality']."', '".$data['decision']."')";
+		$sql = "INSERT INTO `quantity_form` (`id`, `sum_difference`, `appearance`, `consistency`, `smell`, `color`, `clearness`, `pallet_quality`, `decision`) VALUES (NULL, '".$data['sum_difference']."', '".$data['appearance']."', '".$data['consistency']."', '".$data['smell']."', '".$data['color']."', '".$data['clearness']."', '".$data['pallet_quality']."', '".$data['decision']."')";
 	}
 	
 	if($sql === ""){
@@ -28,13 +28,9 @@ if(array_key_exists("type",$data)){
 				$sql = "INSERT INTO `pallet` (`id`, `product_id`, `supplier_id`, `time`, `amount`, `user_id`, `deleted`) VALUES (NULL, '".$data['product_id']."', '".$data['supplier_id']."', CURRENT_TIMESTAMP, '".$data['amount']."', '".$_SESSION['user_id']."', '0')";
 			}else if($data["type"] == "output"){
 				$sql = "INSERT INTO `output` (`id`, `pallet_id`, `amount`, `time`, `user_id`, `deleted`) VALUES (NULL, '".$data['pallet_id']."', '".$data['amount']."', CURRENT_TIMESTAMP, '".$_SESSION['user_id']."', '0')";
-<<<<<<< HEAD
-			}else if($data["type"] == "quality_form"){
-				$sql = "INSERT INTO `quality_form` (`id`, `sum_difference`, `appearance`, `consistency`, `smell`, `color`, `clearness`, `pallet_quality`, `decision`) VALUES (NULL, '".$data['sum_difference']."', '".$data['appearance']."', '".$data['consistency']."', '".$data['smell']."', '".$data['color']."', '".$data['clearness']."', '".$data['pallet_quality']."', '".$data['decision']."')";
-=======
 			}else if($data["type"] == "alert"){
 				$sql = "INSERT INTO `alert` (`id`, `type`, `param`, `param2`, `time`, `user_id`, `seen`, `deleted`) VALUES (NULL, '".$data['alert_type']."', '".$data['param']."', '".$data['param2']."', CURRENT_TIMESTAMP, '".$_SESSION['user_id']."', '0', '0')";
->>>>>>> origin/master
+
 			}
 		}else{
 			break;
