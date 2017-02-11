@@ -3,15 +3,14 @@
 -- http://www.phpmyadmin.net
 --
 -- Gép: 127.0.0.1
-<<<<<<< HEAD
+
 -- Létrehozás ideje: 2017. Feb 11. 14:20
 -- Kiszolgáló verziója: 10.1.19-MariaDB
 -- PHP verzió: 5.6.28
-=======
+
 -- Létrehozás ideje: 2017. Feb 11. 12:52
 -- Kiszolgáló verziója: 10.1.13-MariaDB
 -- PHP verzió: 5.6.21
->>>>>>> origin/master
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -126,7 +125,7 @@ INSERT INTO `output` (`id`, `pallet_id`, `amount`, `time`, `user_id`, `deleted`)
 
 CREATE TABLE `pallet` (
   `id` int(11) NOT NULL,
-  `quantity_form_id` int(11) NOT NULL,
+  `quality_form_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `supplier_id` int(11) NOT NULL,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -139,12 +138,7 @@ CREATE TABLE `pallet` (
 -- A tábla adatainak kiíratása `pallet`
 --
 
-<<<<<<< HEAD
-INSERT INTO `pallet` (`id`, `quantity_form_id`, `product_id`, `supplier_id`, `time`, `amount`, `user_id`, `deleted`) VALUES
-(1, 0, 2, 1, '2017-01-24 17:48:39', 101, 2, 0),
-(2, 0, 3, 6, '2017-01-25 10:26:31', 213, 0, 0),
-(3, 0, 3, 3, '2017-01-25 12:56:04', 321, 1, 0);
-=======
+
 INSERT INTO `pallet` (`id`, `product_id`, `supplier_id`, `time`, `amount`, `user_id`, `deleted`) VALUES
 (1, 41, 18, '2017-01-30 08:34:41', 10500, 3, 0),
 (2, 51, 1, '2017-01-30 08:37:21', 392, 1, 0),
@@ -207,7 +201,7 @@ INSERT INTO `pallet` (`id`, `product_id`, `supplier_id`, `time`, `amount`, `user
 (60, 1, 19, '2017-01-31 10:35:08', 1, 4, 0),
 (61, 1, 19, '2017-02-01 10:54:20', 6663, 2, 0),
 (62, 51, 21, '2017-02-01 11:13:02', 552, 4, 0);
->>>>>>> origin/master
+
 
 -- --------------------------------------------------------
 
@@ -286,7 +280,7 @@ INSERT INTO `product` (`id`, `name`, `category_id`, `type`, `deleted`) VALUES
 -- Tábla szerkezet ehhez a táblához `quantity_form`
 --
 
-CREATE TABLE `quantity_form` (
+CREATE TABLE `quality_form` (
   `id` int(11) NOT NULL,
   `sum_difference` int(11) NOT NULL,
   `appearance` int(11) NOT NULL,
@@ -418,9 +412,9 @@ ALTER TABLE `output`
 --
 -- A tábla indexei `pallet`
 --
-ALTER TABLE `pallet`
-  ADD PRIMARY KEY (`id`);
 
+ALTER TABLE `pallet`
+    ADD PRIMARY KEY(`id`);
 --
 -- A tábla indexei `product`
 --
@@ -430,7 +424,7 @@ ALTER TABLE `product`
 --
 -- A tábla indexei `quantity_form`
 --
-ALTER TABLE `quantity_form`
+ALTER TABLE `quality_form`
   ADD PRIMARY KEY (`id`);
 
 --
