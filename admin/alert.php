@@ -36,7 +36,7 @@ require("../common/header.php");
 	  				Selejbe dobott áruk
 	  			</a>
 			</div>
-			<div id="collapse5" class="panel-collapse collapse">
+			<div id="collapse5" class="panel-collapse collapse in">
 			  	<table class="table">
 			  		<tr>
 			  		<td>

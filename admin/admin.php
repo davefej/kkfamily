@@ -43,7 +43,7 @@ require("../common/header.php");
 		                            data: data,
 		                            options: {
 		                                legend: {
-		                                display: true
+		                                display: false
 		                                },
 		                                title: {
 		                                    display: true,
@@ -97,7 +97,7 @@ require("../common/header.php");
 		                            data: data,
 		                            options: {
 		                                legend: {
-		                                display: true
+		                                display: false
 		                                },
 		                                title: {
 		                                    display: true,
