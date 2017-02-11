@@ -321,7 +321,7 @@ function alertcheck(){
         			}
         			alertnum = response;
         			$('#alerta').html(  "Jelzés "+"<span class='hasalert label label-danger'>"+response+"</span>" );
-        			if(window.location.href.indexOf("alert.php") > -1)){
+        			if(window.location.href.indexOf("alert.php") > -1){
         				location.reload();
 					}
         		}else{
