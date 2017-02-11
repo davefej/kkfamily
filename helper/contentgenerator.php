@@ -796,6 +796,7 @@ function periodOutput($day,$last){
 			 $str .= '<th><button class="btn btn-sm btn-default"  onclick="monthlyOutput()">Havi Szűrés</button></th>';
 
 			 $str .= '<th></th>';
+			 $str .= '<th></th>';
 			 $str .= '</tr>';
 			 $str .= '<tr>';
 			 $str .= '<th>Kiadás ID</th>';
@@ -804,6 +805,7 @@ function periodOutput($day,$last){
 			 $str .= '<th>Mennyiség</th>';
 			 $str .= '<th>Kiadási idő</th>';
 			 $str .= '<th>Raktáros</th>';
+			 
 			 $str .= '</tr>';
 			 $str .= '</thead>';
 			 $i =false;
@@ -1346,17 +1348,17 @@ function inputStatistic($weekday,$day,$day2){
 			
 			
 			
-			"SELECT pr.name as product, sum(o.amount) as amount 
-			FROM pallet p, product pr, output o where pr.id=p.product_id and o.pallet_id = p.id and
-				o.time >= '".$day2." 00:00:00' 
-			and o.time <= '".$day." 23:59:59' and 
-			WEEKDAY(o.time) = '".$weekday."' and 
-			 p.deleted = false and pr.deleted = false and
-			o.deleted = false group by product order by p.product_id ")){
+			"SELECT pr.name as product, sum(p.amount) as amount 
+			FROM pallet p, product pr where pr.id=p.product_id and
+				p.time >= '".$day2." 00:00:00' 
+			and p.time <= '".$day." 23:59:59' and 
+			WEEKDAY(p.time) = '".$weekday."' and 
+			 p.deleted = false and pr.deleted = false
+			 group by product order by p.product_id ")){
 		$str =  '<table class="table table-hover ">';
 		$str .= '<thead>';
 		$str .= '<tr>';
-		$str .= '<th>Nap:</th>';
+		$str .= '<th>Nap: '.daymap($weekday).'</th>';
 		$str .= '<th>'.daypicker().'</th>';
 		$str .= '</tr>';
 		$str .= '<tr>';
@@ -1377,6 +1379,67 @@ function inputStatistic($weekday,$day,$day2){
 	}else{
 		print "hiba";
 		print mysqli_error($mysqli);
+	}
+}
+
+function outputStatistic($weekday,$day,$day2){
+
+	$mysqli = connect();
+	if($results = $mysqli->query(
+				
+				
+				
+			"SELECT pr.name as product, sum(o.amount) as amount
+			FROM pallet p, product pr, output o where pr.id=p.product_id and o.pallet_id = p.id and
+				o.time >= '".$day2." 00:00:00'
+			and o.time <= '".$day." 23:59:59' and
+			WEEKDAY(o.time) = '".$weekday."' and
+			 p.deleted = false and pr.deleted = false and
+			o.deleted = false group by product order by p.product_id ")){
+			$str =  '<table class="table table-hover ">';
+			$str .= '<thead>';
+			$str .= '<tr>';
+			$str .= '<th>Nap: '.daymap($weekday).'</th>';
+			$str .= '<th>'.daypicker().'</th>';
+			$str .= '</tr>';
+			$str .= '<tr>';
+			$str .= '<th>Alapanyag</th>';
+			$str .= '<th>Mennyiség</th>';
+			$str .= '</tr>';
+			$str .= '</thead>';
+			while($row = $results->fetch_assoc()) {
+				$str.= '<tr>';
+
+				$str.= '<td>'.$row["product"].'</td>';
+				$str.= '<td>'.$row["amount"].'</td>';
+
+				$str.= '</tr>';
+			}
+			$str.= '</table>';
+			print $str;
+	}else{
+		print "hiba";
+		print mysqli_error($mysqli);
+	}
+}
+
+
+
+function daymap($weekday){
+	if($weekday == "0"){
+		return "Hétfő";
+	}else if($weekday == "1"){
+		return "Kedd";
+	}else if($weekday == "2"){
+		return "Szerda";
+	}else if($weekday == "3"){
+		return "Csütörtök";
+	}else if($weekday == "4"){
+		return "Péntek";
+	}else if($weekday == "5"){
+		return "Szombat";
+	}else if($weekday == "6"){
+		return "Vasárnap";
 	}
 }
 
