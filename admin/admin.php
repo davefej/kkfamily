@@ -158,7 +158,43 @@ require("../common/header.php");
 			  	</table>
 			</div>
 		</div>
+	
+
+
+
+	<!-- WORKERS / USERS -->
+		<div class="panel panel-success">
+			<div class="panel-heading">
+				<a data-toggle="collapse" href="#collapse5">
+	  				Fogyási statisztika
+	  			</a>
+			</div>
+			<div id="#collapse5" class="panel-collapse collapse in">
+			  	<table class="table">
+			  		<tr>
+			  		<td>
+						<div id="adminstatisticcontainer">
+						<?php 			
+							
+								$day  = date("Y-m-d");
+								$day2 = date('Y-m-d', strtotime("-30 days"));
+								$dw = date( "w");
+								$dw = $dw -1;
+								if($dw == -1){
+									$dw = 6;
+								}
+								outputStatistic($dw,$day,$day2);
+							
+						?>
+						</div>
+					</td>
+				</tr>
+			  	</table>
+			</div>
+		
 	</div>
+
+	
 
 <?php 
 require("../common/footer.php");

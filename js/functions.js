@@ -372,8 +372,12 @@ function dailyOutput(){
 	var day = $('#date_day').val()
 	var month = $('#date_month').val()
 	var year  = new Date().getFullYear();
-	
-	window.location = "output.php?type=day&day="+year+"-"+month+"-"+day;
+	if($("#detailscb").is(":checked")){
+		detail = "true";
+	}else{
+		detail = "false";
+	}
+	window.location = "output.php?type=day&day="+year+"-"+month+"-"+day+"&detail="+detail;
 }
 
 
@@ -381,24 +385,36 @@ function dailyInput(){
 	var day = $('#date_day').val()
 	var month = $('#date_month').val()
 	var year  = new Date().getFullYear();
-	
-	window.location = "input.php?type=day&day="+year+"-"+month+"-"+day;
+	if($("#detailscb").is(":checked")){
+		detail = "true";
+	}else{
+		detail = "false";
+	}
+	window.location = "input.php?type=day&day="+year+"-"+month+"-"+day+"&detail="+detail;
 }
 
 function dailySpare(){
 	var day = $('#date_day').val()
 	var month = $('#date_month').val()
 	var year  = new Date().getFullYear();
-	
-	window.location = "spare.php?type=day&day="+year+"-"+month+"-"+day;
+	if($("#detailscb").is(":checked")){
+		detail = "true";
+	}else{
+		detail = "false";
+	}
+	window.location = "spare.php?type=day&day="+year+"-"+month+"-"+day+"&detail="+detail;
 }
 
 function monthlyOutput(){
 	var day = $('#date_day').val()
 	var month = $('#date_month').val()
 	var year  = new Date().getFullYear();
-	
-	window.location = "output.php?type=month&month="+year+"-"+month+"-01";
+	if($("#detailscb").is(":checked")){
+		detail = "true";
+	}else{
+		detail = "false";
+	}
+	window.location = "output.php?type=month&month="+year+"-"+month+"-01"+"&detail="+detail;
 }
 
 
@@ -406,16 +422,24 @@ function monthlyInput(){
 	var day = $('#date_day').val()
 	var month = $('#date_month').val()
 	var year  = new Date().getFullYear();
-	
-	window.location = "input.php?type=month&month="+year+"-"+month+"-01";
+	if($("#detailscb").is(":checked")){
+		detail = "true";
+	}else{
+		detail = "false";
+	}
+	window.location = "input.php?type=month&month="+year+"-"+month+"-01"+"&detail="+detail;
 }
 
 function monthlySpare(){
 	var day = $('#date_day').val()
 	var month = $('#date_month').val()
 	var year  = new Date().getFullYear();
-	
-	window.location = "spare.php?type=month&month="+year+"-"+month+"-01";
+	if($("#detailscb").is(":checked")){
+		detail = "true";
+	}else{
+		detail = "false";
+	}
+	window.location = "spare.php?type=month&month="+year+"-"+month+"-01"+"&detail="+detail;
 }
 
 function filterProd(){
@@ -441,13 +465,17 @@ String.prototype.replaceAt=function(index, character) {
 
 function inputchangeday(){
 	var wday = $('#wday').val()
-	if(window.location.href.indexOf("wday") > -1){
-		window.location.href = window.location.href.replaceAt(window.location.href.indexOf("wday")+5,wday)
-	}else{
-		if(window.location.href.indexOf("?") > -1){
-			window.location.href = window.location.href +"&wday="+wday
-		}else{
-			window.location.href = window.location.href +"?wday="+wday
-		}
-	}
+	
+	$.ajax({
+        url: "../helper/ajaxcontent.php?type=fogyas&wday="+wday,
+        type: "get",
+        cache: false,
+        success: function (response) {        	
+        	$("#adminstatisticcontainer").html(response);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+        	bootbox.alert("Internet vagy szerver hiba<br/>"+textStatus+"<br/>"+errorThrown)
+        }
+    });
+	
 }

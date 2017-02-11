@@ -584,11 +584,13 @@ function dailyInput(){
 	
 	$mysqli = connect();
 	if($results = $mysqli->query(
-			"SELECT p.id as id, pr.name as product, s.name as supplier, p.amount as amount, u.name as user
-	 				FROM supplier s, pallet p, product pr, user u
-				where pr.id=p.product_id and p.supplier_id = s.id and u.id = p.user_id 
+			"SELECT p.id as id, pr.name as product, s.name as supplier, sum(p.amount) as amount
+	 				FROM supplier s, pallet p, product pr
+				where pr.id=p.product_id and p.supplier_id = s.id
 				
-				 and p.time >= CURDATE()  and p.deleted = false and pr.deleted = false order by supplier")){
+				 and p.time >= CURDATE()  and p.deleted = false and pr.deleted = false 
+			group by pr.id
+			order by supplier")){
 	
 		$str = '<table class="table table-hover sortable">';
 		$str .= '<thead>';
@@ -596,7 +598,7 @@ function dailyInput(){
 		$str .= '<th>Alapanyag</th>';
 		$str .= '<th>Beszállító Neve</th>';
 		$str .= '<th>Mennyiség</th>';
-		$str .= '<th>Raktáros</th>';
+		
 		$str .= '</tr>';
 		$str .= '</thead>';
 
@@ -615,7 +617,7 @@ function dailyInput(){
 			$str .= '<td>'.$row["product"].'</td>';
 			$str .= '<td>'.$row["supplier"].'</td>';
 			$str .= '<td>'.$row["amount"].'</td>';
-			$str .= '<td>'.$row["user"].'</td>';
+			
 			$str .= '</tr>';
 			$i = true;
 
@@ -679,19 +681,20 @@ function dailyOutput(){
 	$mysqli = connect();
 	if($results = $mysqli->query(
 			
-			"SELECT p.id as id, pr.name as product, o.amount as amount, o.time as time, u.name as user
- 				FROM  pallet p, product pr, output o, user u
-			where pr.id=p.product_id and o.pallet_id = p.id and o.user_id = u.id
-			 and o.time >= CURDATE() and p.deleted = false and pr.deleted = false and o.deleted = false order by product")){
+			"SELECT p.id as id, pr.name as product, sum(o.amount) as amount
+ 				FROM  pallet p, product pr, output o
+			where pr.id=p.product_id and o.pallet_id = p.id 
+			 and o.time >= CURDATE() and p.deleted = false and pr.deleted = false and o.deleted = false 
+			group by pr.id order by product")){
 			 
 		$str =  '<table class="table table-hover sortable">';
 		$str .= '<thead>';
 		$str .= '<tr>';
-		$str .= '<th>ID</th>';
+		
 		$str .= '<th>Alapanyag</th>';
 		$str .= '<th>Mennyiség</th>';
-		$str .= '<th>Kiadási idő</th>';
-		$str .= '<th>Raktáros</th>';
+	
+		
 		$str .= '</tr>';
 		$str .= '</thead>';
 		$i =false;
@@ -707,11 +710,11 @@ function dailyOutput(){
 			}
 			$str .= '<tr>';
 
-			$str .= '<td>'.$row["id"].'</td>';
+			
 			$str .= '<td>'.$row["product"].'</td>';
 			$str .= '<td>'.$row["amount"].'</td>';
-			$str .= '<td>'.$row["time"].'</td>';
-			$str .= '<td>'.$row["user"].'</td>';
+			
+			
 
 			$str .= '</tr>';
 			$i = true;
@@ -770,11 +773,18 @@ function dailyOutput(){
 	$mysqli->close();
 }
 
-function periodOutput($day,$last){
+function periodOutput($day,$last,$detail){
 
 	$labels = array();
 	$data = array();
 
+	if($detail){
+		$groupby = "";
+	}else{
+		$groupby = " group by pr.id ";
+	}
+	
+	
 	$mysqli = connect();
 	if($results = $mysqli->query(
 
@@ -784,12 +794,19 @@ function periodOutput($day,$last){
 			 and 
 			o.time >= '".$day." 00:00:00' and
 			o.time <= '".$last." 23:59:59' 
-			and p.deleted = false and pr.deleted = false and o.deleted = false order by product")){
+			and p.deleted = false and pr.deleted = false and o.deleted = false ".$groupby." order by product")){
 
 			 $str =  '<table class="table table-hover">';
 			 $str .= '<thead>';
 			 $str .= '<tr>';
-			 $str .= '<th>'.$day." -> ".$last.'</th>';
+			 
+			 if($detail){
+			 	$str .= '<th>'.$day." -> ".$last.' Részletes<input id="detailscb" type="checkbox" name="detailscb" checked></th>';
+			 }else{
+			 	$str .= '<th>'.$day." -> ".$last.' Részletes<input id="detailscb" type="checkbox" name="detailscb" ></th>';
+			 }
+			 
+			 
 			 $str .= '<th class="dateth">'.datepicker(true) .'</th>';
 
 			 $str .= '<th><button class="btn btn-sm btn-default"  onclick="dailyOutput()">Napi Szűrés</button></th>';
@@ -881,11 +898,17 @@ function periodOutput($day,$last){
 	$mysqli->close();
 }
 
-function periodSpare($day,$last){
+function periodSpare($day,$last,$detail){
 
 	$labels = array();
 	$data = array();
 
+	if($detail){
+		$groupby = "";
+	}else{
+		$groupby = " group by pr.id ";
+	}
+	
 
 	$mysqli = connect();
 	if($results = $mysqli->query(
@@ -896,12 +919,19 @@ function periodSpare($day,$last){
 			 and
 			t.time >= '".$day." 00:00:00' and
 			t.time <= '".$last." 23:59:59'
-			and p.deleted = false and pr.deleted = false and t.deleted = false order by product")){
+			and p.deleted = false and pr.deleted = false and t.deleted = false 
+			".$groupby." order by product")){
 
 			$str =  '<table class="table table-hover">';
 			$str .= '<thead>';
 			$str .= '<tr>';
-			$str .= '<th>'.$day." -> ".$last.'</th>';
+				
+			if($detail){
+			 	$str .= '<th>'.$day." -> ".$last.' Részletes<input id="detailscb" type="checkbox" name="detailscb" checked></th>';
+			 }else{
+			 	$str .= '<th>'.$day." -> ".$last.' Részletes<input id="detailscb" type="checkbox" name="detailscb" ></th>';
+			 }
+			
 			$str .= '<th class="dateth">'.datepicker(true) .'</th>';
 
 			$str .= '<th><button class="btn btn-sm btn-default"  onclick="dailySpare()">Napi Szűrés</button></th>';
@@ -992,11 +1022,15 @@ function periodSpare($day,$last){
 	$mysqli->close();
 }
 
-function periodInput($day,$last){
+function periodInput($day,$last,$detail){
 	$labels = array();
 	$data = array();
 
-	
+	if($detail){
+		$groupby = "";
+	}else{
+		$groupby = " group by pr.id ";
+	}
 	
 	$mysqli = connect();
 	if($results = $mysqli->query(
@@ -1005,13 +1039,18 @@ function periodInput($day,$last){
 				where pr.id=p.product_id and p.supplier_id = s.id and u.id = p.user_id
 				 and  p.time >= '".$day." 00:00:00' and
 			p.time <= '".$last." 23:59:59' 
-			and p.deleted = false and pr.deleted = false order by supplier")){
+			and p.deleted = false and pr.deleted = false ".$groupby." order by supplier")){
 
 
 				 $str = '<table class="table table-hover">';
 				 $str .= '<thead>';
 				 $str .= '<tr>';
-				 $str .= '<th>'.$day." -> ".$last.'</th>';
+				 if($detail){
+				 	$str .= '<th>'.$day." -> ".$last.' Részletes<input id="detailscb" type="checkbox" name="detailscb" checked></th>';
+				 }else{
+				 	$str .= '<th>'.$day." -> ".$last.' Részletes<input id="detailscb" type="checkbox" name="detailscb" ></th>';
+				 }
+				 
 				 $str .= '<th class="dateth">'.datepicker(true).'</th>';
 
 				 $str .= '<th><button class="btn btn-sm btn-default" onclick="dailyInput()">Napi Szűrés</button></th>';

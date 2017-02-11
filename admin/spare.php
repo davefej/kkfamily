@@ -4,6 +4,15 @@ $selected ="admin";
 $selector ="spare";
 require("../common/header.php");
 
+
+
+$detail = false;
+if(isset($_GET['detail'])){
+	if($_GET['detail'] == "true"){
+		$detail = true;
+	}
+}
+
 if(isset($_GET['type'])){
 	if($_GET['type'] == "day"){
 		if(isset($_GET['day'])){
@@ -11,7 +20,7 @@ if(isset($_GET['type'])){
 		}else{
 			$day  = date("Y-m-d");
 		}
-		periodSpare($day,$day);
+		periodSpare($day,$day,$detail);
 	}else if($_GET['type'] == "month"){
 		if(isset($_GET['month'])){
 			$month_begin  = $_GET['month'];
@@ -20,12 +29,12 @@ if(isset($_GET['type'])){
 			$month_begin  = date("Y-m-d");
 			$month_end = date("Y-m-t");
 		}
-		periodSpare($month_begin,$month_end);
+		periodSpare($month_begin,$month_end,$detail);
 	}
 	
 }else{
 	$day  = date("Y-m-d");
-	periodSpare($day,$day);
+	periodSpare($day,$day,$detail);
 }
 
 require("../common/footer.php");
