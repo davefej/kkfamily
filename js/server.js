@@ -10,7 +10,6 @@ function newCategory(name){
     });
 }
 
-
 function newUser(name,password,user_type){
 	insert({
     	"name":name,
@@ -44,7 +43,7 @@ function newTrash(pallet_id,amount){
     	"pallet_id":pallet_id,
     	"amount":amount,   	
     	"type":"trash"
-	});
+	},'true');
 }
 
 function newPallet(product_id,supplier_id,amount,user_id){	
@@ -56,22 +55,36 @@ function newPallet(product_id,supplier_id,amount,user_id){
 	});
 }
 
-function newOutput(pallet_id,amount){	
+function newOutput(pallet_id,amount,alert){	
 	insert({
     	"pallet_id":pallet_id,
     	"amount":amount,
     	"type":"output"
-	});
+	},alert);
 }
 
+function newAlert(alert_type,param,param2){
+	insert({
+    	"alert_type":alert_type,
+    	"param2":param2,
+    	"param":param,
+    	"type":"alert"
+    });
+}
 
-function insert(json,tablet){
+function insert(json,alert){
+	alert = (alert == 'true');
 	$.ajax({
         url: "../helper/insert.php",
         type: "post",
         data: JSON.stringify(json) ,
         cache: false,
-        success: function (response) {           
+        success: function (response) {
+        	if(alert){        		
+        		newAlert(
+        				json.type,response,json.pallet_id							
+        		);
+        	}
         	location.reload();          
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -163,6 +176,13 @@ function updateOutput(id,pallet_id,amount,time,user_id){
 	});
 }
 
+function updateAlert(id){
+	update({
+		"id":id,
+		"type":"alert"
+	});
+}
+
 function update(json){
 	
 	$.ajax({
@@ -227,6 +247,14 @@ function deleteOutput(id){
 	});
 }
 
+function deleteAlert(id){
+	Delete({
+		"id":id,
+		"type":"alert"
+	});
+}
+
+
 function Delete(json){
 	
 	$.ajax({
@@ -236,6 +264,35 @@ function Delete(json){
         cache: false,
         success: function (response) {           
         	location.reload();          
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            //TODO
+        }
+    });
+}
+
+var alertnum = -1;
+
+function alertcheck(){
+	$.ajax({
+        url: "../helper/alertcheck.php",
+        type: "get",        
+        cache: false,
+        success: function (response) {           
+        	if(!isNaN(response)){
+        		response = parseInt(response);
+        		if(response > 0){
+        			if(alertnum != response && alertnum != -1){
+        				makesound();
+        			}
+        			alertnum = response;
+        			$('#alerta').html(  "Jelzés "+"<span class='hasalert'>"+response+"</span>" );
+        				
+        		}else{
+        			alertnum = 0;
+        			$('#alerta').html("Jelzés") 
+        		}        		
+        	} 
         },
         error: function(jqXHR, textStatus, errorThrown) {
             //TODO

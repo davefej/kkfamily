@@ -34,10 +34,11 @@ function bbsave(){
 		var pallet_id = $('#type').attr("id2");
 		var amount = $('#output_amount').val()		
 		var max = $('#type').attr("max");
+		var old = $('#type').attr("old");
 		if(parseInt(max) < parseInt(amount)){
 			bootbox.alert("Túl Nagy mennyiség, max:"+max);
 		}else{
-			newOutput(pallet_id,amount)
+			newOutput(pallet_id,amount,old)
 		}
 		
 		
@@ -193,8 +194,8 @@ function createCategory(){
 	bootbox.alert(str);
 }
 
-function createOutput(pallet_id,full){
-	var str = '<input type="hidden" id="type" value="createOutput" id2="'+pallet_id+'" max="'+full+'"/>';
+function createOutput(pallet_id,full,old){
+	var str = '<input type="hidden" id="type" value="createOutput" id2="'+pallet_id+'" max="'+full+'" old="'+old+'"/>';
 	str += '<table class = "table table-hover">';
 	str += "<thead>";
 		str += "<tr>";
@@ -421,4 +422,15 @@ function filterProd(){
 	var prod_id = $('#prod_select').val();
 	window.location = "storage.php?filter=prod&id="+prod_id;
 	
+}
+
+function filterProdOutput(){
+	var prod_id = $('#prod_select').val();
+	window.location = "kiadas.php?filter=prod&id="+prod_id;
+	
+}
+
+function makesound(){	
+	 var audio = document.getElementById("audio");
+     audio.play();
 }

@@ -22,6 +22,7 @@ function connect(){
 function insert($sql){
 	$mysqli = connect();
 	$var = $mysqli->query($sql);
+	print strval($mysqli->insert_id);
 	return $var;
 }
 function update($sql){

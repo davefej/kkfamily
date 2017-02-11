@@ -12,6 +12,12 @@
 	    <script src="../js/jquery1.12.4.js"></script>	    
 	    <script src="../js/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 	    <script src="../js/bootbox.js" ></script>
+	    <audio id="audio" src="../sound/alert.wav" ></audio>
+	   
+	    <script>
+	    alertcheck();
+	    setInterval(function(){ alertcheck() }, 10000);
+	    </script>
 	    
 	</body>
 </html>

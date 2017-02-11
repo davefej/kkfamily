@@ -149,3 +149,12 @@ table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sor
   height: 100%;
   width: auto;
 }
+
+.unseen{
+	background-color:pink;
+}
+
+.hasalert{
+	margin-left:5px;
+	color:red;
+}

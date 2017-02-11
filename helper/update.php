@@ -22,6 +22,8 @@ if(array_key_exists("type",$data)){
 		$sql = "UPDATE `pallet` SET `product_id` = '".$data['product_id']."', `supplier_id` = '".$data['supplier_id']."', `time` = '".$data['time']."', `amount` = '".$data['amount']."', `user_id` = '".$data['user_id']."' WHERE `pallet`.`id` = ".$data['id'];
 	}else if($data["type"] == "output"){
 		$sql = "UPDATE `output` SET `pallet_id` = '".$data['pallet_id']."', `amount` = '".$data['amount']."', `time` = '".$data['time']."', `user_id` = '".$data['user_id']."' WHERE `output`.`id` = ".$data['id'];
+	}else if($data["type"] == "alert"){
+		$sql = "UPDATE `alert` SET `seen` = '1'  WHERE `id` = ".$data['id'];
 	}
 	
 	return update($sql); 
