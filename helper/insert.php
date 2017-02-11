@@ -30,15 +30,15 @@ if(array_key_exists("type",$data)){
 				$sql = "INSERT INTO `output` (`id`, `pallet_id`, `amount`, `time`, `user_id`, `deleted`) VALUES (NULL, '".$data['pallet_id']."', '".$data['amount']."', CURRENT_TIMESTAMP, '".$_SESSION['user_id']."', '0')";
 			}else if($data["type"] == "alert"){
 				$sql = "INSERT INTO `alert` (`id`, `type`, `param`, `param2`, `time`, `user_id`, `seen`, `deleted`) VALUES (NULL, '".$data['alert_type']."', '".$data['param']."', '".$data['param2']."', CURRENT_TIMESTAMP, '".$_SESSION['user_id']."', '0', '0')";
+			}else if($data["type"] == "alert"){
+				$sql = "INSERT INTO `alert` (`id`, `type`, `param`, `param2`, `time`, `user_id`, `seen`, `deleted`) VALUES (NULL, '".$data['alert_type']."', '".$data['param']."', '".$data['param2']."', CURRENT_TIMESTAMP, '".$_SESSION['user_id']."', '0', '0')";
 
 			}
 		}else{
 			break;
 		}
 	}
-	
-		
-	
+
 	return insert($sql);
 }
  
