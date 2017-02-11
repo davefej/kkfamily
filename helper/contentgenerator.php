@@ -1266,4 +1266,84 @@ function alertSpare(){
 	// close connection
 	$mysqli->close();
 }
+<<<<<<< HEAD
+=======
+
+function alertInput(){
+
+	$mysqli = connect();
+	$results = $mysqli->query("SELECT a.id, a.type, a.param, a.param2, a.time, u.name, a.seen from alert a, user u where u.id = a.user_id and a.deleted = false and a.type='input' order by time desc ");
+	print '<table class="table table-hover sortable">';
+	print '<thead>';
+	print '<tr>';
+	print '<th>Minőség id</th>';
+	print '<th>Hibák</th>';
+	print '<th>Raktáros</th>';
+	print '<th>Időpont</th>';
+	print '<th>Láttam</th>';
+	print '</tr>';
+	print '</thead>';
+	while($row = $results->fetch_assoc()) {
+		print '<tr';
+		if($row["seen"] == '0' ){
+			print " class='unseen' ";
+		}
+		print '>';
+		print '<td>'.$row["param"].'</td>';
+		$data = json_decode($row["param2"],True);
+		print '<td>';
+		if($data != null){
+			foreach ($data as $i => $value) {
+					
+				if(is_numeric($value) && (2 == (int)$value || 1 == (int)$value) && $i != 'product'){
+					print minosegmap2($i).' => '.minosegmap((int)$value).'<br/>';
+				}
+			}
+		}		
+		print '</td>';
+		print '<td>'.$row["name"].'</td>';
+		print '<td>'.$row["time"].'</td>';
+		if($row["seen"] == '0' ){
+			print '<td><button class="btn btn-sm btn-danger" onclick="updateAlert('.$row["id"].')">OK</button></td>';
+		}else{
+			print '<td> </td>';
+		}
+		print '</tr>';
+	}
+	print '</table>';
+	// Frees the memory associated with a result
+	$results->free();
+	// close connection
+	$mysqli->close();
+}
+
+function minosegmap($i){
+	if($i === 1){
+		return "Rossz";
+	}else if($i === 2){
+		return "Közepes";
+	}else if($i === 3){
+		return "OK";
+	}else{
+		return '';
+	}
+}
+function minosegmap2($i){
+	if($i === "appearance"){
+		return "Kinézet";
+	}else if($i === "consistency"){
+		return "Állag";
+	}else if($i === "smell"){
+		return "Illat";
+	}else if($i === "color"){
+		return "Szín";
+	}else if($i === "clearness"){
+		return "Tisztaság Hőfok";
+	}else if($i === "pallet_quality"){
+		return "Raklap minőság";
+	}else{
+		return '';
+	}
+}
+>>>>>>> origin/master
 ?>

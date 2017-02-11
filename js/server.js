@@ -91,7 +91,14 @@ function newQualityForm(sumDifference, appearance, consistency, smell, color,
 }
 
 function palletcallback(json,response){
-	newPallet(json.product,json.supplier,json.amount,response)
+	
+	if(json.decision  == "accept"){//ÁTVÉVE
+		newPallet(json.product,json.supplier,json.amount,response)
+	}else{
+		//TODO
+		newAlert("input",response,JSON.stringify(json))
+	}
+	
 }
 
 function reload(){
@@ -122,7 +129,7 @@ function insert(json,callback){
         	          
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            alert.show(hiba);
+        	bootbox.alert("Internet vagy szerver hiba<br/>"+textStatus+"<br/>"+errorThrown)
         }
     });
 }
@@ -228,7 +235,7 @@ function update(json){
         	location.reload();          
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            //TODO
+        	bootbox.alert("Internet vagy szerver hiba<br/>"+textStatus+"<br/>"+errorThrown)
         }
     });
 }
@@ -300,7 +307,7 @@ function Delete(json){
         	location.reload();          
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            //TODO
+        	bootbox.alert("Internet vagy szerver hiba<br/>"+textStatus+"<br/>"+errorThrown)
         }
     });
 }
@@ -317,11 +324,15 @@ function alertcheck(){
         		response = parseInt(response);
         		if(response > 0){
         			if(alertnum != response && alertnum != -1){
-        				makesound();
+        				makesound();        				
         			}
-        			alertnum = response;
+        			
         			$('#alerta').html(  "Jelzés "+"<span class='hasalert label label-danger'>"+response+"</span>" );
-        				
+        			
+        			if(alertnum != -1 && window.location.href.indexOf("alert.php") > -1){
+        				location.reload();
+					}
+        			alertnum = response;
         		}else{
         			alertnum = 0;
         			$('#alerta').html("Jelzés") 
@@ -329,7 +340,7 @@ function alertcheck(){
         	} 
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            //TODO
+            bootbox.alert("Internet vagy szerver hiba<br/>"+textStatus+"<br/>"+errorThrown)
         }
     });
 }
