@@ -1266,8 +1266,6 @@ function alertSpare(){
 	// close connection
 	$mysqli->close();
 }
-<<<<<<< HEAD
-=======
 
 function alertInput(){
 
@@ -1345,5 +1343,5 @@ function minosegmap2($i){
 		return '';
 	}
 }
->>>>>>> origin/master
+
 ?>
