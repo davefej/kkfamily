@@ -50,6 +50,28 @@ require("../common/header.php");
 			  	</table>
 			</div>
 		</div>
+		
+		<!-- INPUT ALERT -->
+		<div class="panel panel-success">
+			<div class="panel-heading">
+				<a data-toggle="collapse" href="#collapse6">
+	  				Hibás beérkezett áruk
+	  			</a>
+			</div>
+			<div id="collapse5" class="panel-collapse collapse in">
+			  	<table class="table">
+			  		<tr>
+			  		<td>
+						<div>
+						<?php 			
+							alertInput();
+						?>
+						</div>
+					</td>
+				</tr>
+			  	</table>
+			</div>
+		</div>
 </div>
 
 <?php 
