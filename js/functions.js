@@ -434,3 +434,20 @@ function makesound(){
 	 var audio = document.getElementById("audio");
      audio.play();
 }
+
+String.prototype.replaceAt=function(index, character) {
+    return this.substr(0, index) + character + this.substr(index+character.length);
+}
+
+function inputchangeday(){
+	var wday = $('#wday').val()
+	if(window.location.href.indexOf("wday") > -1){
+		window.location.href = window.location.href.replaceAt(window.location.href.indexOf("wday")+5,wday)
+	}else{
+		if(window.location.href.indexOf("?") > -1){
+			window.location.href = window.location.href +"&wday="+wday
+		}else{
+			window.location.href = window.location.href +"?wday="+wday
+		}
+	}
+}

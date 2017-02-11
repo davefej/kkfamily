@@ -56,7 +56,19 @@ function datepicker($bool){
 		      <option value="31">31</option>
 		    </select>	';	   
 	
-
 }
 
+function daypicker(){
+	return '<select onchange="inputchangeday()" class="form-control" id="wday">
+		      <option value="">Nap</option>
+		      <option value="">-----</option>
+		      <option value="0">Hétfő</option>
+		      <option value="1">Kedd</option>
+		      <option value="2">Szerda</option>
+		      <option value="3">Csütörtök</option>
+		      <option value="4">Péntek</option>
+		      <option value="5">Szombat</option>
+		      <option value="6">Vasárnap</option>		      
+		    </select>';
+}
 ?>

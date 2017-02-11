@@ -641,9 +641,6 @@ function periodOutput($day,$last){
 	$labels = array();
 	$data = array();
 
-	
-	
-	
 	$mysqli = connect();
 	if($results = $mysqli->query(
 
@@ -692,14 +689,11 @@ function periodOutput($day,$last){
 			$str .= '<td>'.$row["product"].'</td>';
 			$str .= '<td>'.$row["amount"].'</td>';
 			$str .= '<td>'.$row["time"].'</td>';
-			$str .= '<td>'.$row["user"].'</td>';
-			 	
-
-			 	$str .= '</tr>';
-			 	$i =true;
-			 }
+			$str .= '<td>'.$row["user"].'</td>';			 	
+		 	$str .= '</tr>';
+		 	$i =true;
+		 }
 			
-
 			 if($i){
 			 	$str .= '</table>';
 			 	print $str;
@@ -885,7 +879,7 @@ function periodInput($day,$last){
 				 $str .= '<thead>';
 				 $str .= '<tr>';
 				 $str .= '<th>'.$day." -> ".$last.'</th>';
-				 $str .= '<th class="dateth">'.datepicker(true) .'</th>';
+				 $str .= '<th class="dateth">'.datepicker(true).'</th>';
 
 				 $str .= '<th><button class="btn btn-sm btn-default" onclick="dailyInput()">Napi Szűrés</button></th>';
 				 $str .= '<th><button class="btn btn-sm btn-default"  onclick="monthlyInput()">Havi Szűrés</button></th>';
@@ -1210,6 +1204,47 @@ function minosegmap2($i){
 		return "Raklap minőság";
 	}else{
 		return '';
+	}
+}
+
+function inputStatistic($weekday,$day,$day2){
+	
+	$mysqli = connect();
+	if($results = $mysqli->query(
+			
+			
+			
+			"SELECT pr.name as product, sum(o.amount) as amount 
+			FROM pallet p, product pr, output o where pr.id=p.product_id and o.pallet_id = p.id and
+				o.time >= '".$day2." 00:00:00' 
+			and o.time <= '".$day." 23:59:59' and 
+			WEEKDAY(o.time) = '".$weekday."' and 
+			 p.deleted = false and pr.deleted = false and
+			o.deleted = false group by product order by p.product_id ")){
+		$str =  '<table class="table table-hover ">';
+		$str .= '<thead>';
+		$str .= '<tr>';
+		$str .= '<th>Nap:</th>';
+		$str .= '<th>'.daypicker().'</th>';
+		$str .= '</tr>';
+		$str .= '<tr>';
+		$str .= '<th>Alapanyag</th>';
+		$str .= '<th>Mennyiség</th>';	
+		$str .= '</tr>';
+		$str .= '</thead>';
+		while($row = $results->fetch_assoc()) {
+			$str.= '<tr>';
+	
+			$str.= '<td>'.$row["product"].'</td>';
+			$str.= '<td>'.$row["amount"].'</td>';
+	
+			$str.= '</tr>';
+		}
+		$str.= '</table>';
+		print $str;
+	}else{
+		print "hiba";
+		print mysqli_error($mysqli);
 	}
 }
 ?>
