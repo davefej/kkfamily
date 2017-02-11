@@ -27,12 +27,6 @@
 				<li <?php if($selector == "alert"){ echo "class=\"active\"";} ?>><a id='alerta'  href="alert.php">Jelzés</a></li>
 			</ul>
 
-			<!-- <form class="navbar-form navbar-left">
-				<div class="form-group">
-					<input type="text" class="form-control" placeholder="Keresés">
-				</div>
-			</form> -->
-
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="../logout.php">Kijelentkezés</a></li>
 			</ul>

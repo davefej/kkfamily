@@ -320,7 +320,7 @@ function alertcheck(){
         				makesound();
         			}
         			alertnum = response;
-        			$('#alerta').html(  "Jelzés "+"<span class='hasalert'>"+response+"</span>" );
+        			$('#alerta').html(  "Jelzés "+"<span class='hasalert label label-danger'>"+response+"</span>" );
         				
         		}else{
         			alertnum = 0;

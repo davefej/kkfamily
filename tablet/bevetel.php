@@ -6,7 +6,7 @@
 
 ?>
 <div class="container-fluid">
-	<div class="col-md-11 centerBlock">
+	<div class="centerBlock">
 	<form method="post">
 		<table class="table table-striped">
 			<thead>
@@ -65,25 +65,49 @@
 			</tr>
 			<tr>
 				<td>
-					<input class="form-control" type="number" id="sumDifference">
+					<input type="number" class="form-control" id="sumDifference">
 				</td>
 				<td>
-					<input class="form-control" type="number" id="appearance" min="1" max="5">
+					<select class="form-control" id="appearance">
+					  <option value="1">Rossz</option>
+					  <option value="2">Közepes</option>
+					  <option value="3" selected>Jó</option>
+					</select>
 				</td>
 				<td>
-					<input class="form-control" type="number" id="consistency" min="1" max="5">
+					<select class="form-control" id="consistency">
+					  <option value="1">Rossz</option>
+					  <option value="2">Közepes</option>
+					  <option value="3" selected>Jó</option>
+					</select>
 				</td>
 				<td>
-					<input class="form-control" type="number" id="smell" min="1" max="5">
+					<select class="form-control" id="smell">
+					  <option value="1">Rossz</option>
+					  <option value="2">Közepes</option>
+					  <option value="3" selected>Jó</option>
+					</select>
 				</td>
 				<td>
-					<input class="form-control" type="number" id="color" min="1" max="5">
+					<select class="form-control" id="color">
+					  <option value="1">Rossz</option>
+					  <option value="2">Közepes</option>
+					  <option value="3" selected>Jó</option>
+					</select>
 				</td>
 				<td>
-					<input class="form-control" type="number" id="clearness" min="1" max="5">
+					<select class="form-control" id="clearness">
+					  <option value="1">Rossz</option>
+					  <option value="2">Közepes</option>
+					  <option value="3" selected>Jó</option>
+					</select>
 				</td>
 				<td>
-					<input class="form-control" type="number" id="palletQuality" min="1" max="5">
+					<select class="form-control" id="palletQuality">
+					  <option value="1">Rossz</option>
+					  <option value="2">Közepes</option>
+					  <option value="3" selected>Jó</option>
+					</select>
 				</td>
 				<td style="width: 150px">
 					<select class="form-control" id="decision">
