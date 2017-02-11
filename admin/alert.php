@@ -58,7 +58,7 @@ require("../common/header.php");
 	  				Hibás beérkezett áruk
 	  			</a>
 			</div>
-			<div id="collapse5" class="panel-collapse collapse in">
+			<div id="collapse6" class="panel-collapse collapse in">
 			  	<table class="table">
 			  		<tr>
 			  		<td>
