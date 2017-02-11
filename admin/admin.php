@@ -162,14 +162,14 @@ require("../common/header.php");
 
 
 
-	<!-- WORKERS / USERS -->
+	<!-- STATISTICS -->
 		<div class="panel panel-success">
 			<div class="panel-heading">
-				<a data-toggle="collapse" href="#collapse5">
+				<a data-toggle="collapse" href="#collapsed">
 	  				Fogyási statisztika
 	  			</a>
 			</div>
-			<div id="#collapse5" class="panel-collapse collapse in">
+			<div id="collapsed" class="panel-collapse collapse">
 			  	<table class="table">
 			  		<tr>
 			  		<td>
@@ -191,7 +191,6 @@ require("../common/header.php");
 				</tr>
 			  	</table>
 			</div>
-		
 	</div>
 
 	
