@@ -197,13 +197,20 @@ function listCategory(){
 	$mysqli->close();
 }
 
-function palletOutput($alapanyag){
+function palletOutput($id){
+	
+	if($id === ""){
+		$filter  = "";
+	}else{
+		$filter  = "and pr.id = '".$id."' ";
+	}
+	
 	$mysqli = connect();
 	if($results = $mysqli->query(
 			"select p.id as id, pr.name as product, s.name as supplier,p.time as time, 
 IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0) as rest 
 from pallet p 
-INNER JOIN product pr on p.product_id = pr.id
+INNER JOIN product pr on p.product_id = pr.id ".$filter."
 INNER JOIN supplier s on s.id = p.supplier_id
 LEFT JOIN (
     select t2.id as id ,t3.amount as trash,t2.amount as output from 
@@ -227,21 +234,24 @@ LEFT JOIN (
 		ON t2.id = t3.id 
  ) t1 
  on p.id = t1.id
-HAVING rest > 0
+HAVING rest > 0 ORDER BY product, time
 			")){
 	//and a.nev='".$alapanyag."'
 	print '<table class="table table-hover sortable">';
 	print '<thead>';
 	print '<tr>';
 	print '<th>ID</th>';
-	print '<th>Alapanyag név</th>';
+	print '<th>';
+	productOptionOutput($id);			
+	print 'Alapanyag név';
+	print '</th>';
 	print '<th>Beszállító Neve</th>';
 	print '<th>Beérkezés ideje</th>';
 	print '<th>Mennyiség</th>';
 	print '<th>Kiad</th>';
 	print '</tr>';
 	print '</thead>';
-
+	$firstprods = array();
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
 		print '<td>'.$row["id"].'</td>';
@@ -249,8 +259,15 @@ HAVING rest > 0
 		print '<td>'.$row["supplier"].'</td>';
 		print '<td>'.$row["time"].'</td>';
 		print '<td>'.$row["rest"].'</td>';
-
-		print '<td><button class="btn btn-sm btn-danger" onclick="output('.$row["id"].','.$row["rest"].')">Kiadás</button></td>';
+		
+		if(in_array($row["product"],$firstprods))
+		{
+			print '<td><button class="btn btn-sm btn-danger" onclick="olderOutput('.$row["id"].','.$row["rest"].')">Kiadás</button></td>';
+		}else{
+			print '<td><button class="btn btn-sm btn-danger" onclick="output('.$row["id"].','.$row["rest"].')">Kiadás</button></td>';
+			array_push($firstprods,$row["product"]);
+		}
+		
 		print '</tr>';
 	}
 	print '</table>';
@@ -379,6 +396,28 @@ function productOptionStore($filter){
 	}
 	print '</select>';
 	
+	// Frees the memory associated with a result
+	$results->free();
+	// close connection
+	$mysqli->close();
+}
+
+function productOptionOutput($filter){
+	$mysqli = connect();
+	$results = $mysqli->query("SELECT * FROM product where deleted = false order by name");
+	print '<select id="prod_select" onchange="filterProdOutput()" class="form-control">';
+
+	print '<option  value=""> Összes </option>';
+	while($row = $results->fetch_assoc()) {
+		if($filter === $row["id"]){
+			print '<option value="'.$row["id"].'" selected>'.$row["name"].'</option>';
+		}else{
+			print '<option  value="'.$row["id"].'">'.$row["name"].'</option>';
+		}
+
+	}
+	print '</select>';
+
 	// Frees the memory associated with a result
 	$results->free();
 	// close connection
@@ -605,7 +644,7 @@ function periodOutput($day,$last){
 	$mysqli = connect();
 	if($results = $mysqli->query(
 
-			"SELECT p.id as id, pr.name as product, o.amount as amount, o.time as time, u.name as user
+			"SELECT p.id as id, pr.name as product, o.amount as amount, o.time as time, u.name as user,o.id as o_id
  				FROM  pallet p, product pr, output o, user u
 			where pr.id=p.product_id and o.pallet_id = p.id and o.user_id = u.id
 			 and 
@@ -625,7 +664,8 @@ function periodOutput($day,$last){
 			 $str .= '<th></th>';
 			 $str .= '</tr>';
 			 $str .= '<tr>';
-			 $str .= '<th>ID</th>';
+			 $str .= '<th>Kiadás ID</th>';
+			 $str .= '<th>Raklap ID</th>';
 			 $str .= '<th>Alapanyag</th>';
 			 $str .= '<th>Mennyiség</th>';
 			 $str .= '<th>Kiadási idő</th>';
@@ -643,7 +683,8 @@ function periodOutput($day,$last){
 			 		array_push($data,(int)$row["amount"]);
 			 	}
 			 	$str .= '<tr>';
-
+			 
+			 $str .= '<td>'.$row["o_id"].'</td>';
 			$str .= '<td>'.$row["id"].'</td>';
 			$str .= '<td>'.$row["product"].'</td>';
 			$str .= '<td>'.$row["amount"].'</td>';
@@ -1014,4 +1055,74 @@ function listUser(){
 	// close connection
 	$mysqli->close();
 }
+
+function alertOutput(){
+	
+	$mysqli = connect();
+	$results = $mysqli->query("SELECT a.id, a.type, a.param, a.param2, a.time, u.name, a.seen from alert a, user u where u.id = a.user_id and a.deleted = false and a.type='output' order by time desc ");
+	print '<table class="table table-hover sortable">';
+	print '<thead>';
+	print '<tr>';
+	print '<th>Kiadás id</th>';
+	print '<th>Raklap id</th>';
+	print '<th>Raktáros</th>';
+	print '<th>Időpont</th>';
+	print '<th>Láttam</th>';
+	print '</tr>';
+	print '</thead>';
+	while($row = $results->fetch_assoc()) {
+		print '<tr';
+		if($row["seen"] == '0' ){
+			print " class='unseen' ";
+		}
+		print '>';
+		print '<td>'.$row["param"].'</td>';
+		print '<td>'.$row["param2"].'</td>';
+		print '<td>'.$row["name"].'</td>';
+		print '<td>'.$row["time"].'</td>';
+		print '<td><button class="btn btn-sm btn-danger" onclick="updateAlert('.$row["id"].')">OK</button></td>';
+		print '</tr>';
+	}
+	print '</table>';
+	// Frees the memory associated with a result
+	$results->free();
+	// close connection
+	$mysqli->close();
+}
+
+function alertSpare(){
+
+	$mysqli = connect();
+	$results = $mysqli->query("SELECT a.id, a.type, a.param, a.param2, a.time, u.name, a.seen from alert a, user u where u.id = a.user_id and a.deleted = false and a.type='trash' order by time desc ");
+	print '<table class="table table-hover sortable">';
+	print '<thead>';
+	print '<tr>';
+	print '<th>Selejt id</th>';
+	print '<th>Raklap id</th>';
+	print '<th>Raktáros</th>';
+	print '<th>Időpont</th>';
+	print '<th>Láttam</th>';
+	print '</tr>';
+	print '</thead>';
+	while($row = $results->fetch_assoc()) {
+		print '<tr';
+		if($row["seen"] == '0' ){
+			print " class='unseen' ";
+		}
+		print '>';
+		print '<td>'.$row["param"].'</td>';
+		print '<td>'.$row["param2"].'</td>';
+		print '<td>'.$row["name"].'</td>';
+		print '<td>'.$row["time"].'</td>';
+		print '<td><button class="btn btn-sm btn-danger" onclick="updateAlert('.$row["id"].')">OK</button></td>';
+		print '</tr>';
+	}
+	print '</table>';
+	// Frees the memory associated with a result
+	$results->free();
+	// close connection
+	$mysqli->close();
+}
+
+
 ?>

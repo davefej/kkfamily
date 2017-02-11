@@ -279,7 +279,7 @@
         },
         en: {
             OK: "OK",
-            CANCEL: "Cancel",
+            CANCEL: "Mégsem",
             CONFIRM: "OK"
         },
         es: {

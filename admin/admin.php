@@ -2,6 +2,8 @@
 $selected ="admin";
 $selector ="admin";
 require("../common/header.php");
+
+dailyInput();
 ?>
   
   <div class="panel-group">

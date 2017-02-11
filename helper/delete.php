@@ -21,7 +21,9 @@ if($data["type"] == "category"){
 		$sql = "UPDATE `pallet` SET `deleted` = '1' WHERE `pallet`.`id` = ".$data['id'];
 	}else if($data["type"] == "output"){
 		$sql = "UPDATE `output` SET `deleted` = '1' WHERE `output`.`id` = ".$data['id'];
-	}	
+	}else if($data["type"] == "alert"){
+		$sql = "UPDATE `alert` SET `deleted` = '1' WHERE `output`.`id` = ".$data['id'];
+	}
 	return update($sql); 
 }
  
