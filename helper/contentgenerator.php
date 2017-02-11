@@ -33,13 +33,14 @@ function listStore($id){
         ) t3 
 		ON t2.id = t3.id 
 		UNION
-	select t2.id as id ,t3.amount as trash,t2.amount as output from 
+	select t2.id as id ,t3.amount as output,t2.amount as trash from 
 		(
-            SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
+             SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
+            
         ) t2 
-		RIGHT JOIN 
+		LEFT JOIN 
 		(
-            SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
+           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
         ) t3 
 		ON t2.id = t3.id 
  ) t1 
@@ -223,13 +224,14 @@ LEFT JOIN (
         ) t3 
 		ON t2.id = t3.id 
 		UNION
-	select t2.id as id ,t3.amount as trash,t2.amount as output from 
+	select t2.id as id ,t3.amount as output,t2.amount as trash from 
 		(
-            SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
+             SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
+            
         ) t2 
-		RIGHT JOIN 
+		LEFT JOIN 
 		(
-            SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
+           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
         ) t3 
 		ON t2.id = t3.id 
  ) t1 
@@ -301,13 +303,14 @@ function palletSpare($alapanyag){
         ) t3 
 		ON t2.id = t3.id 
 		UNION
-	select t2.id as id ,t3.amount as trash,t2.amount as output from 
+	select t2.id as id ,t3.amount as output,t2.amount as trash from 
 		(
-            SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
+             SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
+            
         ) t2 
-		RIGHT JOIN 
+		LEFT JOIN 
 		(
-            SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
+           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
         ) t3 
 		ON t2.id = t3.id 
  ) t1 
@@ -1080,7 +1083,12 @@ function alertOutput(){
 		print '<td>'.$row["param2"].'</td>';
 		print '<td>'.$row["name"].'</td>';
 		print '<td>'.$row["time"].'</td>';
-		print '<td><button class="btn btn-sm btn-danger" onclick="updateAlert('.$row["id"].')">OK</button></td>';
+		if($row["seen"] == '0' ){
+			print '<td><button class="btn btn-sm btn-danger" onclick="updateAlert('.$row["id"].')">OK</button></td>';
+		}else{
+			print '<td> </td>';
+		}
+		
 		print '</tr>';
 	}
 	print '</table>';
@@ -1114,7 +1122,11 @@ function alertSpare(){
 		print '<td>'.$row["param2"].'</td>';
 		print '<td>'.$row["name"].'</td>';
 		print '<td>'.$row["time"].'</td>';
+		if($row["seen"] == '0' ){
 		print '<td><button class="btn btn-sm btn-danger" onclick="updateAlert('.$row["id"].')">OK</button></td>';
+		}else{
+			print '<td> </td>';
+		}
 		print '</tr>';
 	}
 	print '</table>';
