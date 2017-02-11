@@ -2,121 +2,256 @@
 require('mysqli.php');
 require('datepicker.php');
 
-
-function listStore($id){
-	
-	if($id === ""){
-		$filter  = "";
-	}else{
-		$filter  = "and pr.id = '".$id."' ";
-	}
-	
-	
-	$labels = array();
-	$data = array();
+function getSupplies($id){
 	$mysqli = connect();
 	if($results = $mysqli->query(
-			"select p.id as id, pr.name as product, s.name as supplier,p.time as time, u.name as user,
-			IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0) as rest 
-			from pallet p 
-			INNER JOIN product pr on p.product_id = pr.id ".$filter."
-			INNER JOIN supplier s on s.id = p.supplier_id
-			INNER JOIN user u on u.id = p.user_id
+			"SELECT pr.name as product, SUM(IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0)) as rest 
+			FROM pallet p
+			INNER JOIN product pr ON p.product_id = pr.id
 			LEFT JOIN (
-    select t2.id as id ,t3.amount as trash,t2.amount as output from 
-		(
-           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
-        ) t2 
-		LEFT JOIN 
-		(
-           SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
-        ) t3 
-		ON t2.id = t3.id 
-		UNION
-	select t2.id as id ,t3.amount as output,t2.amount as trash from 
-		(
-             SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
-            
-        ) t2 
-		LEFT JOIN 
-		(
-           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
-        ) t3 
-		ON t2.id = t3.id 
- ) t1 
- on p.id = t1.id
-HAVING rest > 0 order by product")){
-	
-	print '<table class="table table-hover sortable">';
-	print '<thead>';
-	print '<tr>';
-	print '<th>ID</th>';
-	print '<th>';
-	productOptionStore($id);
-	print 'Alapanyag név</th>';
-	print '<th>Beszállító Neve</th>';
-	print '<th>Beérkezés ideje</th>';
-	print '<th>Mennyiség</th>';
-	print '<th>Raktáros</th>';
-	print '</tr>';
-	print '</thead>';
-	while($row = $results->fetch_assoc()) {
-		if(in_array($row["product"],$labels))
-		{
-			$key = array_search($row["product"],$labels);
-			$data[$key] = $data[$key]+(int)$row["rest"]; 
-		}else{
-			array_push($labels,$row["product"]);
-			array_push($data,(int)$row["rest"]);
-		}
-		
+    		SELECT t2.id as id ,t3.amount as trash,t2.amount as output from 
+				(
+		           SELECT pallet_id as id, sum(amount) as amount FROM output WHERE deleted = false GROUP BY pallet_id
+		        )t2 
+			LEFT JOIN 
+				(
+		           SELECT pallet_id as id, sum(amount) as amount FROM trash WHERE deleted = false GROUP BY pallet_id
+		        )t3 
+			ON t2.id = t3.id 
+			UNION
+			SELECT t2.id as id ,t3.amount as output,t2.amount as trash from 
+				(
+	             	SELECT pallet_id as id, sum(amount) as amount FROM trash WHERE deleted = false GROUP BY pallet_id
+	        	)t2 
+			LEFT JOIN (
+		           SELECT pallet_id as id, sum(amount) as amount FROM output WHERE deleted = false GROUP BY pallet_id
+		        )t3 
+			ON t2.id = t3.id 
+ 			) t1 
+ 			ON p.id = t1.id
+			GROUP BY product
+			HAVING rest > 0
+			"
+			)){
+		print '<table class="table table-hover sortable">';
+		print '<thead>';
 		print '<tr>';
-		print '<td>'.$row["id"].'</td>';
-		print '<td>'.$row["product"].'</td>';
-		print '<td>'.$row["supplier"].'</td>';
-		print '<td>'.$row["time"].'</td>';
-		print '<td>'.$row["rest"].'</td>';
-		print '<td>'.$row["user"].'</td>';
+		print '<th>';
+		productOptionStorage($id);
+		print 'Alapanyag név</th>';
+		print '<th>Mennyiség</th>';
 		print '</tr>';
-	}
-	print '</table>';
-	
-	$colors = array( 'rgba(255, 99, 132, 0.8)',
-			'rgba(54, 162, 235, 0.8)',
-			'rgba(255, 206, 86, 0.8)',
-			'rgba(75, 192, 192, 0.8)',
-			'rgba(153, 102, 255, 0.8)');
-	
-	$backgroundColor = array();
-	for($i=0; $i < count($labels); $i++){
-		$num = $i%count($colors);
-		array_push($backgroundColor,$colors[$num]);
-	}
-	
-	$datasets = array(
-			"label" => "Raktárkészletek",
-			"backgroundColor" => $backgroundColor,
-			"borderWidth" => 0,
-			"data" => $data
-	);
-	$datasetsarray = array($datasets);
-	$json = array(
-		"labels" => $labels,
-		"datasets" => $datasetsarray
-	);
-	
-	$json_str = json_encode($json,True);
-	
-	print '<div id="storage_json" class="hiddendiv">'.$json_str.'</div>';
-	// Frees the memory associated with a result
-	$results->free();
-	
+		print '</thead>';
+		while($row = $results->fetch_assoc()) {
+			print '<tr>';
+			print '<td>'.$row["product"].'</td>';
+			print '<td>'.$row["rest"].'</td>';
+			print '</tr>';
+		}
+		print '</table>';
+		
+		$results->free();
 	}else{
 		print mysqli_error($mysqli);
 		print "hiba";
 	}
 	// close connection
 	$mysqli->close();
+}
+
+function listForChart(){
+	
+	$labels = array();
+	$data = array();
+	$mysqli = connect();
+	if($results = $mysqli->query(
+			"select p.id as id, pr.name as product, s.name as supplier, p.time as time, u.name as user,
+			IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0) as rest
+			from pallet p
+			INNER JOIN product pr on p.product_id = pr.id
+			INNER JOIN supplier s on s.id = p.supplier_id
+			INNER JOIN user u on u.id = p.user_id
+			LEFT JOIN (
+    			select t2.id as id ,t3.amount as trash,t2.amount as output from
+				(
+		           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
+		        )t2
+			LEFT JOIN
+			(
+	           SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
+	        )t3
+			ON t2.id = t3.id
+			UNION
+			select t2.id as id ,t3.amount as output,t2.amount as trash from
+			(
+             	SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
+        	)t2
+			LEFT JOIN
+			(
+	           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
+	        )t3
+			ON t2.id = t3.id
+ 			) t1
+ 			on p.id = t1.id
+			HAVING rest > 0 order by product")){
+			
+			while($row = $results->fetch_assoc()) {
+				if(in_array($row["product"],$labels))
+				{
+					$key = array_search($row["product"],$labels);
+					$data[$key] = $data[$key]+(int)$row["rest"];
+				}else{
+					array_push($labels,$row["product"]);
+					array_push($data,(int)$row["rest"]);
+				}
+			}
+			
+			$colors = array( 'rgba(255, 99, 132, 0.8)',
+					'rgba(54, 162, 235, 0.8)',
+					'rgba(255, 206, 86, 0.8)',
+					'rgba(75, 192, 192, 0.8)',
+					'rgba(153, 102, 255, 0.8)');
+			
+			$backgroundColor = array();
+			for($i=0; $i < count($labels); $i++){
+				$num = $i%count($colors);
+				array_push($backgroundColor,$colors[$num]);
+			}
+			
+			$datasets = array(
+					"label" => "Raktárkészletek",
+					"backgroundColor" => $backgroundColor,
+					"borderWidth" => 0,
+					"data" => $data
+			);
+			$datasetsarray = array($datasets);
+			$json = array(
+					"labels" => $labels,
+					"datasets" => $datasetsarray
+			);
+			
+			$json_str = json_encode($json,True);
+			
+			print '<div id="storage_json" class="hiddendiv">'.$json_str.'</div>';
+			
+			$results->free();
+	}
+	else{
+		print mysqli_error($mysqli);
+		print "hiba";
+	}
+	// close connection
+	$mysqli->close();
+}
+
+function listStorage($id){
+	
+	if($id === ""){
+		getSupplies($id);
+		listForChart();
+	}else{
+		$filter  = "and pr.id = '".$id."' ";
+	
+		$labels = array();
+		$data = array();
+		$mysqli = connect();
+		if($results = $mysqli->query(
+				"select p.id as id, pr.name as product, s.name as supplier, p.time as time, u.name as user,
+				IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0) as rest 
+				from pallet p 
+				INNER JOIN product pr on p.product_id = pr.id ".$filter."
+				INNER JOIN supplier s on s.id = p.supplier_id
+				INNER JOIN user u on u.id = p.user_id
+				LEFT JOIN (
+	    			select t2.id as id ,t3.amount as trash,t2.amount as output from 
+					(
+			           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
+			        )t2 
+				LEFT JOIN 
+				(
+		           SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
+		        )t3 
+				ON t2.id = t3.id 
+				UNION
+				select t2.id as id ,t3.amount as output,t2.amount as trash from 
+				(
+	             	SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
+	        	)t2 
+				LEFT JOIN 
+				(
+		           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
+		        )t3 
+				ON t2.id = t3.id 
+	 			) t1 
+	 			on p.id = t1.id
+				HAVING rest > 0 order by product")){
+		
+		print '<table class="table table-hover sortable">';
+		print '<thead>';
+		print '<tr>';
+		print '<th>ID</th>';
+		print '<th>';
+		productOptionStorage($id);
+		print 'Alapanyag név</th>';
+		print '<th>Beszállító Neve</th>';
+		print '<th>Beérkezés ideje</th>';
+		print '<th>Mennyiség</th>';
+		print '<th>Raktáros</th>';
+		print '</tr>';
+		print '</thead>';
+		while($row = $results->fetch_assoc()) {
+			array_push($labels,$row["product"]);
+			array_push($data,(int)$row["rest"]);
+			
+			print '<tr>';
+			print '<td>'.$row["id"].'</td>';
+			print '<td>'.$row["product"].'</td>';
+			print '<td>'.$row["supplier"].'</td>';
+			print '<td>'.$row["time"].'</td>';
+			print '<td>'.$row["rest"].'</td>';
+			print '<td>'.$row["user"].'</td>';
+			print '</tr>';
+		}
+		print '</table>';
+		
+		$colors = array( 'rgba(255, 99, 132, 0.8)',
+				'rgba(54, 162, 235, 0.8)',
+				'rgba(255, 206, 86, 0.8)',
+				'rgba(75, 192, 192, 0.8)',
+				'rgba(153, 102, 255, 0.8)');
+			
+		$backgroundColor = array();
+		for($i=0; $i < count($labels); $i++){
+			$num = $i%count($colors);
+			array_push($backgroundColor,$colors[$num]);
+		}
+			
+		$datasets = array(
+				"label" => "Raktárkészletek",
+				"backgroundColor" => $backgroundColor,
+				"borderWidth" => 0,
+				"data" => $data
+		);
+		$datasetsarray = array($datasets);
+		$json = array(
+				"labels" => $labels,
+				"datasets" => $datasetsarray
+		);
+			
+		$json_str = json_encode($json,True);
+			
+		print '<div id="storage_json" class="hiddendiv">'.$json_str.'</div>';
+		
+		// Frees the memory associated with a result
+		$results->free();
+		
+		}else{
+			print mysqli_error($mysqli);
+			print "hiba";
+		}
+		// close connection
+		$mysqli->close();
+	}
 }
 
 function listProduct(){
@@ -383,7 +518,7 @@ function productOption(){
 	$mysqli->close();
 }
 
-function productOptionStore($filter){
+function productOptionStorage($filter){
 	$mysqli = connect();
 	$results = $mysqli->query("SELECT * FROM product where deleted = false order by name");
 	print '<select id="prod_select" onchange="filterProd()" class="form-control">';
@@ -635,7 +770,6 @@ function dailyOutput(){
 	$mysqli->close();
 }
 
-
 function periodOutput($day,$last){
 
 	$labels = array();
@@ -751,8 +885,6 @@ function periodOutput($day,$last){
 	$mysqli->close();
 }
 
-
-
 function periodSpare($day,$last){
 
 	$labels = array();
@@ -863,7 +995,6 @@ function periodSpare($day,$last){
 
 	$mysqli->close();
 }
-
 
 function periodInput($day,$last){
 	$labels = array();
@@ -1135,6 +1266,4 @@ function alertSpare(){
 	// close connection
 	$mysqli->close();
 }
-
-
 ?>

@@ -81,7 +81,7 @@ require("../common/header.php");
 				</div>
 		  	<div class="col-md-6-2">
 		  		<div class="centerBlock">
-			  			<canvas id="dailyOutputChart" width="300" height="250">
+			  			<canvas id="dailyOutputChart">
 		                    <script>
 		                        var ctx = document.getElementById("dailyOutputChart");
 		                        var data = document.getElementById('dailyOutput_json').innerHTML;

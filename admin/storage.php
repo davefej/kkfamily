@@ -6,11 +6,12 @@ require("../common/header.php");
 
 if(isset($_GET["filter"])){
 	if($_GET["filter"] == "prod"){
-		listStore($_GET["id"]);
+		listStorage($_GET["id"]);
 	}
 	
 }else{
-	listStore("");
+	getSupplies("");
+	listForChart();
 }
 
 
