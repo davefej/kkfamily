@@ -56,14 +56,28 @@ function newPallet(product_id,supplier_id,amount,user_id){
 	});
 }
 
-function newOutput(pallet_id,amount){	
+function newOutput(pallet_id,amount, qualityForm){	
 	insert({
     	"pallet_id":pallet_id,
     	"amount":amount,
+    	"quality_form":qualityForm,
     	"type":"output"
 	});
 }
 
+function newQualityForm(sumDifference, appearance, consistency, smell, color, clearness, palletQuality, decision){
+	insert({
+		"sum_difference":sumDifference,
+		"appearance":appearance,
+		"consistency":consistency,
+		"smell":smell,
+		"color":color,
+		"clearness":clearness,
+		"pallet_quality":palletQuality,
+		"decision":decision,
+		"type":"quality_form"
+	});
+}
 
 function insert(json,tablet){
 	$.ajax({
@@ -75,7 +89,7 @@ function insert(json,tablet){
         	location.reload();          
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            //TODO
+            alert.show(hiba);
         }
     });
 }

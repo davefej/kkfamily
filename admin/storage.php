@@ -17,7 +17,6 @@ if(isset($_GET["filter"])){
 ?>
 
 <!-- BAR CHART -->
-<!-- TODO: Dinamikussá tenni a grafikonokat -->
 <div class="container-fluid" id="barChartContainer">
 	<canvas id="myBarChart" width="600" height="150">
 		<script>
