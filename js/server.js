@@ -317,11 +317,13 @@ function alertcheck(){
         		response = parseInt(response);
         		if(response > 0){
         			if(alertnum != response && alertnum != -1){
-        				makesound();
+        				makesound();        				
         			}
         			alertnum = response;
         			$('#alerta').html(  "Jelzés "+"<span class='hasalert label label-danger'>"+response+"</span>" );
-        				
+        			if(window.location.href.indexOf("alert.php") > -1)){
+        				location.reload();
+					}
         		}else{
         			alertnum = 0;
         			$('#alerta').html("Jelzés") 
