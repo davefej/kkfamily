@@ -4,6 +4,25 @@ $selected ="admin";
 $selector ="input";
 require("../common/header.php");
 
+
+if(isset($_GET['wday'])){
+	$day  = date("Y-m-d");
+	$day2 = date('Y-m-d', strtotime("-30 days"));
+	inputStatistic($_GET['wday'],$day,$day2);
+}else{
+	$day  = date("Y-m-d");
+	$day2 = date('Y-m-d', strtotime("-30 days"));
+	$dw = date( "w");
+	$dw = $dw -1;
+	if($dw == -1){
+		$dw = 6;
+	}
+	inputStatistic($dw,$day,$day2);
+}
+?>
+<br/>
+<?php 
+
 if(isset($_GET['type'])){
 	if($_GET['type'] == "day"){
 		if(isset($_GET['day'])){
@@ -27,23 +46,8 @@ if(isset($_GET['type'])){
 	$day  = date("Y-m-d");
 	periodInput($day,$day);
 }
-?>
-<br/>
-<?php 
 
-if(isset($_GET['wday'])){
-	$day  = date("Y-m-d");
-	$day2 = date('Y-m-d', strtotime("-30 days"));
-	inputStatistic($_GET['wday'],$day,$day2);
-}else{
-	$day  = date("Y-m-d");
-	$day2 = date('Y-m-d', strtotime("-30 days"));
-	$dw = date( "w");
-	$dw = $dw -1;
-	if($dw == -1){
-		$dw = 6;
-	}
-	inputStatistic($dw,$day,$day2);
-}
+
+
 require("../common/footer.php");
 ?>
