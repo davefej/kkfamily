@@ -224,6 +224,14 @@ function updateAlert(id){
 	});
 }
 
+function updateInventory(id,amount){
+	update({
+		"id":id,
+		"amount":amount,
+		"type":"inventory"
+	});
+}
+
 function update(json){
 	
 	$.ajax({

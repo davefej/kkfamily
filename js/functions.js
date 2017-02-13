@@ -83,6 +83,12 @@ function bbsave(){
 		var id = $('#type').attr("id2");
 		updateCategory(id,name)
 		
+	}else if(tipus == "inventory_update"){
+		
+		var name = $('#inventory_update_amount').val()		
+		var id = $('#type').attr("id2");
+		updateInventory(id,name)
+		
 	}
 	
 }
@@ -364,7 +370,26 @@ function editCategory(id){
 	bootbox.alert(str);
 }
 
+function inventory_update(id,amount){
+	var str = '<input type="hidden" id="type" value="inventory_update" id2="'+id+'"/>';
+	str += '<table class = "table table-hover">';
+	str += "<thead>";
+		str += "<tr>";
+			str += "<th>";
+				str += "Mennyiség";
+			str += "</th>";			
+		str += "</tr>";
+	str += "</thead>";
+		str += "<tr>";
+			str += "<td>";
+				str += "<input type='text' maxlength='50' value="+amount+" id='inventory_update_amount'>";
+			str += "<td>";
+		str += "</tr>";
+	str += "</table>";
+	bootbox.alert(str);
+}
 
+///OTEHR/////////
 
 
 

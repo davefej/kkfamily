@@ -4,35 +4,7 @@ require('datepicker.php');
 
 function getSupplies($id){
 	$mysqli = connect();
-	if($results = $mysqli->query(
-			"SELECT pr.name as product, SUM(IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0)) as rest 
-			FROM pallet p
-			INNER JOIN product pr ON p.product_id = pr.id
-			LEFT JOIN (
-    		SELECT t2.id as id ,t3.amount as trash,t2.amount as output from 
-				(
-		           SELECT pallet_id as id, sum(amount) as amount FROM output WHERE deleted = false GROUP BY pallet_id
-		        )t2 
-			LEFT JOIN 
-				(
-		           SELECT pallet_id as id, sum(amount) as amount FROM trash WHERE deleted = false GROUP BY pallet_id
-		        )t3 
-			ON t2.id = t3.id 
-			UNION
-			SELECT t2.id as id ,t3.amount as output,t2.amount as trash from 
-				(
-	             	SELECT pallet_id as id, sum(amount) as amount FROM trash WHERE deleted = false GROUP BY pallet_id
-	        	)t2 
-			LEFT JOIN (
-		           SELECT pallet_id as id, sum(amount) as amount FROM output WHERE deleted = false GROUP BY pallet_id
-		        )t3 
-			ON t2.id = t3.id 
- 			) t1 
- 			ON p.id = t1.id
-			GROUP BY product
-			HAVING rest > 0
-			"
-			)){
+	if($results = $mysqli->query(palletSQL3(""," GROUP BY product "))){
 		print '<table class="table table-hover sortable">';
 		print '<thead>';
 		print '<tr>';
@@ -64,36 +36,7 @@ function listForChart(){
 	$labels = array();
 	$data = array();
 	$mysqli = connect();
-	if($results = $mysqli->query(
-			"select p.id as id, pr.name as product, s.name as supplier, p.time as time, u.name as user,
-			IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0) as rest
-			from pallet p
-			INNER JOIN product pr on p.product_id = pr.id
-			INNER JOIN supplier s on s.id = p.supplier_id
-			INNER JOIN user u on u.id = p.user_id
-			LEFT JOIN (
-    			select t2.id as id ,t3.amount as trash,t2.amount as output from
-				(
-		           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
-		        )t2
-			LEFT JOIN
-			(
-	           SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
-	        )t3
-			ON t2.id = t3.id
-			UNION
-			select t2.id as id ,t3.amount as output,t2.amount as trash from
-			(
-             	SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
-        	)t2
-			LEFT JOIN
-			(
-	           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
-	        )t3
-			ON t2.id = t3.id
- 			) t1
- 			on p.id = t1.id
-			HAVING rest > 0 order by product")){
+	if($results = $mysqli->query(palletSQL())){
 			
 			while($row = $results->fetch_assoc()) {
 				if(in_array($row["product"],$labels))
@@ -155,36 +98,7 @@ function listStorage($id){
 		$labels = array();
 		$data = array();
 		$mysqli = connect();
-		if($results = $mysqli->query(
-				"select p.id as id, pr.name as product, s.name as supplier, p.time as time, u.name as user,
-				IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0) as rest 
-				from pallet p 
-				INNER JOIN product pr on p.product_id = pr.id ".$filter."
-				INNER JOIN supplier s on s.id = p.supplier_id
-				INNER JOIN user u on u.id = p.user_id
-				LEFT JOIN (
-	    			select t2.id as id ,t3.amount as trash,t2.amount as output from 
-					(
-			           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
-			        )t2 
-				LEFT JOIN 
-				(
-		           SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
-		        )t3 
-				ON t2.id = t3.id 
-				UNION
-				select t2.id as id ,t3.amount as output,t2.amount as trash from 
-				(
-	             	SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
-	        	)t2 
-				LEFT JOIN 
-				(
-		           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
-		        )t3 
-				ON t2.id = t3.id 
-	 			) t1 
-	 			on p.id = t1.id
-				HAVING rest > 0 order by product")){
+		if($results = $mysqli->query(palletSQL2($filter))){
 		
 		print '<table class="table table-hover sortable">';
 		print '<thead>';
@@ -342,38 +256,8 @@ function palletOutput($id){
 	}
 	
 	$mysqli = connect();
-	if($results = $mysqli->query(
-			"select p.id as id, pr.name as product, s.name as supplier,p.time as time, 
-IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0) as rest 
-from pallet p 
-INNER JOIN product pr on p.product_id = pr.id ".$filter."
-INNER JOIN supplier s on s.id = p.supplier_id
-LEFT JOIN (
-    select t2.id as id ,t3.amount as trash,t2.amount as output from 
-		(
-           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
-        ) t2 
-		LEFT JOIN 
-		(
-           SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
-        ) t3 
-		ON t2.id = t3.id 
-		UNION
-	select t2.id as id ,t3.amount as output,t2.amount as trash from 
-		(
-             SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
-            
-        ) t2 
-		LEFT JOIN 
-		(
-           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
-        ) t3 
-		ON t2.id = t3.id 
- ) t1 
- on p.id = t1.id
-HAVING rest > 0 ORDER BY product, time
-			")){
-	//and a.nev='".$alapanyag."'
+	if($results = $mysqli->query(palletSQL2($filter))){
+
 	print '<table class="table table-hover sortable">';
 	print '<thead>';
 	print '<tr>';
@@ -419,39 +303,9 @@ HAVING rest > 0 ORDER BY product, time
 	$mysqli->close();
 }
 
-function palletSpare($alapanyag){
+function palletSpare(){
 	$mysqli = connect();
-	if($results = $mysqli->query(
-			"select p.id as id, pr.name as product, s.name as supplier,p.time as time, 
-		IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0) as rest 
-		from pallet p 
-		INNER JOIN product pr on p.product_id = pr.id
-		INNER JOIN supplier s on s.id = p.supplier_id
-		LEFT JOIN (
-    select t2.id as id ,t3.amount as trash,t2.amount as output from 
-		(
-           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
-        ) t2 
-		LEFT JOIN 
-		(
-           SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
-        ) t3 
-		ON t2.id = t3.id 
-		UNION
-	select t2.id as id ,t3.amount as output,t2.amount as trash from 
-		(
-             SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
-            
-        ) t2 
-		LEFT JOIN 
-		(
-           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
-        ) t3 
-		ON t2.id = t3.id 
- ) t1 
- on p.id = t1.id
-HAVING rest > 0
-			")){
+	if($results = $mysqli->query(palletSQL())){
 			
 		print '<table class="table table-hover sortable">';
 		print '<thead>';
@@ -837,21 +691,23 @@ function periodOutput($day,$last,$detail){
 			 	}
 			 	$str .= '<tr>';
 			 
-			 $str .= '<td>'.$row["o_id"].'</td>';
-			$str .= '<td>'.$row["id"].'</td>';
-			$str .= '<td>'.$row["product"].'</td>';
-			$str .= '<td>'.$row["amount"].'</td>';
-			$str .= '<td>'.$row["time"].'</td>';
-			$str .= '<td>'.$row["user"].'</td>';			 	
-		 	$str .= '</tr>';
-		 	$i =true;
-		 }
+				$str .= '<td>'.$row["o_id"].'</td>';
+				$str .= '<td>'.$row["id"].'</td>';
+				$str .= '<td>'.$row["product"].'</td>';
+				$str .= '<td>'.$row["amount"].'</td>';
+				$str .= '<td>'.$row["time"].'</td>';
+				$str .= '<td>'.$row["user"].'</td>';			 	
+			 	$str .= '</tr>';
+			 	$i =true;
+		 	}
 			
 			 if($i){
 			 	$str .= '</table>';
 			 	print $str;
 			 		
 			 }else{
+			 	$str .= '</table>';
+			 	print $str;
 			 	print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 90%"><strong>Semmmit nem adtak ki a raktárból!</strong></div>';
 			 	
 			 }
@@ -976,6 +832,8 @@ function periodSpare($day,$last,$detail){
 				print $str;
 
 			}else{
+				$str .= '</table>';
+				print $str;
 				print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 90%"><strong>Semmmit nem adtak ki a raktárból!</strong></div>';
 					
 			}
@@ -1094,7 +952,8 @@ function periodInput($day,$last,$detail){
 				 	print $str;
 			 		
 				 }else{
-
+				 	$str .= '</table>';
+				 	print $str;
 				 	print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 90%"><strong>Ma még semmmit nem adtak ki a raktárból!</strong></div>';
 				 }
 				 
@@ -1482,4 +1341,101 @@ function daymap($weekday){
 	}
 }
 
+
+function inventory(){
+	$mysqli = connect();
+		if($results = $mysqli->query(palletSQL())){
+
+				print '<table class="table table-hover sortable">';
+				print '<thead>';
+				print '<tr>';
+				print '<th>ID</th>';
+				print '<th>';
+
+				print 'Alapanyag név</th>';
+				print '<th>Beszállító Neve</th>';
+				print '<th>Beérkezés ideje</th>';
+				print '<th>Mennyiség</th>';
+				print '<th>Raktáros</th>';
+				print '<th>Módosít</th>';
+				print '<th>Töröl</th>';
+				print '</tr>';
+				print '</thead>';
+				while($row = $results->fetch_assoc()) {
+					
+						
+					print '<tr>';
+					print '<td>'.$row["id"].'</td>';
+					print '<td>'.$row["product"].'</td>';
+					print '<td>'.$row["supplier"].'</td>';
+					print '<td>'.$row["time"].'</td>';
+					print '<td>'.$row["rest"].'</td>';
+					print '<td>'.$row["user"].'</td>';
+					print '<td><button class="btn btn-sm btn-default" onclick="inventory_update('.$row["id"].','.$row["rest"].')">Szerkeszt</button></td>';
+					print '<td><button class="btn btn-sm btn-danger" onclick="deletePallet('.$row["id"].')">Töröl</button></td>';
+					print '</tr>';
+				}
+				print '</table>';
+
+				// Frees the memory associated with a result
+				$results->free();
+
+		}else{
+			print mysqli_error($mysqli);
+			print "hiba";
+		}
+		// close connection
+		$mysqli->close();
+	
+}
+
+
+
+function palletSQL(){
+	return palletSQL2(""); 
+}
+
+function palletSQL2($filter){
+	return palletSQL3($filter,"");
+}
+
+
+function palletSQL3($filter,$groupby){
+	
+	
+	return "select p.id as id, pr.name as product, s.name as supplier, p.time as time, u.name as user,
+				IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0) as rest
+				from pallet p
+				INNER JOIN product pr on p.product_id = pr.id ".$filter." 
+				INNER JOIN supplier s on s.id = p.supplier_id
+				INNER JOIN user u on u.id = p.user_id
+				LEFT JOIN (
+	    			select t2.id as id ,t3.amount as trash,t2.amount as output from
+					(
+			           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
+			        )t2
+				LEFT JOIN
+				(
+		           SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
+		        )t3
+				ON t2.id = t3.id
+				UNION
+				select t2.id as id ,t2.amount as trash,t3.amount as output from
+				(
+	             	SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false group by pallet_id
+	        	)t2
+				LEFT JOIN
+				(
+		           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false group by pallet_id
+		        )t3
+				ON t2.id = t3.id
+	 			) t1
+	 			on p.id = t1.id 
+						".$groupby."
+						HAVING rest > 0 
+						order by product, time";
+}
+	
 ?>
+
+

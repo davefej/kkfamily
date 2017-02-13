@@ -15,9 +15,9 @@
 		<!-- Collect the nav links, forms, and other content for toggling -->
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li <?php if($selector =="bevetel"){ echo "class=\"active\"";} ?> ><a href="bevetel.php">Áruhozzáadás<span class="sr-only">(current)</span></a></li>
-				<li <?php if($selector =="kiadas"){ echo "class=\"active\"";} ?> ><a href="kiadas.php">Árukiadás</a></li>
-				<li <?php if($selector =="spare"){ echo "class=\"active\"";} ?> ><a href="spare.php">Árueltávolítás</a></li>
+				<li <?php if($selector =="bevetel"){ echo "class=\"active\"";} ?> ><a href="bevetel.php">BEVÉTEL<span class="sr-only">(current)</span></a></li>
+				<li <?php if($selector =="kiadas"){ echo "class=\"active\"";} ?> ><a href="kiadas.php">KIADÁS</a></li>
+				<li <?php if($selector =="spare"){ echo "class=\"active\"";} ?> ><a href="spare.php">SELEJT</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="../logout.php">Kijelentkezés</a></li>

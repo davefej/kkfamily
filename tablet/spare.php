@@ -4,7 +4,7 @@ $selector="spare";
 require("../common/header.php");
 
 
-	palletSpare('paprika');
+	palletSpare();
 
 require("../common/footer.php");
 ?>
