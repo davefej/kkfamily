@@ -4,7 +4,7 @@ require('datepicker.php');
 
 function getSupplies($id){
 	$mysqli = connect();
-	if($results = $mysqli->query(palletSQL3(""," GROUP BY product "))){
+	if($results = $mysqli->query(palletSQL3(""," GROUP BY pr_id "))){
 		print '<table class="table table-hover sortable">';
 		print '<thead>';
 		print '<tr>';
@@ -1174,6 +1174,7 @@ function alertInput(){
 	print '<th>Hibák</th>';
 	print '<th>Raktáros</th>';
 	print '<th>Időpont</th>';
+	print '<th>Üzenet</th>';
 	print '<th>Láttam</th>';
 	print '</tr>';
 	print '</thead>';
@@ -1197,10 +1198,11 @@ function alertInput(){
 		print '</td>';
 		print '<td>'.$row["name"].'</td>';
 		print '<td>'.$row["time"].'</td>';
+		print '<td> <button onclick="bootbox.alert('.mymessage($data).')">Üzenet</button></td>';
 		if($row["seen"] == '0' ){
 			print '<td><button class="btn btn-sm btn-danger" onclick="updateAlert('.$row["id"].')">OK</button></td>';
 		}else{
-			print '<td> </td>';
+			print '<td> Ok </td>';
 		}
 		print '</tr>';
 	}
@@ -1458,7 +1460,7 @@ function palletSQL2($filter){
 function palletSQL3($filter,$groupby){
 	
 	
-	return "select p.id as id, pr.name as product, s.name as supplier, p.time as time, u.name as user,pr.minimum as min,
+	return "select p.id as id, pr.name as product, pr.id as pr_id, s.name as supplier, p.time as time, u.name as user,pr.minimum as min,
 				IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0) as rest
 				from pallet p 
 				INNER JOIN product pr on p.product_id = pr.id ".$filter." and p.deleted = false  
@@ -1500,7 +1502,7 @@ function outOfStock(){
 	
 	
 	
-	$SQL = str_replace("HAVING rest > 0","HAVING rest < min and rest > 0",palletSQL3(""," GROUP BY product "));
+	$SQL = str_replace("HAVING rest > 0","HAVING rest < min and rest > 0",palletSQL3(""," GROUP BY pr_id "));
 	$mysqli = connect();
 	if($results = $mysqli->query($SQL)){
 	
@@ -1536,6 +1538,29 @@ function outOfStock(){
 	// close connection
 	$mysqli->close();
 	
+}
+
+
+function mymessage($data){
+	$str = "'<h2>Kedves Ügyfelünk!</h2>";
+	$str .= "<br/>Rossz minőségű árut szállítottak üzemünkbe.";
+	$str .= "<br/>Az áruval alábbi problémáink voltak:<br/>";
+	$str .= "<ul>";
+	if($data != null){
+		foreach ($data as $i => $value) {
+				
+			if(is_numeric($value) && (2 == (int)$value || 1 == (int)$value) && $i != 'product'){
+				$str .= "<li>".minosegmap2($i)." : ".minosegmap((int)$value)." </li>";
+				
+			}
+		}
+	}
+	$str .= "</ul>";
+	$str .= "<p>Az áruátvételt megtagadtuk</p>";
+	
+	$str .= "Üdvözlettel<br/><br/>";
+	$str .= "KKFAMILY<br/><br/>'";
+	return $str;
 }
 
 ?>
