@@ -1283,7 +1283,7 @@ function inputStatistic($weekday,$day,$day2){
 }
 
 function outputStatistic($weekday){
-
+	$data = array();
 	print '<table class="table">';
 	
 	for($i=1; $i<=4; $i++){
@@ -1317,6 +1317,13 @@ function outputStatistic($weekday){
 					$str .= '</tr>';
 					$str .= '</thead>';
 					while($row = $results->fetch_assoc()) {
+						$prod = $row["product"];
+						if(array_key_exists($prod,$data))
+						{							
+							$data[$prod] = $data[$prod]+(int)$row["amount"];
+						}else{
+							$data[$prod] = $row["amount"];
+						}
 						$str.= '<tr>';
 		
 						$str.= '<td>'.$row["product"].'</td>';
@@ -1335,9 +1342,37 @@ function outputStatistic($weekday){
 		print '</td>';
 		if($i==2 || $i == 4)
 			print '</tr>';
-		print "<br/>";
-		print "<br/>";
+			
 	}
+	print '</table>';
+//ÖSSZEGZŐ
+	print '<br/>';
+	print '<hr/>';
+	print '<div class="statisticsdiv"><h2>Átlag</h2></div>';
+	
+	$str =  '<table class="table table-hover ">';
+	$str .= '<thead>';
+	$str .= '<tr>';
+	$str .= '<th>'.$day2.' -> '.$day.'</th>';
+	$str .= '<th>'.daymap($weekday).'</th>';
+		
+	$str .= '</tr>';
+	$str .= '<tr>';
+	$str .= '<th>Alapanyag</th>';
+	$str .= '<th>Mennyiség</th>';
+	$str .= '</tr>';
+	$str .= '</thead>';
+		foreach ($data as $key => $value) {		 	
+			$average = $value / 4;
+			$str.= '<tr>';
+			
+			$str.= '<td>'.$key.'</td>';
+			$str.= '<td>'.$average.'</td>';
+			
+			$str.= '</tr>';
+		}
+	$str.= '</table>';
+	print $str;
 	
 }
 
@@ -1462,6 +1497,9 @@ function palletSQL3($filter,$groupby){
 
 
 function outOfStock(){
+	
+	
+	
 	$SQL = str_replace("HAVING rest > 0","HAVING rest < min and rest > 0",palletSQL3(""," GROUP BY product "));
 	$mysqli = connect();
 	if($results = $mysqli->query($SQL)){

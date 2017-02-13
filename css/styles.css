@@ -161,3 +161,9 @@ table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sor
 	margin-left:5px;
 	color:white;
 }
+
+.statisticsdiv{
+	align:center;
+	width:200px;
+	margin-left:100px;
+}
