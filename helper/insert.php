@@ -15,7 +15,7 @@ if(array_key_exists("type",$data)){
 	}else if($data["type"] == "supplier"){
 		$sql = "INSERT INTO `supplier` (`id`, `name`, `address`, `deleted`) VALUES (NULL, '".$data['name']."', '".$data['address']."', '0')";
 	}else if($data["type"] == "product"){
-		$sql = "INSERT INTO `product` (`id`, `name`, `category_id`, `type`, `deleted`) VALUES (NULL, '".$data['name']."', '".$data['category_id']."', '".$data['product_type']."', '0')";
+		$sql = "INSERT INTO `product` (`id`, `name`, `category_id`, `type`, `minimum` , `deleted`) VALUES (NULL, '".$data['name']."', '".$data['category_id']."', '".$data['product_type']."', '".$data['min']."', '0')";
 	}else if($data["type"] == "quality_form"){
 		$sql = "INSERT INTO `quantity_form` (`id`, `sum_difference`, `appearance`, `consistency`, `smell`, `color`, `clearness`, `pallet_quality`, `decision`) VALUES (NULL, '".$data['sum_difference']."', '".$data['appearance']."', '".$data['consistency']."', '".$data['smell']."', '".$data['color']."', '".$data['clearness']."', '".$data['pallet_quality']."', '".$data['decision']."')";
 	}

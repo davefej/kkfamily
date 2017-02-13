@@ -163,27 +163,22 @@ require("../common/header.php");
 
 
 	<!-- STATISTICS -->
-		<div class="panel panel-success">
+		
+
+	<div class="panel panel-success">
 			<div class="panel-heading">
-				<a data-toggle="collapse" href="#collapsed">
-	  				Fogyási statisztika
+				<a data-toggle="collapse" href="#collapsed6">
+	  				Fogyásban lévő termékek
 	  			</a>
 			</div>
-			<div id="collapsed" class="panel-collapse collapse">
+			<div id="collapsed6" class="panel-collapse collapse in">
 			  	<table class="table">
 			  		<tr>
 			  		<td>
 						<div id="adminstatisticcontainer">
 						<?php 			
 							
-								$day  = date("Y-m-d");
-								$day2 = date('Y-m-d', strtotime("-30 days"));
-								$dw = date( "w");
-								$dw = $dw -1;
-								if($dw == -1){
-									$dw = 6;
-								}
-								outputStatistic($dw,$day,$day2);
+								outOfStock();
 							
 						?>
 						</div>
@@ -192,8 +187,6 @@ require("../common/header.php");
 			  	</table>
 			</div>
 	</div>
-
-	
 
 <?php 
 require("../common/footer.php");

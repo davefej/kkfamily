@@ -170,12 +170,13 @@ function listStorage($id){
 
 function listProduct(){
 	$mysqli = connect();
-	$results = $mysqli->query("SELECT p.id as id, p.name as name, c.name as cat FROM product p, category c WHERE c.id = p.category_id and p.deleted = false");
+	$results = $mysqli->query("SELECT p.id as id, p.name as name, p.minimum as minimum, c.name as cat FROM product p, category c WHERE c.id = p.category_id and p.deleted = false");
 	print '<table class="table table-hover sortable">';
 	print '<thead>';
 	print '<tr>';
 	print '<th>Alapanyag Neve</th>';
 	print '<th>Kategória</th>';
+	print '<th>Jelzési Mennyiség</th>';
 	print '<th><button class="btn btn-sm btn-default" id="newRetailer" onclick="createProduct()">Új alapanyag</button></th>';
 	print '<th>Törlés</th>';
 	print '</tr>';
@@ -184,6 +185,7 @@ function listProduct(){
 		print '<tr>';
 		print '<td id="alapnev_'.$row["id"].'">'.$row["name"].'</td>';
 		print '<td id="alapkat_'.$row["id"].'">'.$row["cat"].'</td>';
+		print '<td id="alapmin_'.$row["id"].'">'.$row["minimum"].'</td>';
 		print '<td><button class="btn btn-sm btn-default" id="newRetailer"  onclick="editProduct('.$row["id"].')">Szerkeszt</button></td>';
 		print '<td><button class="btn btn-sm btn-danger" onclick="deleteProduct('.$row["id"].')">Töröl</button></td>';
 		print '</tr>';
@@ -1111,7 +1113,7 @@ function alertOutput(){
 		if($row["seen"] == '0' ){
 			print '<td><button class="btn btn-sm btn-danger" onclick="updateAlert('.$row["id"].')">OK</button></td>';
 		}else{
-			print '<td> </td>';
+			print '<td> OK </td>';
 		}
 		
 		print '</tr>';
@@ -1280,45 +1282,63 @@ function inputStatistic($weekday,$day,$day2){
 	}
 }
 
-function outputStatistic($weekday,$day,$day2){
+function outputStatistic($weekday){
 
-	$mysqli = connect();
-	if($results = $mysqli->query(
-				
-				
-				
-			"SELECT pr.name as product, sum(o.amount) as amount
+	print '<table class="table">';
+	
+	for($i=1; $i<=4; $i++){
+		if($i==1 || $i == 3)
+			print '<tr>';
+		print '<td>';
+		$back = $i*7-1-6;
+		$day = date('Y-m-d', strtotime("-".$back." days"));
+		$back = $i*7-1;
+		$day2 = date('Y-m-d', strtotime("-".$back." days"));
+		
+		$mysqli = connect();
+		if($results = $mysqli->query(
+				"SELECT pr.name as product, sum(o.amount) as amount
 			FROM pallet p, product pr, output o where pr.id=p.product_id and o.pallet_id = p.id and
 				o.time >= '".$day2." 00:00:00'
 			and o.time <= '".$day." 23:59:59' and
 			WEEKDAY(o.time) = '".$weekday."' and
 			 p.deleted = false and pr.deleted = false and
 			o.deleted = false group by product order by p.product_id ")){
-			$str =  '<table class="table table-hover ">';
-			$str .= '<thead>';
-			$str .= '<tr>';
-			$str .= '<th>Nap: '.daymap($weekday).'</th>';
-			$str .= '<th>'.daypicker().'</th>';
-			$str .= '</tr>';
-			$str .= '<tr>';
-			$str .= '<th>Alapanyag</th>';
-			$str .= '<th>Mennyiség</th>';
-			$str .= '</tr>';
-			$str .= '</thead>';
-			while($row = $results->fetch_assoc()) {
-				$str.= '<tr>';
-
-				$str.= '<td>'.$row["product"].'</td>';
-				$str.= '<td>'.$row["amount"].'</td>';
-
-				$str.= '</tr>';
-			}
-			$str.= '</table>';
-			print $str;
-	}else{
-		print "hiba";
-		print mysqli_error($mysqli);
+					$str =  '<table class="table table-hover ">';
+					$str .= '<thead>';
+					$str .= '<tr>';
+					$str .= '<th>'.$day2.' -> '.$day.'</th>';
+					$str .= '<th>'.daymap($weekday).'</th>';
+					
+					$str .= '</tr>';
+					$str .= '<tr>';
+					$str .= '<th>Alapanyag</th>';
+					$str .= '<th>Mennyiség</th>';
+					$str .= '</tr>';
+					$str .= '</thead>';
+					while($row = $results->fetch_assoc()) {
+						$str.= '<tr>';
+		
+						$str.= '<td>'.$row["product"].'</td>';
+						$str.= '<td>'.$row["amount"].'</td>';
+		
+						$str.= '</tr>';
+					}
+					$str.= '</table>';
+					print $str;
+		}else{
+			print "hiba";
+			print mysqli_error($mysqli);
+		}	
+		
+		
+		print '</td>';
+		if($i==2 || $i == 4)
+			print '</tr>';
+		print "<br/>";
+		print "<br/>";
 	}
+	
 }
 
 
@@ -1403,10 +1423,10 @@ function palletSQL2($filter){
 function palletSQL3($filter,$groupby){
 	
 	
-	return "select p.id as id, pr.name as product, s.name as supplier, p.time as time, u.name as user,
+	return "select p.id as id, pr.name as product, s.name as supplier, p.time as time, u.name as user,pr.minimum as min,
 				IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0) as rest
-				from pallet p
-				INNER JOIN product pr on p.product_id = pr.id ".$filter." 
+				from pallet p 
+				INNER JOIN product pr on p.product_id = pr.id ".$filter." and p.deleted = false  
 				INNER JOIN supplier s on s.id = p.supplier_id
 				INNER JOIN user u on u.id = p.user_id
 				LEFT JOIN (
@@ -1434,8 +1454,52 @@ function palletSQL3($filter,$groupby){
 						".$groupby."
 						HAVING rest > 0 
 						order by product, time";
+	
+	//TODO deleted pallet!!!
 }
 	
+
+
+
+function outOfStock(){
+	$SQL = str_replace("HAVING rest > 0","HAVING rest < min and rest > 0",palletSQL3(""," GROUP BY product "));
+	$mysqli = connect();
+	if($results = $mysqli->query($SQL)){
+	
+		print '<table class="table table-hover sortable">';
+		print '<thead>';
+		print '<tr>';
+		print '<th>ID</th>';
+		print '<th>';	
+		print 'Alapanyag név</th>';
+		print '<th>Jelzés szint</th>';
+		print '<th>Mennyiség</th>';
+		print '</tr>';
+		print '</thead>';
+		while($row = $results->fetch_assoc()) {
+				
+	
+			print '<tr>';
+			print '<td>'.$row["id"].'</td>';
+			print '<td>'.$row["product"].'</td>';
+			print '<td>'.$row["min"].'</td>';
+			print '<td>'.$row["rest"].'</td>';
+			print '</tr>';
+		}
+		print '</table>';
+	
+		// Frees the memory associated with a result
+		$results->free();
+	
+	}else{
+		print mysqli_error($mysqli);
+		print "hiba";
+	}
+	// close connection
+	$mysqli->close();
+	
+}
+
 ?>
 
 

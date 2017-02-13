@@ -26,6 +26,7 @@
 				<li <?php if($selector == "spare"){ echo "class=\"active\"";} ?>><a href="spare.php">Selejt</a></li>				
 				<li <?php if($selector == "alert"){ echo "class=\"active\"";} ?>><a id='alerta'  href="alert.php">Jelzés</a></li>
 				<li <?php if($selector == "inventory"){ echo "class=\"active\"";} ?>><a href="inventory.php">Leltár</a></li>
+				<li <?php if($selector == "statistics"){ echo "class=\"active\"";} ?>><a href="statistics.php">Statisztika</a></li>
 			</ul>
 
 			<ul class="nav navbar-nav navbar-right">
