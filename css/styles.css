@@ -163,7 +163,6 @@ table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sor
 	margin-left:100px;
 }
 
-<<<<<<< HEAD
 .tableHeader{
 	background-color: #724b4b;
 	color: white;
@@ -182,7 +181,6 @@ table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sor
 	width:30%;
 }
 
-=======
 .colordiv{
 	width:10px;
 	height:10px;
@@ -219,4 +217,3 @@ table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sor
     border: 3px solid #00767F;
     border-radius: 10px;>/
 }*/
->>>>>>> origin/master
