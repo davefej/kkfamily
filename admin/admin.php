@@ -115,27 +115,10 @@ require("../common/header.php");
 	  </div>
 	  </div>
 	  
-	  <!-- SOON BE EXPIRED PRODUCTS -->
-	  <div class="panel panel-danger">
-	  	<div class="panel-heading">
-	  		<a data-toggle="collapse" href="#collapse3">
-	  			Hamarosan Lejáró Termékek
-	  		</a>
-	  	</div>
-	  	<div id="collapse3" class="panel-collapse collapse">
-		  	<table class="table">
-		  		<tr>
-			  		<td>
-						<div>
-						<?php 			
-							listOld();
-						?>
-						</div>
-					</td>
-				</tr>
-		  	</table>
-		  </div>
-		</div>
+	  
+	  
+	  
+	 
 		
 		<!-- WORKERS / USERS -->
 		<div class="panel panel-success">
@@ -160,12 +143,8 @@ require("../common/header.php");
 		</div>
 	
 
-
-
 	<!-- STATISTICS -->
-		
-
-	<div class="panel panel-success">
+	  <div class="panel panel-danger">
 			<div class="panel-heading">
 				<a data-toggle="collapse" href="#collapsed6">
 	  				Fogyásban lévő termékek
@@ -188,6 +167,30 @@ require("../common/header.php");
 			</div>
 	</div>
 
+
+		 <!-- SOON BE EXPIRED PRODUCTS 
+	  <div class="panel panel-danger">
+	  	<div class="panel-heading">
+	  		<a data-toggle="collapse" href="#collapse3">
+	  			Hamarosan Lejáró Termékek
+	  		</a>
+	  	</div>
+	  	<div id="collapse3" class="panel-collapse collapse">
+		  	<table class="table">
+		  		<tr>
+			  		<td>
+						<div>
+						<?php 			
+							//listOld();
+						?>
+						</div>
+					</td>
+				</tr>
+		  	</table>
+		  </div>
+		</div>
+ -->
+	
 <?php 
 require("../common/footer.php");
 ?>

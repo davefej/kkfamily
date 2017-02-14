@@ -35,17 +35,17 @@ function login($user,$pass){
 	$ret = -1;
 	$id = 0; 
 	
-	if($stmt = $mysqli->prepare("SELECT id,type FROM user WHERE name = ? and password = ? and deleted = false") ){
+	if($stmt = $mysqli->prepare("SELECT id,type,theme FROM user WHERE name = ? and password = ? and deleted = false") ){
 		/* bind result variables */
 		$stmt->bind_param("ss", $user, $pass);
 		$stmt->execute();
 
-		$stmt->bind_result($id,$type);
+		$stmt->bind_result($id,$type,$theme);
 
 		/* fetch values */
 		while ($stmt->fetch()) {
 			$ret = $type;
-			
+			$_SESSION['theme'] = $theme;
 		}
 		/* close statement */
 		$stmt->close();

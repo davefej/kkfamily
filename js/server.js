@@ -355,3 +355,18 @@ function alertcheck(){
     });
 }
 
+function saveColor(json){
+	$.ajax({
+        url: "../helper/update.php",
+        type: "post",
+        data: JSON.stringify(json) ,
+        cache: false,
+        success: function (response) {           
+        	          
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+
+        }
+    });
+}
+

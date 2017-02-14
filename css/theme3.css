@@ -1,0 +1,11 @@
+@CHARSET "UTF-8";
+
+body { 
+       
+    background: -webkit-linear-gradient(left top, #FFC107, #FFEB3B);
+    background: -o-linear-gradient(bottom right, #FFC107, #FFEB3B);
+    background: -moz-linear-gradient(bottom right, #FFC107, #FFEB3B);
+    background: linear-gradient(to bottom right, #FFC107, #FFEB3B);
+    background-repeat: no-repeat;
+    
+}

@@ -519,3 +519,41 @@ function inputchangeday(){
     });
 	
 }
+
+function changecolor(i){
+	switch(i){
+		case 0:
+		$('body').css({
+		    background: "-webkit-gradient(linear, left top, left bottom, from(#00767F), to(#E3F9FF))",
+		    "background-repeat": "no-repeat"
+		});
+		break;		
+		case 1:
+			$('body').css({
+				background:"url(../img/bg.jpg)",
+			    "background-attachment": "fixed"
+			});
+			break;
+		case 2:
+			$('body').css({
+			    background: "-webkit-gradient(linear, left top, left bottom, from(#4CAF50), to(green))",
+			    "background-repeat": "no-repeat"
+			});
+			break;
+		case 3:
+			$('body').css({
+			    background: "-webkit-gradient(linear, left top, left bottom, from(#FFC107), to(#FFEB3B))",
+			    "background-repeat": "no-repeat" 
+			});
+			break;
+		
+	}
+	localStorage.color = i;
+	saveColor({
+		"type":"theme",
+		"theme":i
+	});
+}
+
+
+

@@ -28,6 +28,15 @@ if(array_key_exists("type",$data)){
 		$sql = "UPDATE `pallet` SET `amount` = '".$data['amount']."'  WHERE `id` = ".$data['id'];
 	}
 	
+	
+	if(isset($_SESSION['user_id'])){
+		if($data["type"] == "theme"){		
+			$sql = "UPDATE `user` SET `theme` = '".$data['theme']."'  WHERE `id` = ".$_SESSION['user_id'];
+			$_SESSION['theme'] = $data['theme'];
+		}
+	}
+	
+	
 	return update($sql); 
 }
  

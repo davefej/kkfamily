@@ -1,14 +1,10 @@
 body { 
-    background: red; 
+    padding-top: 70px;     
+    background-repeat: no-repeat;
     background: -webkit-linear-gradient(left top, #00767F, #E3F9FF);
     background: -o-linear-gradient(bottom right, #00767F, #E3F9FF);
     background: -moz-linear-gradient(bottom right, #00767F, #E3F9FF);
     background: linear-gradient(to bottom right, #00767F, #E3F9FF);
-    background-repeat: no-repeat;
-    
-   /* background:url(../img/bg.jpg);
-    background-attachment: fixed;*/
-    padding-top: 70px;
 }
 h1 {
     color: #fff3e0;
@@ -166,4 +162,32 @@ table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sor
 	align:center;
 	width:200px;
 	margin-left:100px;
+}
+
+.colordiv{
+	width:10px;
+	height:10px;
+	float:left;
+	margin-left:5px;
+	cursor:pointer;
+}
+
+.colorpicker{
+	position:absolute;
+	bottom: 10px;
+	left:0px;	
+}
+
+.black{
+	background-color:black;
+}
+.green{
+	background-color:green;
+}
+.blue{
+	background-color:#00767F;
+}
+
+.yellow{
+	background-color:yellow;
 }
