@@ -38,7 +38,6 @@ function olderOutput(id,amount){
 	
 }
 
-
 function trash(id,mennyiseg){
 	bootbox.confirm('<h3>Biztos, hogy selejtbe rakja?</h3>',function (yes){
 		if(yes){

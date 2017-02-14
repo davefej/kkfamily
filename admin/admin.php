@@ -13,7 +13,7 @@ require("../common/header.php");
 	  			Napi bevétel (Raktár)
 	  		</a>
 	  		&nbsp;&nbsp;&nbsp;&nbsp;
-	  		<button type="button" class="btn btn-primary" href="input.php">
+	  		<button type="button" class="btn btn-primary">
 		  			<a href="input.php">Részletek</a>
 	  		</button>
 	  	</div>
@@ -166,7 +166,7 @@ require("../common/header.php");
 			  	</table>
 			</div>
 	</div>
-
+</div>
 
 		 <!-- SOON BE EXPIRED PRODUCTS 
 	  <div class="panel panel-danger">
