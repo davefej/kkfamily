@@ -1459,9 +1459,16 @@ function palletSQL2($filter){
 
 function palletSQL3($filter,$groupby){
 	
-	
+	if($groupby == ""){
+           $sum1="";
+           $sum2="";
+        }else{
+           $sum1="sum(";
+           $sum2=")";
+          
+        }
 	return "select p.id as id, pr.name as product, pr.id as pr_id, s.name as supplier, p.time as time, u.name as user,pr.minimum as min,
-				IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0) as rest
+				".$sum1."IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0)".$sum2." as rest
 				from pallet p 
 				INNER JOIN product pr on p.product_id = pr.id ".$filter." and p.deleted = false  
 				INNER JOIN supplier s on s.id = p.supplier_id
@@ -1564,5 +1571,3 @@ function mymessage($data){
 }
 
 ?>
-
-
