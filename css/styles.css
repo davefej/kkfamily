@@ -191,3 +191,12 @@ table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sor
 .yellow{
 	background-color:yellow;
 }
+
+/*
+.footersing{	
+	color: black;
+    background-color: #00767F;
+    display: inline-block;
+    border: 3px solid #00767F;
+    border-radius: 10px;>/
+}*/

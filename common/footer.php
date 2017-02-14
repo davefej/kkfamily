@@ -1,5 +1,5 @@
 		<br/>
-		
+		<br/>
 		<footer class="footer navbar-fixed-bottom">
 			<div class="colorpicker">
 				<div class="colordiv blue" onclick="changecolor(0)"></div>
@@ -8,7 +8,7 @@
 				<div class="colordiv yellow" onclick="changecolor(3)"></div>
 			</div>
             <div class="container text-center">
-                <p style="font-color: #ffffff">made by <b>David Varga</b> &amp; <b>David Szanto</b> | Bootstrap 3</p>
+                <p class="footersign" style="color: #ffffff">made by <b>David Varga</b> &amp; <b>David Szanto</b> | Bootstrap 3</p>
             </div>
         </footer>
 		
