@@ -1462,9 +1462,16 @@ function palletSQL2($filter){
 
 function palletSQL3($filter,$groupby){
 	
-	
+	if($groupby == ""){
+           $sum1="";
+           $sum2="";
+        }else{
+           $sum1="sum(";
+           $sum2=")";
+          
+        }
 	return "select p.id as id, pr.name as product, pr.id as pr_id, s.name as supplier, p.time as time, u.name as user,pr.minimum as min,
-				IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0) as rest
+				".$sum1."IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0)".$sum2." as rest
 				from pallet p 
 				INNER JOIN product pr on p.product_id = pr.id ".$filter." and p.deleted = false  
 				INNER JOIN supplier s on s.id = p.supplier_id
@@ -1495,42 +1502,51 @@ function palletSQL3($filter,$groupby){
 						HAVING rest > 0 
 						order by product, time";
 	
-	//TODO deleted pallet!!!
 }
 	
 function outOfStock(){
 	
-	
-	
-	$SQL = str_replace("HAVING rest > 0","HAVING rest < min and rest > 0",palletSQL3(""," GROUP BY pr_id "));
 	$mysqli = connect();
-	if($results = $mysqli->query($SQL)){
+	$prodstock = array();
+	if($results = $mysqli->query(palletSQL3(""," GROUP BY pr_id "))){
+		while($row = $results->fetch_assoc()) {		
+			$prodstock[$row["pr_id"]] = $row["rest"];
+		}
+		$results->free();
+	}
 	
+	if($results = $mysqli->query("SELECT id,minimum,name from product where deleted = false and minimum > 0")){	
 		print '<table class="table table-hover sortable">';
 		print '<thead>';
 		print '<tr>';
-		print '<th>ID</th>';
-		print '<th>';	
-		print 'Alapanyag név</th>';
+
+		print '<th>Alapanyag név</th>';
 		print '<th>Jelzés szint</th>';
 		print '<th>Mennyiség</th>';
 		print '</tr>';
 		print '</thead>';
 		while($row = $results->fetch_assoc()) {
 				
-	
-			print '<tr>';
-			print '<td>'.$row["id"].'</td>';
-			print '<td>'.$row["product"].'</td>';
-			print '<td>'.$row["min"].'</td>';
-			print '<td>'.$row["rest"].'</td>';
-			print '</tr>';
+			if(array_key_exists($row["id"],$prodstock))
+			{
+				if((int)$row["minimum"] > (int)$prodstock[$row["id"]]){
+					print '<tr>';
+					print '<td>'.$row["name"].'</td>';
+					print '<td>'.$row["minimum"].'</td>';
+					print '<td>'.$prodstock[$row["id"]].'</td>';
+					print '</tr>';
+				}
+				
+			}else{
+				print '<tr>';
+				print '<td>'.$row["name"].'</td>';
+				print '<td>'.$row["minimum"].'</td>';
+				print '<td>0</td>';
+				print '</tr>';
+			}
 		}
 		print '</table>';
-	
-		// Frees the memory associated with a result
 		$results->free();
-	
 	}else{
 		print mysqli_error($mysqli);
 		print "hiba";
@@ -1563,5 +1579,3 @@ function mymessage($data){
 }
 
 ?>
-
-

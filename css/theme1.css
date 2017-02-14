@@ -1,0 +1,6 @@
+@CHARSET "UTF-8";
+
+body {    
+    background:url(../img/bg.jpg);
+    background-attachment: fixed;   
+}

@@ -2,6 +2,7 @@
 	<head>
 		<?php
 		session_start();
+		
 		$version = rand();
 			if($selected == "admin")
 				echo "<title> Kezelőfelület | KK Family</title>";
@@ -30,6 +31,12 @@
 				
 				<script src="../js/tablet.js"></script>
 	<?php } ?>
+				
+<?php 		
+	if(isset($_SESSION['theme']) && $_SESSION['theme'] != "0"){	
+		echo '<link rel="stylesheet" type="text/css" href="../css/theme'.$_SESSION['theme'].'.css?v='.$version.'">';
+	}
+?>
 				
 	</head>
 	<body class="admin">
