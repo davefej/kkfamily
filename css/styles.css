@@ -19,22 +19,21 @@ p{
 }
 
 a{
-	color: #0F003B;
+	color: #666666;
 	font-weight: bold;
 }
 
 a:hover{
-	color: #0F003B;
+	color: #666666;
 	text-decoration: none;
 }
 
 a:visited{
-	color: #0F003B;
-	text-decoration: none;
+	color: white;
 }
 
 a:active{
-	color: #0F003B;
+	color: #666666;
 	text-decoration: none;
 }
 
@@ -167,3 +166,22 @@ table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sor
 	width:200px;
 	margin-left:100px;
 }
+
+.tableHeader{
+	background-color: #724b4b;
+	color: white;
+}
+
+.tableTitle{
+	background-color: white;
+	color: black;
+}
+
+#wday{
+	width:35%;
+}
+
+#prod_select{
+	width:30%;
+}
+

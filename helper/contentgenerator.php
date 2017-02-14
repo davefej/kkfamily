@@ -654,7 +654,7 @@ function periodOutput($day,$last,$detail){
 
 			 $str =  '<table class="table table-hover">';
 			 $str .= '<thead>';
-			 $str .= '<tr>';
+			 $str .= '<tr class="tableHeader">';
 			 
 			 if($detail){
 			 	$str .= '<th>'.$day." -> ".$last.' Részletes<input id="detailscb" type="checkbox" name="detailscb" checked></th>';
@@ -710,7 +710,7 @@ function periodOutput($day,$last,$detail){
 			 }else{
 			 	$str .= '</table>';
 			 	print $str;
-			 	print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 90%"><strong>Semmmit nem adtak ki a raktárból!</strong></div>';
+			 	print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 80%"><strong>Semmmit nem adtak ki a raktárból!</strong></div>';
 			 	
 			 }
 
@@ -836,7 +836,7 @@ function periodSpare($day,$last,$detail){
 			}else{
 				$str .= '</table>';
 				print $str;
-				print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 90%"><strong>Semmmit nem adtak ki a raktárból!</strong></div>';
+				print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 80%"><strong>Semmmit nem adtak ki a raktárból!</strong></div>';
 					
 			}
 
@@ -904,7 +904,7 @@ function periodInput($day,$last,$detail){
 
 				 $str = '<table class="table table-hover">';
 				 $str .= '<thead>';
-				 $str .= '<tr>';
+				 $str .= '<tr class="tableHeader">';
 				 if($detail){
 				 	$str .= '<th>'.$day." -> ".$last.' Részletes<input id="detailscb" type="checkbox" name="detailscb" checked></th>';
 				 }else{
@@ -956,7 +956,7 @@ function periodInput($day,$last,$detail){
 				 }else{
 				 	$str .= '</table>';
 				 	print $str;
-				 	print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 90%"><strong>Ma még semmmit nem adtak ki a raktárból!</strong></div>';
+				 	print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 80%"><strong>Ma még semmmit nem adtak ki a raktárból!</strong></div>';
 				 }
 				 
 				 $colors = array( 'rgba(255, 99, 132, 0.8)',
@@ -1224,6 +1224,7 @@ function minosegmap($i){
 		return '';
 	}
 }
+
 function minosegmap2($i){
 	if($i === "appearance"){
 		return "Kinézet";
@@ -1241,7 +1242,6 @@ function minosegmap2($i){
 		return '';
 	}
 }
-
 
 function inputStatistic($weekday,$day,$day2){
 	
@@ -1261,7 +1261,7 @@ function inputStatistic($weekday,$day,$day2){
 		$str .= '<thead>';
 		$str .= '<tr>';
 		$str .= '<th>Nap: '.daymap($weekday).'</th>';
-		$str .= '<th>'.daypicker().'</th>';
+		$str .= '<th>'.daypicker($weekday).'</th>';
 		$str .= '</tr>';
 		$str .= '<tr>';
 		$str .= '<th>Alapanyag</th>';
@@ -1288,6 +1288,15 @@ function outputStatistic($weekday){
 	$data = array();
 	print '<table class="table">';
 	
+	print '<thead><tr class="tableTitle"><th>Napi Statisztikák</th><th></th></tr></thead>';
+	
+	print '<tr>';
+	print '<td>';
+	print daypicker($weekday);
+	print '</td>';
+	print '</tr>';
+	
+	
 	for($i=1; $i<=4; $i++){
 		if($i==1 || $i == 3)
 			print '<tr>';
@@ -1308,7 +1317,7 @@ function outputStatistic($weekday){
 			o.deleted = false group by product order by p.product_id ")){
 					$str =  '<table class="table table-hover ">';
 					$str .= '<thead>';
-					$str .= '<tr>';
+					$str .= '<tr class="tableHeader">';
 					$str .= '<th>'.$day2.' -> '.$day.'</th>';
 					$str .= '<th>'.daymap($weekday).'</th>';
 					
@@ -1349,12 +1358,12 @@ function outputStatistic($weekday){
 	print '</table>';
 //ÖSSZEGZŐ
 	print '<br/>';
-	print '<hr/>';
-	print '<div class="statisticsdiv"><h2>Átlag</h2></div>';
+	print '<hr style="width:90%">';
 	
 	$str =  '<table class="table table-hover ">';
+	$str .= '<thead><tr class="tableTitle"><th>Átlag</th></tr></thead>';
 	$str .= '<thead>';
-	$str .= '<tr>';
+	$str .= '<tr class="tableHeader">';
 	$str .= '<th>'.$day2.' -> '.$day.'</th>';
 	$str .= '<th>'.daymap($weekday).'</th>';
 		
@@ -1373,12 +1382,10 @@ function outputStatistic($weekday){
 			
 			$str.= '</tr>';
 		}
-	$str.= '</table>';
+	$str .= '</table>';
 	print $str;
 	
 }
-
-
 
 function daymap($weekday){
 	if($weekday == "0"){
@@ -1397,7 +1404,6 @@ function daymap($weekday){
 		return "Vasárnap";
 	}
 }
-
 
 function inventory(){
 	$mysqli = connect();
@@ -1446,8 +1452,6 @@ function inventory(){
 	
 }
 
-
-
 function palletSQL(){
 	return palletSQL2(""); 
 }
@@ -1455,7 +1459,6 @@ function palletSQL(){
 function palletSQL2($filter){
 	return palletSQL3($filter,"");
 }
-
 
 function palletSQL3($filter,$groupby){
 	
@@ -1495,9 +1498,6 @@ function palletSQL3($filter,$groupby){
 	//TODO deleted pallet!!!
 }
 	
-
-
-
 function outOfStock(){
 	
 	
@@ -1539,7 +1539,6 @@ function outOfStock(){
 	$mysqli->close();
 	
 }
-
 
 function mymessage($data){
 	$str = "'<h2>Kedves Ügyfelünk!</h2>";

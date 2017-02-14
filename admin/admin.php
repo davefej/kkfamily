@@ -13,9 +13,9 @@ require("../common/header.php");
 	  			Napi bevétel (Raktár)
 	  		</a>
 	  		&nbsp;&nbsp;&nbsp;&nbsp;
-	  		<a href="input.php">
-	  			Részletek
-	  		</a>
+	  		<button type="button" class="btn btn-primary" href="input.php">
+		  			<a href="input.php">Részletek</a>
+	  		</button>
 	  	</div>
 	  	<div id="collapse1" class="panel-collapse collapse in">
 		  	<div class="row" style="width:95%">
@@ -68,9 +68,9 @@ require("../common/header.php");
 	  			Napi Kiadás (Raktár)
 	  		</a>
 	  		&nbsp;&nbsp;&nbsp;&nbsp;
-	  		<a href="output.php">
-	  			Részletek
-	  		</a>
+	  		<button type="button" class="btn btn-primary">
+		  			<a href="output.php">Részletek</a>
+	  		</button>
 	  	</div>
 	  	<div id="collapse2" class="panel-collapse collapse in">
 		  	<div class="row" style="width:95%">

@@ -58,17 +58,35 @@ function datepicker($bool){
 	
 }
 
-function daypicker(){
-	return '<select onchange="inputchangeday()" class="form-control" id="wday">
-		      <option value="">Nap</option>
-		      <option value="">-----</option>
-		      <option value="0">Hétfő</option>
-		      <option value="1">Kedd</option>
-		      <option value="2">Szerda</option>
-		      <option value="3">Csütörtök</option>
-		      <option value="4">Péntek</option>
-		      <option value="5">Szombat</option>
-		      <option value="6">Vasárnap</option>		      
-		    </select>';
+function daypicker($day){
+	$returnValue = '<select onchange="inputchangeday()" class="form-control" id="wday">';
+	if($day > 6){	$returnValue .= '<option value="" selected>Nap</option>';}
+	else{ $returnValue .= '<option value="">Nap</option>';}
+	
+	$returnValue .= '<option value="">-----</option>';
+	
+	if($day == 0){	$returnValue .= '<option value="0" selected>Hétfő</option>';}
+	else{ $returnValue .= '<option value="0">Hétfő</option>';}
+	
+	if($day == 1){	$returnValue .= '<option value="1" selected>Kedd</option>';}
+	else{ $returnValue .= '<option value="1">Kedd</option>';}
+	
+	if($day == 2){	$returnValue .= '<option value="2" selected>Szerda</option>';}
+	else{ $returnValue .= '<option value="2">Szerda</option>';}
+	
+	if($day == 3){	$returnValue .= '<option value="3" selected>Csütörtök</option>';}
+	else{ $returnValue .= '<option value="3">Csütörtök</option>';}
+	
+	if($day == 4){	$returnValue .= '<option value="4" selected>Péntek</option>';}
+	else{ $returnValue .= '<option value="4">Péntek</option>';}
+	
+	if($day == 5){	$returnValue .= '<option value="5" selected>Szombat</option>';}
+	else{ $returnValue .= '<option value="5">Szombat</option>';}
+	
+	if($day == 6){	$returnValue .= '<option value="6" selected>Vasárnap</option>';}
+	else{ $returnValue .= '<option value="6">Vasárnap</option>';}
+	
+	$returnValue .= '</selected>';
+	return $returnValue;
 }
 ?>

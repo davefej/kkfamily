@@ -5,7 +5,9 @@ $selector ="statistics";
 require("../common/header.php");
 ?>
 <div class="statisticsdiv">
-<?php print daypicker();?>
+<?php 
+	
+?>
 </div>
 <br/>
 <div id="adminstatisticcontainer">
