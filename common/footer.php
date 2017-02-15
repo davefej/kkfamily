@@ -3,7 +3,7 @@
 		<footer class="footer navbar-fixed-bottom">
 			<div class="colorpicker">
 				<div class="colordiv blue" onclick="changecolor(0)"></div>
-				<div class="colordiv black" onclick="changecolor(1)"></div>
+				<div class="colordiv black" onclick="changecolor(1)"></div><br/>
 				<div class="colordiv green" onclick="changecolor(2)"></div>
 				<div class="colordiv yellow" onclick="changecolor(3)"></div>
 			</div>
