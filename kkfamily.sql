@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2017. Feb 13. 22:40
+-- Létrehozás ideje: 2017. Feb 15. 09:44
 -- Kiszolgáló verziója: 10.1.13-MariaDB
 -- PHP verzió: 5.6.21
 
@@ -62,7 +62,9 @@ INSERT INTO `alert` (`id`, `type`, `param`, `param2`, `time`, `user_id`, `seen`,
 (19, 'input', '14', '{"sum_difference":"0","appearance":"1","consistency":"2","smell":"1","color":"3","clearness":"3","pallet_quality":"3","decision":"decline","type":"quality_form","product":"1","supplier":"19","amount":"200"}', '2017-02-11 18:55:08', 2, 1, 0),
 (20, 'output', '26', '17', '2017-02-13 20:37:22', 2, 1, 0),
 (21, 'output', '27', '42', '2017-02-13 20:37:44', 2, 1, 0),
-(22, 'output', '28', '42', '2017-02-13 20:46:39', 1, 1, 0);
+(22, 'output', '28', '42', '2017-02-13 20:46:39', 1, 1, 0),
+(23, 'output', '29', '20', '2017-02-14 19:28:04', 2, 0, 0),
+(24, 'output', '30', '20', '2017-02-14 19:28:34', 2, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -132,7 +134,9 @@ INSERT INTO `output` (`id`, `pallet_id`, `amount`, `time`, `user_id`, `deleted`)
 (25, 24, 10, '2017-02-11 18:21:53', 2, 0),
 (26, 17, 265, '2017-02-13 20:37:22', 2, 0),
 (27, 42, 102, '2017-02-13 20:37:44', 2, 0),
-(28, 42, 10, '2017-02-13 20:46:37', 1, 0);
+(28, 42, 10, '2017-02-13 20:46:37', 1, 0),
+(29, 20, 10, '2017-02-14 19:28:04', 2, 0),
+(30, 20, 10, '2017-02-14 19:28:34', 2, 0);
 
 -- --------------------------------------------------------
 
@@ -230,6 +234,7 @@ CREATE TABLE `product` (
   `category_id` int(11) NOT NULL,
   `type` int(11) NOT NULL,
   `minimum` int(11) NOT NULL DEFAULT '0',
+  `expire` int(11) NOT NULL DEFAULT '0',
   `deleted` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
@@ -237,59 +242,60 @@ CREATE TABLE `product` (
 -- A tábla adatainak kiíratása `product`
 --
 
-INSERT INTO `product` (`id`, `name`, `category_id`, `type`, `minimum`, `deleted`) VALUES
-(1, 'Alma', 1, 0, 10, 0),
-(2, 'Banán', 1, 0, 10, 0),
-(3, 'Bazsalikom', 3, 0, 10, 0),
-(4, 'Bébi spenót', 3, 0, 10, 0),
-(5, 'Burgonya', 3, 0, 10, 0),
-(6, 'Cékla', 3, 0, 10, 0),
-(7, 'Citrom', 1, 0, 10, 0),
-(8, 'Csemegekukorica 2650ml/db', 4, 0, 10, 0),
-(9, 'Endívia saláta', 3, 0, 10, 0),
-(10, 'Édes kömény', 3, 0, 10, 0),
-(11, 'Fejeskáposzta', 3, 0, 10, 0),
-(12, 'Frisée saláta', 3, 0, 10, 0),
-(13, 'Gomba', 4, 0, 10, 0),
-(14, 'Gyökér', 3, 0, 10, 0),
-(15, 'Hegyeser?s paprika', 4, 0, 10, 1),
-(16, 'Hegyeserös paprika', 3, 0, 10, 0),
-(17, 'Jégsaláta', 3, 0, 10, 0),
-(18, 'Kaliforniai paprika Sárga', 3, 0, 10, 1),
-(19, 'Kalif. paprika Zöld', 3, 0, 10, 0),
-(20, 'Kalif. paprika Sárga', 3, 0, 10, 0),
-(21, 'Kínai kel', 3, 0, 10, 0),
-(22, 'Koktélparadicsom', 3, 0, 10, 0),
-(23, 'Lilahagyma', 3, 0, 10, 0),
-(24, 'Lilakáposzta', 3, 0, 10, 0),
-(25, 'Lime', 1, 0, 10, 0),
-(26, 'Lollo bionda saláta', 3, 0, 10, 0),
-(27, 'Lollo rosso saláta', 3, 0, 10, 0),
-(28, 'Madársaláta', 3, 0, 10, 0),
-(29, 'Menta', 3, 0, 10, 0),
-(30, 'Misticanza saláta', 3, 0, 10, 0),
-(31, 'Narancs', 1, 0, 10, 0),
-(32, 'Paradicsom', 3, 0, 10, 0),
-(33, 'Piros retek', 3, 0, 10, 0),
-(34, 'Petrezselyem', 3, 0, 10, 0),
-(35, 'Póréhagyma', 3, 0, 10, 0),
-(36, 'Radicchio saláta', 3, 0, 10, 0),
-(37, 'Ruccola saláta', 3, 0, 10, 0),
-(38, 'Római saláta', 3, 0, 10, 0),
-(39, 'Salátaszív', 3, 0, 10, 0),
-(40, 'Sárgarépa egész', 3, 0, 10, 0),
-(41, 'Sárgarépa vágott', 3, 0, 10, 0),
-(42, 'Sárga sárgarépa vágott', 3, 0, 10, 0),
-(43, 'Snidling', 3, 0, 10, 0),
-(44, 'Cukkini', 3, 0, 10, 0),
-(45, 'Tatsoi', 3, 0, 10, 0),
-(46, 'Tonhal db', 4, 0, 10, 0),
-(47, 'Uborka', 3, 0, 10, 0),
-(48, 'Vöröshagyma', 3, 0, 10, 0),
-(49, 'Retekcsíra', 3, 0, 10, 0),
-(50, 'Oliva konzerv db', 4, 0, 10, 0),
-(51, 'Batavia', 3, 0, 10, 0),
-(52, 'Körte', 1, 0, 100, 0);
+INSERT INTO `product` (`id`, `name`, `category_id`, `type`, `minimum`, `expire`, `deleted`) VALUES
+(1, 'Alma', 1, 0, 10, 10, 0),
+(2, 'Banán', 1, 0, 10, 10, 0),
+(3, 'Bazsalikom', 3, 0, 10, 10, 0),
+(4, 'Bébi spenót', 3, 0, 10, 10, 0),
+(5, 'Burgonya', 3, 0, 10, 10, 0),
+(6, 'Cékla', 3, 0, 10, 10, 0),
+(7, 'Citrom', 1, 0, 10, 10, 0),
+(8, 'Csemegekukorica 2650ml/db', 4, 0, 10, 10, 0),
+(9, 'Endívia saláta', 3, 0, 10, 10, 0),
+(10, 'Édes kömény', 3, 0, 10, 10, 0),
+(11, 'Fejeskáposzta', 3, 0, 10, 10, 0),
+(12, 'Frisée saláta', 3, 0, 10, 10, 0),
+(13, 'Gomba', 4, 0, 10, 10, 0),
+(14, 'Gyökér', 3, 0, 10, 10, 0),
+(15, 'Hegyeser?s paprika', 4, 0, 10, 10, 1),
+(16, 'Hegyeserös paprika', 3, 0, 10, 10, 0),
+(17, 'Jégsaláta', 3, 0, 10, 10, 0),
+(18, 'Kaliforniai paprika Sárga', 3, 0, 10, 10, 1),
+(19, 'Kalif. paprika Zöld', 3, 0, 10, 10, 0),
+(20, 'Kalif. paprika Sárga', 3, 0, 10, 10, 0),
+(21, 'Kínai kel', 3, 0, 10, 10, 0),
+(22, 'Koktélparadicsom', 3, 0, 10, 10, 0),
+(23, 'Lilahagyma', 3, 0, 10, 10, 0),
+(24, 'Lilakáposzta', 3, 0, 10, 10, 0),
+(25, 'Lime', 1, 0, 10, 10, 0),
+(26, 'Lollo bionda saláta', 3, 0, 10, 10, 0),
+(27, 'Lollo rosso saláta', 3, 0, 10, 10, 0),
+(28, 'Madársaláta', 3, 0, 10, 10, 0),
+(29, 'Menta', 3, 0, 10, 10, 0),
+(30, 'Misticanza saláta', 3, 0, 10, 10, 0),
+(31, 'Narancs', 1, 0, 10, 10, 0),
+(32, 'Paradicsom', 3, 0, 10, 10, 0),
+(33, 'Piros retek', 3, 0, 10, 10, 0),
+(34, 'Petrezselyem', 3, 0, 10, 10, 0),
+(35, 'Póréhagyma', 3, 0, 10, 10, 0),
+(36, 'Radicchio saláta', 3, 0, 10, 10, 0),
+(37, 'Ruccola saláta', 3, 0, 10, 10, 0),
+(38, 'Római saláta', 3, 0, 10, 10, 0),
+(39, 'Salátaszív', 3, 0, 10, 10, 0),
+(40, 'Sárgarépa egész', 3, 0, 10, 10, 0),
+(41, 'Sárgarépa vágott', 3, 0, 10, 10, 0),
+(42, 'Sárga sárgarépa vágott', 3, 0, 10, 10, 0),
+(43, 'Snidling', 3, 0, 10, 10, 0),
+(44, 'Cukkini', 3, 0, 10, 10, 0),
+(45, 'Tatsoi', 3, 0, 10, 10, 0),
+(46, 'Tonhal db', 4, 0, 10, 10, 0),
+(47, 'Uborka', 3, 0, 10, 10, 0),
+(48, 'Vöröshagyma', 3, 0, 10, 10, 0),
+(49, 'Retekcsíra', 3, 0, 10, 10, 0),
+(50, 'Oliva konzerv db', 4, 0, 10, 10, 0),
+(51, 'Batavia', 3, 0, 10, 10, 0),
+(52, 'Körte', 1, 0, 100, 10, 0),
+(53, 'PóréHagyma', 3, 0, 10, 10, 1);
 
 -- --------------------------------------------------------
 
@@ -413,6 +419,7 @@ CREATE TABLE `user` (
   `name` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `type` int(11) NOT NULL,
+  `theme` int(11) NOT NULL DEFAULT '0',
   `deleted` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -420,11 +427,11 @@ CREATE TABLE `user` (
 -- A tábla adatainak kiíratása `user`
 --
 
-INSERT INTO `user` (`id`, `name`, `password`, `type`, `deleted`) VALUES
-(1, 'admin', 'kkpass', 0, 0),
-(2, 'raktar', 'kkpass', 1, 0),
-(3, 'Varga', '1111', 1, 0),
-(4, 'Petrics', '0000', 1, 0);
+INSERT INTO `user` (`id`, `name`, `password`, `type`, `theme`, `deleted`) VALUES
+(1, 'admin', 'kkpass', 0, 1, 0),
+(2, 'raktar', 'kkpass', 1, 0, 0),
+(3, 'Varga', '1111', 1, 0, 0),
+(4, 'Petrics', '0000', 1, 0, 0);
 
 --
 -- Indexek a kiírt táblákhoz
@@ -492,7 +499,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT a táblához `alert`
 --
 ALTER TABLE `alert`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 --
 -- AUTO_INCREMENT a táblához `category`
 --
@@ -502,7 +509,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT a táblához `output`
 --
 ALTER TABLE `output`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 --
 -- AUTO_INCREMENT a táblához `pallet`
 --
@@ -512,7 +519,7 @@ ALTER TABLE `pallet`
 -- AUTO_INCREMENT a táblához `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 --
 -- AUTO_INCREMENT a táblához `quantity_form`
 --

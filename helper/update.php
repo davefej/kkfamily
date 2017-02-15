@@ -15,7 +15,7 @@ if(array_key_exists("type",$data)){
 	}else if($data["type"] == "supplier"){
 		$sql = "UPDATE `supplier` SET `name` = '".$data['name']."', `address` = '".$data['address']."' WHERE `id` = ".$data['id'];
 	}else if($data["type"] == "product"){
-		$sql = "UPDATE `product` SET `name` = '".$data['name']."', `category_id` = '".$data['category_id']."', `type` = '".$data['product_type']."' , `minimum` = '".$data['min']."' WHERE `product`.`id` = ".$data['id'];
+		$sql = "UPDATE `product` SET `name` = '".$data['name']."', `category_id` = '".$data['category_id']."', `type` = '".$data['product_type']."' , `minimum` = '".$data['min']."', `expire` = '".$data['expire']."' WHERE `product`.`id` = ".$data['id'];
 	}else if($data["type"] == "trash"){
 		$sql = "UPDATE `trash` SET `pallet_id` = '".$data['pallet_id']."', `amount` = '".$data['amount']."', `time` = '".$data['time']."', `user_id` = '".$data['user_id']."' WHERE `trash`.`id` = ".$data['id'];
 	}else if($data["type"] == "pallet"){

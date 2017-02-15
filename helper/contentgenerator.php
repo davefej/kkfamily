@@ -170,13 +170,14 @@ function listStorage($id){
 
 function listProduct(){
 	$mysqli = connect();
-	$results = $mysqli->query("SELECT p.id as id, p.name as name, p.minimum as minimum, c.name as cat FROM product p, category c WHERE c.id = p.category_id and p.deleted = false");
+	$results = $mysqli->query("SELECT p.id as id, p.name as name, p.minimum as minimum, p.expire as expire, c.name as cat FROM product p, category c WHERE c.id = p.category_id and p.deleted = false");
 	print '<table class="table table-hover sortable">';
 	print '<thead>';
 	print '<tr>';
 	print '<th>Alapanyag Neve</th>';
 	print '<th>Kategória</th>';
 	print '<th>Jelzési Mennyiség</th>';
+	print '<th>Lejárat (nap)</th>';
 	print '<th><button class="btn btn-sm btn-default" id="newRetailer" onclick="createProduct()">Új alapanyag</button></th>';
 	print '<th>Törlés</th>';
 	print '</tr>';
@@ -186,6 +187,7 @@ function listProduct(){
 		print '<td id="alapnev_'.$row["id"].'">'.$row["name"].'</td>';
 		print '<td id="alapkat_'.$row["id"].'">'.$row["cat"].'</td>';
 		print '<td id="alapmin_'.$row["id"].'">'.$row["minimum"].'</td>';
+		print '<td id="alapexp_'.$row["id"].'">'.$row["expire"].'</td>';
 		print '<td><button class="btn btn-sm btn-default" id="newRetailer"  onclick="editProduct('.$row["id"].')">Szerkeszt</button></td>';
 		print '<td><button class="btn btn-sm btn-danger" onclick="deleteProduct('.$row["id"].')">Töröl</button></td>';
 		print '</tr>';
@@ -1003,31 +1005,62 @@ function periodInput($day,$last,$detail){
 }
 
 function listOld(){
-	$mysqli = connect();
-	if($results = $mysqli->query(
-				"SELECT p.id as a0, pr.name as a1, p.amount as a2, p.time as a3
-	 			FROM  pallet p, product pr
-				where pr.id=p.product_id
-				and p.time < CURDATE() and p.deleted = false order by a3 ")){
 	
+	
+	$mysqli = connect();
+	$prod_exp = array();
+
+	
+	if($results = $mysqli->query("SELECT id,expire,name from product where deleted = false and expire > 0")){
+		while($row = $results->fetch_assoc()) {
+			$prod_exp[$row["id"]] = $row["expire"];
+		}
+		$results->free();
+	}
+	
+	
+	
+	if($results = $mysqli->query(palletSQL())){
+		
 		$str =  '<table class="table table-hover  sortable">';
 		$str .= '<thead>';
 		$str .= '<tr>';
-		$str .= '<th>ID</th>';
+		$str .= '<th>RAKLAP ID</th>';
 		$str .= '<th>Alapanyag</th>';
 		$str .= '<th>Mennyiség</th>';
 		$str .= '<th>Bevétel ideje</th>';
+		$str .= '<th>Kalkulált Lejárat</th>';
+		$str .= '<th>Lejárt </th>';
 		$str .= '</tr>';
 		$str .= '</thead>';
 		$i = false;
+
 		while($row = $results->fetch_assoc()) {
-			$i = true;
-			$str .= '<tr>';
-			$str .= '<td>'.$row["a0"].'</td>';
-			$str .= '<td>'.$row["a1"].'</td>';
-			$str .= '<td>'.$row["a2"].'</td>';
-			$str .= '<td>'.$row["a3"].'</td>';
-			$str .= '</tr>';
+			
+			if(array_key_exists($row["pr_id"],$prod_exp)){
+				
+				$expday = $prod_exp[$row["pr_id"]];
+				$date = date("Y-m-d",strtotime($row["time"]));
+				$expireDate = date('Y-m-d',strtotime($date . "+".$expday." days"));
+				//$expireDate = date("Y-m-d",date( strtotime("+".$expday." days"),$date));
+				$today = date("Y-m-d");
+				if($today > $expireDate) {
+					
+					$timediff = strtotime($today)-strtotime($expireDate);
+					$daydiff = floor($timediff / (60 * 60 * 24));
+					
+					$str .= '<tr>';
+					$str .= '<td>'.$row["id"].'</td>';
+					$str .= '<td>'.$row["product"].'</td>';
+					$str .= '<td>'.$row["rest"].'</td>';
+					$str .= '<td>'.$row["time"].'</td>';
+					$str .= '<td>'.$expireDate.'</td>';
+					$str .= '<td>'.$daydiff.' napja</td>';
+					$str .= '</tr>';
+					$i = true;
+				}				
+			}
+
 		}
 		$str .= '</table>';
 	

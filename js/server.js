@@ -28,12 +28,13 @@ function newSupplier(name,address){
 	
 }
 
-function newProduct(name,category_id,min,product_type){	
+function newProduct(name,category_id,min,expire,product_type){	
 	insert({
     	"name":name,
     	"category_id":category_id,
     	"product_type":product_type,
     	"min":min,
+    	"expire":expire,
     	"type":"product"
 	},reload);
 }
@@ -173,13 +174,14 @@ function updateSupplier(id,name,address){
 	});
 }
 
-function updateProduct(id,name,category_id,min,product_type){
+function updateProduct(id,name,category_id,min,expire,product_type){
 	update({
 		"id":id,
 		"name":name,
 		"category_id":category_id,
 		"product_type":product_type,
 		"min":min,
+		"expire":expire,
 		"type":"product"
 	});
 }

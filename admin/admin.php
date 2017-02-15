@@ -168,7 +168,6 @@ require("../common/header.php");
 	</div>
 </div>
 
-		 <!-- SOON BE EXPIRED PRODUCTS 
 	  <div class="panel panel-danger">
 	  	<div class="panel-heading">
 	  		<a data-toggle="collapse" href="#collapse3">
@@ -181,7 +180,7 @@ require("../common/header.php");
 			  		<td>
 						<div>
 						<?php 			
-							//listOld();
+							listOld();
 						?>
 						</div>
 					</td>
@@ -189,7 +188,7 @@ require("../common/header.php");
 		  	</table>
 		  </div>
 		</div>
- -->
+
 	
 <?php 
 require("../common/footer.php");

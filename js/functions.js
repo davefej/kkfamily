@@ -7,7 +7,8 @@ function bbsave(){
 		var name = $('#new_prod_name').val()
 		var category_id = $('#new_prod_cat').val()
 		var min = $('#new_prod_min').val()
-		newProduct(name,category_id,min,0)
+		var expire = $('#new_prod_exp').val()
+		newProduct(name,category_id,min,expire,0)
 		
 	}else if(tipus == "createSupplier"){
 		
@@ -64,8 +65,9 @@ function bbsave(){
 		var name = $('#edit_prod_name').val()
 		var category_id = $('#edit_prod_cat').val()
 		var min = $('#edit_prod_min').val()
+		var expire = $('#edit_prod_exp').val()
 		var id = $('#type').attr("id2");
-		updateProduct(id,name,category_id,min,0)
+		updateProduct(id,name,category_id,min,expire,0)
 		
 	}else if(tipus == "editUserName"){
 		
@@ -112,8 +114,11 @@ function createProduct(){
 				str += "Kategória";
 			str += "</th>";
 			str += "<th>";
-			str += "Jelzési Mennyiség";
-		str += "</th>";
+				str += "Jelzési Mennyiség";
+			str += "</th>";
+			str += "<th>";
+				str += "Lejárat";
+			str += "</th>";
 		str += "</tr>";
 	str += "</thead>";
 		str += "<tr>";
@@ -124,8 +129,11 @@ function createProduct(){
 			str += $('#category_container').html().replace("#_#","new_prod_cat");
 			str += "</td>";
 			str += "<td>";
-			str += "<input type='text' maxlength='50' id='new_prod_min'>";
-		str += "</th>";
+				str += "<input type='text' style='width:100px;' maxlength='50' id='new_prod_min'>";
+			str += "</td>";
+			str += "<td>";
+				str += "<input type='text' style='width:100px;' maxlength='50' id='new_prod_exp'>";
+			str += "</td>";
 		str += "</tr>";
 	str += "</table>";
 	bootbox.alert(str);
@@ -284,6 +292,7 @@ function editProduct(id){
 	var nev = $('#alapnev_'+id).html();
 	var kat = $('#alapkat_'+id).html();
 	var min = $('#alapmin_'+id).html();
+	var exp = $('#alapexp_'+id).html();
 	var str = '<input type="hidden" id="type" value="editProduct" id2="'+id+'"/>';
 	str += '<table class = "table table-hover">';
 	str += "<thead>";
@@ -295,8 +304,11 @@ function editProduct(id){
 				str += "Kategória";
 			str += "</th>";
 			str += "<th>";
-			str += "Jelzési Mennyiség";
-		str += "</th>";
+				str += "Jelzési Mennyiség";
+			str += "</th>";
+			str += "<th>";
+				str += "Lejárat";
+			str += "</th>";
 		str += "</tr>";
 	str += "</thead>";
 		str += "<tr>";
@@ -304,11 +316,14 @@ function editProduct(id){
 				str += "<input type='text' maxlength='50' value='"+nev+"' id='edit_prod_name'>";
 			str += "</th>";
 			str += "<td>";
-			str += $('#category_container').html().replace("#_#","edit_prod_cat");
+				str += $('#category_container').html().replace("#_#","edit_prod_cat");
 			str += "</td>";
 			str += "<td>";
-			str += "<input type='text' maxlength='50' value='"+min+"' id='edit_prod_min'>";
-			str += "</th>";
+				str += "<input type='number' style='width: 100px;' maxlength='10' value='"+min+"' id='edit_prod_min'>";
+			str += "</td>";
+			str += "<td>";
+				str += "<input type='number' style='width: 100px;' maxlength='10' value='"+exp+"' id='edit_prod_exp'>";
+			str += "</td>";
 		str += "</tr>";
 	str += "</table>";
 	bootbox.alert(str);
