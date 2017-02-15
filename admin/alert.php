@@ -11,7 +11,7 @@ require("../common/header.php");
 		<div class="panel panel-success">
 			<div class="panel-heading">
 				<a data-toggle="collapse" href="#collapse4">
-	  				Újabban kiadott Kiadás
+	  				<font style="color:gray">Újabb Kiadás</font>
 	  			</a>
 			</div>
 			<div id="collapse4" class="panel-collapse collapse in">
@@ -20,7 +20,12 @@ require("../common/header.php");
 			  		<td>
 						<div>
 						<?php 			
-							alertOutput();
+							sqlExecute(
+						"SELECT a.id, a.type, a.param, a.param2,
+						a.time, u.name, a.seen from alert a, user u 
+						where u.id = a.user_id and a.deleted = false 
+						and a.type='output' order by time desc ",
+						'alertoutputTable');
 						?>
 						</div>
 					</td>
@@ -42,7 +47,12 @@ require("../common/header.php");
 			  		<td>
 						<div>
 						<?php 			
-							alertSpare();
+							sqlExecute(
+						"SELECT a.id, a.type, a.param, a.param2, a.time,
+						u.name, a.seen from alert a, user u 
+						where u.id = a.user_id and a.deleted = false 
+						and a.type='trash' order by time desc ",
+						'alertspareTable');
 						?>
 						</div>
 					</td>
@@ -64,7 +74,12 @@ require("../common/header.php");
 			  		<td>
 						<div>
 						<?php 			
-							alertInput();
+				sqlExecute(
+						"SELECT a.id, a.type, a.param, a.param2, a.time,
+						u.name,a.seen from alert a, user u 
+						where u.id = a.user_id and a.deleted = false 
+						and a.type='input' order by time desc ",
+						'alertinputTable');
 						?>
 						</div>
 					</td>
@@ -76,4 +91,165 @@ require("../common/header.php");
 
 <?php 
 require("../common/footer.php");
+
+function alertinputTable($results){
+	print '<table class="table table-hover sortable">';
+	print '<thead>';
+	print '<tr>';
+	print '<th>Minőség id</th>';
+	print '<th>Hibák</th>';
+	print '<th>Raktáros</th>';
+	print '<th>Időpont</th>';
+	print '<th>Üzenet</th>';
+	print '<th>Láttam</th>';
+	print '</tr>';
+	print '</thead>';
+	while($row = $results->fetch_assoc()) {
+		print '<tr';
+		if($row["seen"] == '0' ){
+			print " class='unseen' ";
+		}
+		print '>';
+		print '<td>'.$row["param"].'</td>';
+		$data = json_decode($row["param2"],True);
+		print '<td>';
+		if($data != null){
+			foreach ($data as $i => $value) {
+					
+				if(is_numeric($value) && (2 == (int)$value || 1 == (int)$value) && $i != 'product'){
+					print minosegmap2($i).' => '.minosegmap((int)$value).'<br/>';
+				}
+			}
+		}
+		print '</td>';
+		print '<td>'.$row["name"].'</td>';
+		print '<td>'.$row["time"].'</td>';
+		print '<td> <button onclick="bootbox.alert('.mymessage($data).')">Üzenet</button></td>';
+		if($row["seen"] == '0' ){
+			print '<td><button class="btn btn-sm btn-danger" onclick="updateAlert('.$row["id"].')">OK</button></td>';
+		}else{
+			print '<td> Ok </td>';
+		}
+		print '</tr>';
+	}
+	print '</table>';
+}
+
+
+function minosegmap($i){
+	if($i === 1){
+		return "Rossz";
+	}else if($i === 2){
+		return "Közepes";
+	}else if($i === 3){
+		return "OK";
+	}else{
+		return '';
+	}
+}
+
+function minosegmap2($i){
+	if($i === "appearance"){
+		return "Kinézet";
+	}else if($i === "consistency"){
+		return "Állag";
+	}else if($i === "smell"){
+		return "Illat";
+	}else if($i === "color"){
+		return "Szín";
+	}else if($i === "clearness"){
+		return "Tisztaság Hőfok";
+	}else if($i === "pallet_quality"){
+		return "Raklap minőság";
+	}else{
+		return '';
+	}
+}
+
+
+
+function mymessage($data){
+	$str = "'<h2>Kedves Ügyfelünk!</h2>";
+	$str .= "<br/>Rossz minőségű árut szállítottak üzemünkbe.";
+	$str .= "<br/>Az áruval alábbi problémáink voltak:<br/>";
+	$str .= "<ul>";
+	if($data != null){
+		foreach ($data as $i => $value) {
+
+			if(is_numeric($value) && (2 == (int)$value || 1 == (int)$value) && $i != 'product'){
+				$str .= "<li>".minosegmap2($i)." : ".minosegmap((int)$value)." </li>";
+
+			}
+		}
+	}
+	$str .= "</ul>";
+	$str .= "<p>Az áruátvételt megtagadtuk</p>";
+
+	$str .= "Üdvözlettel<br/><br/>";
+	$str .= "KKFAMILY<br/><br/>'";
+	return $str;
+}
+
+function alertoutputTable($results){
+	print '<table class="table table-hover sortable">';
+	print '<thead>';
+	print '<tr>';
+	print '<th>Kiadás id</th>';
+	print '<th>Raklap id</th>';
+	print '<th>Raktáros</th>';
+	print '<th>Időpont</th>';
+	print '<th>Láttam</th>';
+	print '</tr>';
+	print '</thead>';
+	while($row = $results->fetch_assoc()) {
+		print '<tr';
+		if($row["seen"] == '0' ){
+			print " class='unseen' ";
+		}
+		print '>';
+		print '<td>'.$row["param"].'</td>';
+		print '<td>'.$row["param2"].'</td>';
+		print '<td>'.$row["name"].'</td>';
+		print '<td>'.$row["time"].'</td>';
+		if($row["seen"] == '0' ){
+			print '<td><button class="btn btn-sm btn-danger" onclick="updateAlert('.$row["id"].')">OK</button></td>';
+		}else{
+			print '<td> OK </td>';
+		}
+	
+		print '</tr>';
+	}
+	print '</table>';
+}
+
+function alertspareTable($results){
+	print '<table class="table table-hover sortable">';
+	print '<thead>';
+	print '<tr>';
+	print '<th>Selejt id</th>';
+	print '<th>Raklap id</th>';
+	print '<th>Raktáros</th>';
+	print '<th>Időpont</th>';
+	print '<th>Láttam</th>';
+	print '</tr>';
+	print '</thead>';
+	while($row = $results->fetch_assoc()) {
+		print '<tr';
+		if($row["seen"] == '0' ){
+			print " class='unseen' ";
+		}
+		print '>';
+		print '<td>'.$row["param"].'</td>';
+		print '<td>'.$row["param2"].'</td>';
+		print '<td>'.$row["name"].'</td>';
+		print '<td>'.$row["time"].'</td>';
+		if($row["seen"] == '0' ){
+			print '<td><button class="btn btn-sm btn-danger" onclick="updateAlert('.$row["id"].')">OK</button></td>';
+		}else{
+			print '<td> </td>';
+		}
+		print '</tr>';
+	}
+	print '</table>';
+}
 ?>
