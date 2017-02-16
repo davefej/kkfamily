@@ -8,7 +8,7 @@
 <div class="container-fluid">
 	<div class="centerBlock">
 	<form method="post">
-		<table class="table table-striped">
+		<table class="table table-striped tabletTable">
 			<thead>
 				<tr>
 					<th colspan="3">
@@ -34,7 +34,7 @@
 						productOption();
 					?>	
 				<td colspan="3">
-					<input class="form-control" id="suly" type="number" />
+					<input class="form-control tabletForm" id="suly" type="number" />
 				</td>
 			</tr>
 			<tr>
@@ -65,52 +65,52 @@
 			</tr>
 			<tr>
 				<td>
-					<input type="number" class="form-control" id="sumDifference">
+					<input type="number" class="form-control tabletForm" id="sumDifference" value=0>
 				</td>
 				<td>
-					<select class="form-control" id="appearance">
+					<select class="form-control tabletForm" id="appearance">
 					  <option value="1">Rossz</option>
 					  <option value="2">Közepes</option>
 					  <option value="3" selected>Jó</option>
 					</select>
 				</td>
 				<td>
-					<select class="form-control" id="consistency">
+					<select class="form-control tabletForm" id="consistency">
 					  <option value="1">Rossz</option>
 					  <option value="2">Közepes</option>
 					  <option value="3" selected>Jó</option>
 					</select>
 				</td>
 				<td>
-					<select class="form-control" id="smell">
+					<select class="form-control tabletForm" id="smell">
 					  <option value="1">Rossz</option>
 					  <option value="2">Közepes</option>
 					  <option value="3" selected>Jó</option>
 					</select>
 				</td>
 				<td>
-					<select class="form-control" id="color">
+					<select class="form-control tabletForm" id="color">
 					  <option value="1">Rossz</option>
 					  <option value="2">Közepes</option>
 					  <option value="3" selected>Jó</option>
 					</select>
 				</td>
 				<td>
-					<select class="form-control" id="clearness">
+					<select class="form-control tabletForm" id="clearness">
 					  <option value="1">Rossz</option>
 					  <option value="2">Közepes</option>
 					  <option value="3" selected>Jó</option>
 					</select>
 				</td>
 				<td>
-					<select class="form-control" id="palletQuality">
+					<select class="form-control tabletForm" id="palletQuality">
 					  <option value="1">Rossz</option>
 					  <option value="2">Közepes</option>
 					  <option value="3" selected>Jó</option>
 					</select>
 				</td>
 				<td style="width: 150px">
-					<select class="form-control" id="decision">
+					<select class="form-control tabletForm" id="decision">
 					  <option value="accept">Átvesz</option>
 					  <option value="decline">Visszautasít</option>
 					</select>
@@ -119,7 +119,7 @@
 			</tr>
 			<tr>
 				<td colspan="9">
-					<button class="btn btn-primary btn-block" onclick="input()">Mentés</button>
+					<button class="btn btn-primary btn-block btn-lg" onclick="input()">Mentés</button>
 				</td>
 			</tr>
 		</table>

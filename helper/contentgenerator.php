@@ -242,7 +242,7 @@ function periodSpare($day,$last,$detail){
 
 			$str =  '<table class="table table-hover">';
 			$str .= '<thead>';
-			$str .= '<tr>';
+			$str .= '<tr class="tableHeader">';
 				
 			if($detail){
 			 	$str .= '<th>'.$day." -> ".$last.' Részletes<input id="detailscb" type="checkbox" name="detailscb" checked></th>';
@@ -701,7 +701,7 @@ function daymap($weekday){
 function supplierOption(){
 	$mysqli = connect();
 	if($results = $mysqli->query("SELECT * FROM supplier WHERE deleted = false order by name")){
-		print '<select id="besz" class="form-control">';
+		print '<select id="besz" class="form-control tabletForm">';
 		while($row = $results->fetch_assoc()) {
 			print '<option value="'.$row["id"].'">'.$row["name"].'</option>';
 		}
@@ -720,7 +720,7 @@ function productOption(){
 
 	$mysqli = connect();
 	if($results = $mysqli->query("SELECT * FROM product where deleted = false order by name")){
-		print '<select id="alap" class="form-control">';
+		print '<select id="alap" class="form-control tabletForm">';
 		while($row = $results->fetch_assoc()) {
 			print '<option  value="'.$row["id"].'">'.$row["name"].'</option>';
 		}
@@ -739,7 +739,7 @@ function productOption(){
 function productOptionStorage($filter){
 	$mysqli = connect();
 	if($results = $mysqli->query("SELECT * FROM product where deleted = false order by name")){
-		print '<select id="prod_select" onchange="filterProd()" class="form-control">';
+		print '<select id="prod_select" onchange="filterProd() style="width: 130%;"" class="form-control">';
 
 		print '<option  value=""> Összes </option>';
 		while($row = $results->fetch_assoc()) {
@@ -764,7 +764,7 @@ function productOptionStorage($filter){
 function productOptionOutput($filter){
 	$mysqli = connect();
 	if($results = $mysqli->query("SELECT * FROM product where deleted = false order by name")){
-		print '<select id="prod_select" onchange="filterProdOutput()" class="form-control">';
+		print '<select id="prod_select" onchange="filterProdOutput()" class="form-control tabletForm">';
 
 		print '<option  value=""> Összes </option>';
 		while($row = $results->fetch_assoc()) {

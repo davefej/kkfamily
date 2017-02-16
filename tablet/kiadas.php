@@ -5,8 +5,12 @@ require("../common/header.php");
 
 $id="";
 if(isset($_GET["filter"]) && $_GET["filter"] == "prod"){
-	$id = $_GET["id"];
-	$filter  = "and pr.id = '".$id."' ";
+	if($_GET["id"] == "")
+		$filter = "";
+	else{
+		$id = $_GET["id"];
+		$filter  = "and pr.id = '".$id."' ";
+	}
 }else{
 	$filter  = "";
 }
@@ -18,7 +22,7 @@ sqlExecute2(
 require("../common/footer.php");
 
 function outputTable($results,$id){
-	print '<table class="table table-hover sortable">';
+	print '<table class="table table-hover sortable tabletTable">';
 	print '<thead>';
 	print '<tr>';
 	print '<th>ID</th>';
@@ -43,9 +47,9 @@ function outputTable($results,$id){
 	
 		if(in_array($row["product"],$firstprods))
 		{
-			print '<td><button class="btn btn-sm btn-danger" onclick="olderOutput('.$row["id"].','.$row["rest"].')">Kiadás</button></td>';
+			print '<td><button class="btn btn-lg btn-danger" onclick="olderOutput('.$row["id"].','.$row["rest"].')">Kiadás</button></td>';
 		}else{
-			print '<td><button class="btn btn-sm btn-danger" onclick="output('.$row["id"].','.$row["rest"].')">Kiadás</button></td>';
+			print '<td><button class="btn btn-lg btn-danger" onclick="output('.$row["id"].','.$row["rest"].')">Kiadás</button></td>';
 			array_push($firstprods,$row["product"]);
 		}
 	

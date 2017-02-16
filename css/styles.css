@@ -114,11 +114,6 @@ thead{
 	color: #555555;
 }
 
-table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after { 
-    content: " \25B4\25BE" 
-}
-
-
 .panel-info > .panel-heading {
     background-color: #C8E8E8;
     color: white;
@@ -217,3 +212,25 @@ table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sor
     border: 3px solid #00767F;
     border-radius: 10px;>/
 }*/
+
+.tabletTable{
+	width:95%;
+}
+
+td{
+	text-align: center;
+}
+
+select.tabletForm{
+	font-size: 160%;
+	height:150%;
+}
+
+input.tabletForm{
+	font-size: 150%;
+	height:150%;
+}
+
+#prod_select{
+	width: 80%;
+}

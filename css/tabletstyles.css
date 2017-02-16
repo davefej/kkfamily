@@ -1,13 +1,10 @@
 body { 
-    background: red; 
+    padding-top: 70px;     
+    background-repeat: no-repeat;
     background: -webkit-linear-gradient(left top, #00767F, #E3F9FF);
     background: -o-linear-gradient(bottom right, #00767F, #E3F9FF);
     background: -moz-linear-gradient(bottom right, #00767F, #E3F9FF);
     background: linear-gradient(to bottom right, #00767F, #E3F9FF);
-    height: 100%;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    padding-top: 80px;
 }
 h1 {
     color: #fff3e0;
@@ -18,45 +15,28 @@ p{
 }
 
 a{
-	color: #0F003B;
+	color: #666666;
 	font-weight: bold;
 }
 
 a:hover{
-	color: #0F003B;
+	color: #666666;
 	text-decoration: none;
 }
 
 a:visited{
-	color: #0F003B;
-	text-decoration: none;
+	color: white;
 }
 
 a:active{
-	color: #0F003B;
+	color: #666666;
 	text-decoration: none;
 }
 
-.panel{
-	width:80%;
-	margin: 0 auto;
-    float: none;
-    margin-bottom: 10px;
-    max-height: 500px;
-    overflow-y: scroll;
-}
-
-.thumbnail{
-    background: #fffdf9 !important;
-}
 .centerBlock {
     display: table;
     margin: 0 auto;
     float: none;
-}
-
-.panel-heading{
-	font-size: 18px;
 }
 
 .col-md-6{
@@ -78,7 +58,7 @@ a:active{
 	background-color: white;
 	float: none;
     margin: 0 auto;
-	width: 80%;
+	width: 95%;
 }
 
 thead{
@@ -88,18 +68,47 @@ thead{
 }
 
 .btn-block{
-	width: 80%;
+	width: 95%;
 	float: none;
 	margin: 0 auto;
 }
 
 .container-fluid{
-	width: 80%;
+	width: 95%;
 }
 
 .navbar-inverse .navbar-brand:hover, 
 .navbar-inverse .navbar-brand:focus {
   background-color: transparent;
   color: #999999;
-  cursor: pointer;
 }
+
+.navbar-brand{
+	padding: 5px;
+}
+
+.navbar-brand>img {
+  height: 100%;
+  width: auto;
+}
+
+.tabletTable{
+	width:95%;
+}
+
+td{
+	text-align: center;
+}
+
+select.tabletForm{
+	font-size: 160%;
+	height:150%;
+}
+
+input.tabletForm{
+	font-size: 150%;
+	height:150%;
+}
+
+#prod_select{
+	width: 80%;

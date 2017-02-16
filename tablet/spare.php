@@ -11,7 +11,7 @@ sqlExecute(
 require("../common/footer.php");
 
 function spareTable($results){
-	print '<table class="table table-hover sortable">';
+	print '<table class="table table-hover sortable tabletTable">';
 	print '<thead>';
 	print '<tr>';
 	print '<th>ID</th>';
@@ -29,7 +29,7 @@ function spareTable($results){
 		print '<td>'.$row["supplier"].'</td>';
 		print '<td>'.$row["time"].'</td>';
 		print '<td>'.$row["rest"].'</td>';
-		print '<td><button class="btn btn-sm btn-danger" onclick="trash('.$row["id"].','.$row["rest"].')">Selejt</button></td>';
+		print '<td><button class="btn btn-lg btn-danger" onclick="trash('.$row["id"].','.$row["rest"].')">Selejt</button></td>';
 		print '</tr>';
 	}
 	print '</table>';

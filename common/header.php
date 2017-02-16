@@ -10,6 +10,8 @@
 				echo "<title> Kiadás | KK Family</title>";
 			else if($selector == "bevetel")
 				echo "<title> Bevétel | KK Family</title>";
+			else if($selector == "spare")
+				echo "<title> Selejtezés | KK Family</title>";
 		?>
 		<meta http-equiv="cache-control" content="max-age=0" />
 	  	<meta http-equiv="cache-control" content="no-cache" />
@@ -20,7 +22,6 @@
 		<meta charset="utf-8">
 		
 		<link href="../js/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
-		<link rel="stylesheet" type="text/css" href="../css/styles.css?v=<?php echo $version;?>">
 		
 		<script src="../js/functions.js?v=<?php echo $version;?>" ></script>
 		<script src="../js/server.js?v=<?php echo $version;?>" ></script>
@@ -30,8 +31,10 @@
 	<?php  if($selected == "tablet"){	//TODO css rand		?>							
 				
 				<script src="../js/tablet.js"></script>
+				<link rel="stylesheet" type="text/css" href="../css/tabletstyles.css?v=<?php echo $version;?>">
+	<?php }else{ ?>
+				<link rel="stylesheet" type="text/css" href="../css/styles.css?v=<?php echo $version;?>">
 	<?php } ?>
-				
 <?php 		
 	if(isset($_SESSION['theme']) && $_SESSION['theme'] != "0"){	
 		echo '<link rel="stylesheet" type="text/css" href="../css/theme'.$_SESSION['theme'].'.css?v='.$version.'">';
