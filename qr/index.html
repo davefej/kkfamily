@@ -7,19 +7,92 @@
 <body>
  <div id="reader" style="width:300px;height:250px">
  </div>
- 
+  <div id="div" >
+  	IDE JÖN AZ ADAT
+  
+ </div>
+   <div id="div2" >
+  	IDE JÖN AZ ADAT
+  
+ </div>
+ <button onclick="start()">start</button>
  <script>
  
  
-$('#reader').html5_qrcode(function(data){
- 		 // do something when code is read
- 	},
- 	function(error){
-		//show read errors 
+ var videoElement = document.querySelector('video');
+ var audioInputSelect = document.createElement('select');
+ 
+ var audioOutputSelect =document.createElement('select');
+ var videoSelect = document.createElement('select');
+ videoSelect.id="vidid"
+ var selectors = [audioInputSelect, audioOutputSelect, videoSelect];
+
+ function gotDevices(deviceInfos) {
+	
+   // Handles being called several times to update labels. Preserve values.
+   var values = selectors.map(function(select) {
+     return select.value;
+   });
+   selectors.forEach(function(select) {
+     while (select.firstChild) {
+       select.removeChild(select.firstChild);
+     }
+   });
+   for (var i = 0; i !== deviceInfos.length; ++i) {
+     var deviceInfo = deviceInfos[i];
+     var option = document.createElement('option');
+     option.value = deviceInfo.deviceId;
+     if (deviceInfo.kind === 'audioinput') {
+       option.text = deviceInfo.label ||
+           'microphone ' + (audioInputSelect.length + 1);
+       audioInputSelect.appendChild(option);
+     } else if (deviceInfo.kind === 'audiooutput') {
+       option.text = deviceInfo.label || 'speaker ' +
+           (audioOutputSelect.length + 1);
+       audioOutputSelect.appendChild(option);
+     } else if (deviceInfo.kind === 'videoinput') {
+       option.text = deviceInfo.label || 'camera ' + (videoSelect.length + 1);
+       videoSelect.appendChild(option);
+     } else {
+       console.log('Some other kind of source/device: ', deviceInfo);
+     }
+   }
+   selectors.forEach(function(select, selectorIndex) {
+     if (Array.prototype.slice.call(select.childNodes).some(function(n) {
+       return n.value === values[selectorIndex];
+     })) {
+       select.value = values[selectorIndex];
+     }
+   });
+   
+   document.getElementById('div2').appendChild(videoSelect)
+ }
+
+ navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(handleError);
+
+ 
+ 
+function handleError(error) {
+	  alert('navigator.getUserMedia error: ', error);
+}
+
+i=1;
+function start(){
+	$('#reader').html5_qrcode(function(data){
+		 $('#div').html(i+". OK"+data);
+		 i++;
+	},
+	function(error){
+		$('#div').html(i+". NINCS "+error);
+		i++;
 	}, function(videoError){
-		//the video stream could be opened
-	}
+		$('#div').html(i+". error "+videoError);
+		i++;
+	},$('#vidid').val()
 );
+}
+
+
 </script>
 </body>
 

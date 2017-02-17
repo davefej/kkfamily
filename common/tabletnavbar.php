@@ -18,6 +18,7 @@
 				<li <?php if($selector =="bevetel"){ echo "class=\"active\"";} ?> ><a href="bevetel.php">BEVÉTEL<span class="sr-only">(current)</span></a></li>
 				<li <?php if($selector =="kiadas"){ echo "class=\"active\"";} ?> ><a href="kiadas.php">KIADÁS</a></li>
 				<li <?php if($selector =="spare"){ echo "class=\"active\"";} ?> ><a href="spare.php">SELEJT</a></li>
+				<li <?php if($selector =="openqr"){ echo "class=\"active\"";} ?> ><a href="openqr.php">QR CODE</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="../logout.php">Kijelentkezés</a></li>
