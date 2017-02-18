@@ -803,4 +803,77 @@ function categoryOption(){
 	$mysqli->close();
 }
 
+function getDataById($id){
+	$mysqli = connect();
+	$pr_id = 0;	
+	if($results = $mysqli->query("SELECT product_id as pid FROM pallet where id = ".$id)){
+		while($row = $results->fetch_assoc()) {
+			$pr_id = $row["pid"];			
+		}
+		$results->free();
+	}else{
+		print "hiba";
+		print mysqli_error($mysqli);
+	}
+	
+	if($pr_id == 0){
+		print '<h1>NINCS ILYEN RAKLAP VAGY TÖRÖLVE LETT</h1>';
+		return;
+	}
+	
+	$filter  = "and pr.id = '".$pr_id."' ";	
+	
+	if($results = $mysqli->query(palletSQL2($filter))){
+		print '<table class="table table-hover">';
+		print '<thead>';
+		print '<tr>';
+		print '<th style="text-align:center;">ID</th>';
+		print '<th style="text-align:center;">Alapanyag</th>';
+		print '<th style="text-align:center;">Mennyiség</th>';
+		print '<th style="text-align:center;">Beszállító</th>';
+		print '<th style="text-align:center;">Idő</th>';
+		print '</tr>';
+		print '</thead>';
+		$firstprods = array();
+		while($row = $results->fetch_assoc()) {
+			$str = '<tr>';
+			$str .= '<td>'.$row["id"].'</td>';
+			$str .= '<td>'.$row["product"].'</td>';
+			$str .= '<td>'.$row["rest"].'</td>';
+			$str .= '<td>'.$row["supplier"].'</td>';
+			$str .= '<td>'.$row["time"].'</td>';
+			$str .= '</tr>';
+			$str .= '<tr>';
+			
+			if(in_array($row["product"],$firstprods))
+			{
+				$str .= '<td colspan="2"><button class="btn btn-lg btn-danger" onclick="olderOutput('.$row["id"].','.$row["rest"].')">Kiadás</button></td>';
+			}else{
+				$str .= '<td colspan="2"><button class="btn btn-lg btn-danger" onclick="output('.$row["id"].','.$row["rest"].')">Kiadás</button></td>';
+				array_push($firstprods,$row["product"]);
+			}			
+			
+			$str .= '<td colspan="2"><button class="btn btn-lg btn-danger" onclick="trash('.$row["id"].','.$row["rest"].')">Selejt</button></td>';
+			$str .= '<td><button class="btn btn-lg btn-danger" onclick="deletePallet('.$row["id"].')">Töröl</button></td>';
+			$str .= '</tr>';
+			$str .= '</table>';
+			
+			if($row["id"] == $id){
+				print $str;
+				break;
+			}
+			
+		}
+		$results->free();
+	}else{
+		print "hiba";
+		print mysqli_error($mysqli);
+	}
+	
+	// close connection
+	$mysqli->close();
+}
+
+
+
 ?>
