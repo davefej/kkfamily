@@ -739,7 +739,7 @@ function productOption(){
 function productOptionStorage($filter){
 	$mysqli = connect();
 	if($results = $mysqli->query("SELECT * FROM product where deleted = false order by name")){
-		print '<select id="prod_select" onchange="filterProd() style="width: 130%;"" class="form-control">';
+		print '<select id="prod_select" onchange="filterProd()" style="width: 130%;" class="form-control">';
 
 		print '<option  value=""> Összes </option>';
 		while($row = $results->fetch_assoc()) {
