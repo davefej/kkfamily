@@ -14,7 +14,7 @@ require("../common/header.php");
 	  		</a>
 	  		&nbsp;&nbsp;&nbsp;&nbsp;
 	  		<button type="button" class="btn btn-primary">
-		  			<a href="input.php">Részletek</a>
+		  			<a class="details" href="input.php">Részletek</a>
 	  		</button>
 	  	</div>
 	  	<div id="collapse1" class="panel-collapse collapse in">
@@ -69,7 +69,7 @@ require("../common/header.php");
 	  		</a>
 	  		&nbsp;&nbsp;&nbsp;&nbsp;
 	  		<button type="button" class="btn btn-primary">
-		  			<a href="output.php">Részletek</a>
+		  			<a class="details" href="output.php">Részletek</a>
 	  		</button>
 	  	</div>
 	  	<div id="collapse2" class="panel-collapse collapse in">

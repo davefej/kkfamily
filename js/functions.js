@@ -175,6 +175,9 @@ function createUser(){
 			str += "<th>";
 				str += "Jelszó";
 			str += "</th>";
+			str += "<th>";
+				str += "Jogosultság";
+			str += "</th>";
 		str += "</tr>";
 	str += "</thead>";
 		str += "<tr>";
@@ -221,16 +224,15 @@ function createOutput(pallet_id,full,old){
 	str += '<table class = "table table-hover">';
 	str += "<thead>";
 		str += "<tr>";
-			str += "<th>";
+			str += '<th>';
 				str += "Mennyiség";
 			str += "</th>";			
 		str += "</tr>";
 	str += "</thead>";
 		str += "<tr>";
 			str += "<td>";
-				str += "<input type='number' maxlength='50' value='"+full+"' id='output_amount'>";
+				str += "<input type='number' maxlength='50' value='"+full+"' id='output_amount' style='font-size: 130%; '>";
 			str += "</th>";
-			str += "<td>";
 		str += "</tr>";
 	str += "</table>";
 	bootbox.alert(str);
@@ -251,7 +253,6 @@ function createTrash(pallet_id,full){
 			str += "<td>";
 				str += "<input type='number' maxlength='50' value='"+full+"' id='trash_amount'>";
 			str += "</th>";
-			str += "<td>";
 		str += "</tr>";
 	str += "</table>";
 	bootbox.alert(str);

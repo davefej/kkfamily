@@ -124,11 +124,11 @@ function alertinputTable($results){
 		print '</td>';
 		print '<td>'.$row["name"].'</td>';
 		print '<td>'.$row["time"].'</td>';
-		print '<td> <button onclick="bootbox.alert('.mymessage($data).')">Üzenet</button></td>';
+		print '<td> <button class="btn btn-default btn-md" onclick="bootbox.alert('.mymessage($data).')">Üzenet</button></td>';
 		if($row["seen"] == '0' ){
 			print '<td><button class="btn btn-sm btn-danger" onclick="updateAlert('.$row["id"].')">OK</button></td>';
 		}else{
-			print '<td> Ok </td>';
+			print '<td> <span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"></span> </td>';
 		}
 		print '</tr>';
 	}
@@ -214,7 +214,7 @@ function alertoutputTable($results){
 		if($row["seen"] == '0' ){
 			print '<td><button class="btn btn-sm btn-danger" onclick="updateAlert('.$row["id"].')">OK</button></td>';
 		}else{
-			print '<td> OK </td>';
+			print '<td> <span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"> </td>';
 		}
 	
 		print '</tr>';
@@ -246,7 +246,7 @@ function alertspareTable($results){
 		if($row["seen"] == '0' ){
 			print '<td><button class="btn btn-sm btn-danger" onclick="updateAlert('.$row["id"].')">OK</button></td>';
 		}else{
-			print '<td> </td>';
+			print '<td> <span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"> </td>';
 		}
 		print '</tr>';
 	}
