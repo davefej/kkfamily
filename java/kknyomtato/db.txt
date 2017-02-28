@@ -1,1 +1,1 @@
-jdbc:mysql://localhost:3306/kkfamily#_#root#_#
+http://zsofiesdavid.hu/kkfamily#_#root#_#a2twYXNzMTIz
