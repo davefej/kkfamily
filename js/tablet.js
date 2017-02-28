@@ -2,7 +2,9 @@ function goTo(url){
 	location.href = url;
 }
 
-function input(){
+function input(e){
+	e.preventDefault();     // stops default button action, e.g. submitting a form
+    e.stopPropagation();
 	var supplier = $('#besz').val()
 	var product = $('#alap').val()
 	var amount = $('#suly').val()
@@ -15,10 +17,11 @@ function input(){
 	var clearness = $('#clearness').val()
 	var palletQuality = $('#palletQuality').val()
 	var decision = $('#decision').val()
-	
+	  
 	newQualityForm(sumDifference, appearance, consistency, smell, color,
 			clearness, palletQuality, decision,product,supplier,amount)
 	
+	return false;
 }
 
 function output(id,mennyiseg){	

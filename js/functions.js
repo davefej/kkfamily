@@ -2,6 +2,9 @@
 function bbsave(){
 	var tipus = $('#type').val();
 	
+	if(tipus == "reload"){
+		location.reload();
+	}	
 	if(tipus == "createProduct"){
 		
 		var name = $('#new_prod_name').val()

@@ -119,15 +119,23 @@ function newAlert(alert_type,param,param2){
 }
 
 function insert(json,callback){
-	alert = (alert == 'true');
+	
 	$.ajax({
         url: "../helper/insert.php",
         type: "post",
         data: JSON.stringify(json) ,
         cache: false,
-        success: function (response) {        	
-        	if(callback && typeof callback === "function"){        		
-        		callback(json,response);
+        success: function (response) {
+        	
+        	if(callback && typeof callback === "function"){
+        		if(callback.name == "reload"){
+        			bootbox.alert("Létrehozás Sikeres! OK"+"<input type='hidden' id='type' value='reload'/>")
+        		}else{
+        			callback(json,response);
+        		}
+        		
+        	}else{
+        		bootbox.alert("Létrehozás Sikeres! OK")
         	}
         	          
         },
@@ -135,6 +143,7 @@ function insert(json,callback){
         	bootbox.alert("Internet vagy szerver hiba<br/>"+textStatus+"<br/>"+errorThrown)
         }
     });
+	return false;
 }
 
 //////////////////////////////
@@ -252,13 +261,17 @@ function update(json){
         type: "post",
         data: JSON.stringify(json) ,
         cache: false,
-        success: function (response) {           
-        	location.reload();          
+        success: function (response) {
+        	bootbox.alert("Sikeres frissítés", function(){
+        		location.reload();
+        	})
+        	        
         },
         error: function(jqXHR, textStatus, errorThrown) {
         	bootbox.alert("Internet vagy szerver hiba<br/>"+textStatus+"<br/>"+errorThrown)
         }
     });
+	return false;
 }
 
 //////////////////////////////
@@ -325,12 +338,15 @@ function Delete(json){
         data: JSON.stringify(json) ,
         cache: false,
         success: function (response) {           
-        	location.reload();          
+        	bootbox.alert("Sikeres törlés", function(){
+        		location.reload();
+        	})         
         },
         error: function(jqXHR, textStatus, errorThrown) {
         	bootbox.alert("Internet vagy szerver hiba<br/>"+textStatus+"<br/>"+errorThrown)
         }
     });
+	return false;
 }
 
 var alertnum = -1;
@@ -364,6 +380,7 @@ function alertcheck(){
             bootbox.alert("Internet vagy szerver hiba<br/>"+textStatus+"<br/>"+errorThrown)
         }
     });
+	return false;
 }
 
 function saveColor(json){
@@ -379,5 +396,6 @@ function saveColor(json){
 
         }
     });
+	return false;
 }
 

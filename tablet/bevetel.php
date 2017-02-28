@@ -119,7 +119,7 @@
 			</tr>
 			<tr>
 				<td colspan="9">
-					<button class="btn btn-primary btn-block btn-lg" onclick="input()">Mentés</button>
+					<button class="btn btn-primary btn-block btn-lg" onclick="input(event)">Mentés</button>
 				</td>
 			</tr>
 		</table>
