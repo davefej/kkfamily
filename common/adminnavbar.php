@@ -17,8 +17,8 @@
 		<!-- Collect the nav links, forms, and other content for toggling -->
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav navbar-left">
-				<li <?php if($selector == "product"){ echo "class=\"active\"";} ?>><a href="product.php">Alapanyagok</a></li>
-				<li <?php if($selector == "supplier"){ echo "class=\"active\"";} ?>><a href="supplier.php">Beszállítók</a></li>
+				<li <?php if($selector == "product"){ echo "class=\"active\"";} ?>><a href="product.php">Alapanyag</a></li>
+				<li <?php if($selector == "supplier"){ echo "class=\"active\"";} ?>><a href="supplier.php">Beszállító</a></li>
 				<li <?php if($selector == "category"){ echo "class=\"active\"";} ?>><a href="category.php">Kategória</a></li>
 				<li <?php if($selector == "storage"){ echo "class=\"active\"";} ?>><a href="storage.php">Raktár</a></li>
 				<li <?php if($selector == "input"){ echo "class=\"active\"";} ?>><a href="input.php">Bevétel</a></li>
