@@ -8,7 +8,8 @@ function bbsave(){
 		var category_id = $('#new_prod_cat').val()
 		var min = $('#new_prod_min').val()
 		var expire = $('#new_prod_exp').val()
-		newProduct(name,category_id,min,expire,0)
+		var unit = $('#new_prod_unit').val()
+		newProduct(name,category_id,min,expire,unit,0)
 		
 	}else if(tipus == "createSupplier"){
 		
@@ -66,8 +67,9 @@ function bbsave(){
 		var category_id = $('#edit_prod_cat').val()
 		var min = $('#edit_prod_min').val()
 		var expire = $('#edit_prod_exp').val()
+		var unit = $('#edit_prod_unit').val()
 		var id = $('#type').attr("id2");
-		updateProduct(id,name,category_id,min,expire,0)
+		updateProduct(id,name,category_id,min,expire,unit,0)
 		
 	}else if(tipus == "editUserName"){
 		
@@ -119,6 +121,10 @@ function createProduct(){
 			str += "<th>";
 				str += "Lejárat";
 			str += "</th>";
+			str += "<th>";
+				str += "Egység";
+			str += "</th>";
+		str += "</th>";	
 		str += "</tr>";
 	str += "</thead>";
 		str += "<tr>";
@@ -129,11 +135,14 @@ function createProduct(){
 			str += $('#category_container').html().replace("#_#","new_prod_cat");
 			str += "</td>";
 			str += "<td>";
-				str += "<input type='text' style='width:100px;' maxlength='50' id='new_prod_min'>";
+				str += "<input type='number' style='width:60px;' maxlength='50' id='new_prod_min'>";
 			str += "</td>";
 			str += "<td>";
-				str += "<input type='text' style='width:100px;' maxlength='50' id='new_prod_exp'>";
+				str += "<input type='number' style='width:60px;' maxlength='50' id='new_prod_exp'>";
 			str += "</td>";
+			str += "<td>";
+				str += "<input type='text' value='kg' style='width:60px;' maxlength='50' id='new_prod_unit'>";
+			str += "</td>";			
 		str += "</tr>";
 	str += "</table>";
 	bootbox.alert(str);
@@ -294,6 +303,8 @@ function editProduct(id){
 	var kat = $('#alapkat_'+id).html();
 	var min = $('#alapmin_'+id).html();
 	var exp = $('#alapexp_'+id).html();
+	var unit = $('#alapunit_'+id).html();
+	
 	var str = '<input type="hidden" id="type" value="editProduct" id2="'+id+'"/>';
 	str += '<table class = "table table-hover">';
 	str += "<thead>";
@@ -309,7 +320,9 @@ function editProduct(id){
 			str += "</th>";
 			str += "<th>";
 				str += "Lejárat";
-			str += "</th>";
+			str += "</th>";	str += "<th>";
+				str += "Egység";
+			str += "</th>";				
 		str += "</tr>";
 	str += "</thead>";
 		str += "<tr>";
@@ -320,11 +333,15 @@ function editProduct(id){
 				str += $('#category_container').html().replace("#_#","edit_prod_cat");
 			str += "</td>";
 			str += "<td>";
-				str += "<input type='number' style='width: 100px;' maxlength='10' value='"+min+"' id='edit_prod_min'>";
+				str += "<input type='number' style='width: 60px;' maxlength='10' value='"+min+"' id='edit_prod_min'>";
 			str += "</td>";
 			str += "<td>";
-				str += "<input type='number' style='width: 100px;' maxlength='10' value='"+exp+"' id='edit_prod_exp'>";
+				str += "<input type='number' style='width: 60px;' maxlength='10' value='"+exp+"' id='edit_prod_exp'>";
 			str += "</td>";
+			str += "<td>";
+				str += "<input type='text' style='width: 60px;' maxlength='10' value='"+unit+"' id='edit_prod_unit'>";
+			str += "</td>";
+			
 		str += "</tr>";
 	str += "</table>";
 	bootbox.alert(str);
@@ -571,5 +588,9 @@ function changecolor(i){
 	});
 }
 
-
+function reloadQuality (){	
+	var month = $('#date_month').val()
+	var year  = new Date().getFullYear();
+	window.location = "quality.php?date="+year+"-"+month+"-01";
+}
 

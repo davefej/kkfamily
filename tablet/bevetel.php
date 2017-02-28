@@ -69,44 +69,44 @@
 				</td>
 				<td>
 					<select class="form-control tabletForm" id="appearance">
-					  <option value="1">Rossz</option>
-					  <option value="2">Közepes</option>
-					  <option value="3" selected>Jó</option>
+					  <option value="1">1 - Rossz</option>
+					  <option value="2">2 - Közepes</option>
+					  <option value="3" selected>3 - Jó</option>
 					</select>
 				</td>
 				<td>
 					<select class="form-control tabletForm" id="consistency">
-					  <option value="1">Rossz</option>
-					  <option value="2">Közepes</option>
-					  <option value="3" selected>Jó</option>
+					  <option value="1">1 - Rossz</option>
+					  <option value="2">2 - Közepes</option>
+					  <option value="3" selected>3 - Jó</option>
 					</select>
 				</td>
 				<td>
 					<select class="form-control tabletForm" id="smell">
-					  <option value="1">Rossz</option>
-					  <option value="2">Közepes</option>
-					  <option value="3" selected>Jó</option>
+					  <option value="1">1 - Rossz</option>
+					  <option value="2">2 - Közepes</option>
+					  <option value="3" selected>3 - Jó</option>
 					</select>
 				</td>
 				<td>
 					<select class="form-control tabletForm" id="color">
-					  <option value="1">Rossz</option>
-					  <option value="2">Közepes</option>
-					  <option value="3" selected>Jó</option>
+					  <option value="1">1 - Rossz</option>
+					  <option value="2">2 - Közepes</option>
+					  <option value="3" selected>3 - Jó</option>
 					</select>
 				</td>
 				<td>
 					<select class="form-control tabletForm" id="clearness">
-					  <option value="1">Rossz</option>
-					  <option value="2">Közepes</option>
-					  <option value="3" selected>Jó</option>
+					  <option value="1">1 - Rossz</option>
+					  <option value="2">2 - Közepes</option>
+					  <option value="3" selected>3 - Jó</option>
 					</select>
 				</td>
 				<td>
 					<select class="form-control tabletForm" id="palletQuality">
-					  <option value="1">Rossz</option>
-					  <option value="2">Közepes</option>
-					  <option value="3" selected>Jó</option>
+					  <option value="1">1 - Rossz</option>
+					  <option value="2">2 - Közepes</option>
+					  <option value="3" selected>3 - Jó</option>
 					</select>
 				</td>
 				<td style="width: 150px">

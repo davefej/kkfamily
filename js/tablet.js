@@ -19,7 +19,6 @@ function input(){
 	newQualityForm(sumDifference, appearance, consistency, smell, color,
 			clearness, palletQuality, decision,product,supplier,amount)
 	
-	//newpallet callbackben
 }
 
 function output(id,mennyiseg){	
