@@ -26,6 +26,8 @@ if(array_key_exists("type",$data)){
 		$sql = "UPDATE `alert` SET `seen` = '1'  WHERE `id` = ".$data['id'];
 	}else if($data["type"] == "inventory"){
 		$sql = "UPDATE `pallet` SET `amount` = '".$data['amount']."'  WHERE `id` = ".$data['id'];
+	}else if($data["type"] == "printing"){
+		$sql = "UPDATE `pallet` SET `printed` = 1  WHERE `id` = ".$data['id'];
 	}
 	
 	

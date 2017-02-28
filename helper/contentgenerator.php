@@ -52,7 +52,7 @@ function palletSQL3($filter,$groupby){
 		$sum2=")";
 
 	}
-	return "select p.id as id, pr.name as product, pr.id as pr_id, s.name as supplier, p.time as time, u.name as user,pr.minimum as min,
+	return "select p.id as id, pr.name as product, pr.id as pr_id, s.name as supplier, p.time as time, u.name as user,pr.minimum as min, p.printed as printed,
 				".$sum1."IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0)".$sum2." as rest
 				from pallet p
 				INNER JOIN product pr on p.product_id = pr.id ".$filter." and p.deleted = false

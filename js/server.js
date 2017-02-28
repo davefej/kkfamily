@@ -238,6 +238,13 @@ function updateInventory(id,amount){
 	});
 }
 
+function updatePrinted(id){
+	update({
+		"id":id,
+		"type":"printing"
+	});
+}
+
 function update(json){
 	
 	$.ajax({
