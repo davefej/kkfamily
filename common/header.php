@@ -24,14 +24,14 @@
 		
 		<link href="../js/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
 		
-		<script src="../js/functions.js?v=12" ></script>
-		<script src="../js/server.js?v=12" ></script>
+		<script src="../js/functions.js?v=13" ></script>
+		<script src="../js/server.js?v=13" ></script>
 		<script src="../js/Chart.js"></script>
 		<script src="../js/sorttable.js"></script>
 		
 	<?php  if($selected == "tablet"){	//TODO css rand		?>							
 				
-				<script src="../js/tablet.js?v=12"></script>
+				<script src="../js/tablet.js?v=13"></script>
 				<link rel="stylesheet" type="text/css" href="../css/tabletstyles.css?v=<?php echo $version;?>">
 	<?php }else{ ?>
 				<link rel="stylesheet" type="text/css" href="../css/styles.css?v=<?php echo $version;?>">
