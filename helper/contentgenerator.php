@@ -13,7 +13,7 @@ function sqlExecute($sql,$proces){
 		$results->free();
 	}else{
 		print mysqli_error($mysqli);
-		print "hiba";
+		print "nincs adatbázis kapcsolat";
 	}
 	$mysqli->close();
 }
@@ -210,7 +210,7 @@ function periodOutput($day,$last,$detail){
 			 $results->free();
 	}else{
 		print mysqli_error($mysqli);
-		print ("HIBA");
+		print ("nincs adatbázis kapcsolat");
 	}
 
 	$mysqli->close();
@@ -336,7 +336,7 @@ function periodSpare($day,$last,$detail){
 			$results->free();
 	}else{
 		print mysqli_error($mysqli);
-		print ("HIBA");
+		print ("nincs adatbázis kapcsolat");
 	}
 
 	$mysqli->close();
@@ -455,7 +455,7 @@ function periodInput($day,$last,$detail){
 				 // Frees the memory associated with a result
 				 $results->free();
 	}else{
-		print "hiba";
+		print "nincs adatbázis kapcsolat";
 		print mysqli_error($mysqli);
 	}
 	// close connection
@@ -527,7 +527,7 @@ function listOld(){
 	
 	}else{
 		print mysqli_error($mysqli);
-		print ("HIBA");
+		print ("nincs adatbázis kapcsolat");
 	}
 	// close connection
 	$mysqli->close();
@@ -569,7 +569,7 @@ function inputStatistic($weekday,$day,$day2){
 		$str.= '</table>';
 		print $str;
 	}else{
-		print "hiba";
+		print "nincs adatbázis kapcsolat";
 		print mysqli_error($mysqli);
 	}
 }
@@ -635,7 +635,7 @@ function outputStatistic($weekday){
 					$str.= '</table>';
 					print $str;
 		}else{
-			print "hiba";
+			print "nincs adatbázis kapcsolat";
 			print mysqli_error($mysqli);
 		}	
 		
@@ -709,7 +709,7 @@ function supplierOption(){
 
 		$results->free();
 	}else{
-		print "hiba";
+		print "nincs adatbázis kapcsolat";
 		print mysqli_error($mysqli);
 	}
 
@@ -729,7 +729,7 @@ function productOption(){
 		// Frees the memory associated with a result
 		$results->free();
 	}else{
-		print "hiba";
+		print "nincs adatbázis kapcsolat";
 		print mysqli_error($mysqli);
 	}
 	// close connection
@@ -754,7 +754,7 @@ function productOptionStorage($filter){
 
 		$results->free();
 	}else{
-		print "hiba";
+		print "nincs adatbázis kapcsolat";
 		print mysqli_error($mysqli);
 	}
 	// close connection
@@ -778,7 +778,7 @@ function productOptionOutput($filter){
 		print '</select>';
 		$results->free();
 	}else{
-		print "hiba";
+		print "nincs adatbázis kapcsolat";
 		print mysqli_error($mysqli);
 	}
 
@@ -796,7 +796,7 @@ function categoryOption(){
 
 		$results->free();
 	}else{
-		print "hiba";
+		print "nincs adatbázis kapcsolat";
 		print mysqli_error($mysqli);
 	}
 	// close connection
@@ -812,7 +812,7 @@ function getDataById($id){
 		}
 		$results->free();
 	}else{
-		print "hiba";
+		print "nincs adatbázis kapcsolat";
 		print mysqli_error($mysqli);
 	}
 	
@@ -866,7 +866,7 @@ function getDataById($id){
 		}
 		$results->free();
 	}else{
-		print "hiba";
+		print "nincs adatbázis kapcsolat";
 		print mysqli_error($mysqli);
 	}
 	

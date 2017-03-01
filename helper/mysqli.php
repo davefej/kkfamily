@@ -1,10 +1,19 @@
 <?php
 
+require('configuration.php');
+
+function warning_handler($errno, $errstr) {
+	http_response_code(500);
+	errorlog("WARNING DB ERROR \n".$errno);
+}
+set_error_handler("warning_handler", E_WARNING);
+
+
 if (session_status() == PHP_SESSION_NONE) {
 	session_start();
 }
 
-require('configuration.php');
+
 function connect(){
 	$mysql_host = getconfig('dbhost');
 	$mysql_database = getconfig('dbname');
@@ -13,10 +22,12 @@ function connect(){
 	$db = new mysqli($mysql_host, $mysql_user, $mysql_password, $mysql_database);
 	if($db->connect_errno > 0){
 		errorlog('error not connected to database');
+	}else{
+		if(!mysqli_set_charset($db, "utf8")){
+			errorlog('error charset not loading');
+		}
 	}
-	if(!mysqli_set_charset($db, "utf8")){
-		errorlog('error charset not loading');
-	}
+
 	return $db;
 }
 function insert($sql){
@@ -55,5 +66,6 @@ function login($user,$pass){
 	$mysqli->close();
 	return $ret.'_'.$id;
 }
+
 
 ?>

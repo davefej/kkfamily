@@ -377,7 +377,7 @@ function alertcheck(){
         	} 
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            bootbox.alert("Internet vagy szerver hiba<br/>"+textStatus+"<br/>"+errorThrown)
+            
         }
     });
 	return false;

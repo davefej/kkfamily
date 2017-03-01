@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<?php
+		
 		session_start();
 		
 		$version = rand();

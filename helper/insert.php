@@ -40,6 +40,7 @@ if(array_key_exists("type",$data)){
 	}
 
 	return insert($sql);
+	
 }
  
 ?>
