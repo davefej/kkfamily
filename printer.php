@@ -1,5 +1,6 @@
 <?php
 require 'helper/mysqli.php';
+header('Content-Type: text/html; charset=utf-8');
 
 if(isset($_GET['pass']) && $_GET['pass'] == "kkpass123"){
 	
