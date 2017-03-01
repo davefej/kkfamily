@@ -1,4 +1,4 @@
-package print_web;
+package kkprint;
 
 
 import java.io.BufferedWriter;
@@ -9,10 +9,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
+import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Scanner;
+
+import javax.swing.JOptionPane;
 
 public class Main {
 	
@@ -24,17 +27,16 @@ public class Main {
 			
 			printer = new Print(this);
 			
-			if(args.length > 0 && args[0].equals("p")){
-				printer.list();
-				return;
-			}
 			if(!(new File("printer.txt")).exists()){
-				log("Printer TXT hiényzik. Tartalma a géphez csatlakoztatott nyomtató száma.");
-				printer.list();
+				log("printer.txt hiányzik. Tartalma a géphez csatlakoztatott nyomtató száma.");
+				alert("printer.txt hiányzik. Listázza a printereket a másik alkalmazással");
+				System.exit(1);
 			}
 			
 			if(!(new File("db.txt")).exists()){
-				log("DB TXT hiányzik. Tartalma: webhost#_#...#_#dbpass2");
+				log("db.txt hiányzik. Tartalma: webhost#_#...#_#dbpass2");
+				alert("db.txt hiányzik. Tartalma: webhost#_#...#_#dbpass2");
+				System.exit(1);
 			}
 			
 			try {
@@ -61,32 +63,46 @@ public class Main {
 			} catch (Exception e) {				
 				e.printStackTrace();
 				error("init error "+e.toString());
-				return;
+				alert("Inícializálási HIBA: "+e.toString()+" \n Ellenőrizze az internet kapcsolatot valamint a nyomtatóval a kábelösszeköttetést");
+				System.exit(1);
 			}		
 		
 			int i = 1;
 			int sum = 0;
 			boolean last = false;
+			int first = 1000;
+		
 			while(true){
-				int count = web.exec();
-				log("updated: "+count);
-
+				
+				if(new File("stop.txt").exists()){
+					alert("stop.txt miatt leállás");
+					System.exit(1);
+				}
+				
+				
+				int count = web.exec();				
+				
 				sum += count;
 				
-				int sleep = 20000;				
+				int sleep = 10000;				
 				if(last){
-					sleep = 10000;
+					sleep = 5000;
 				}
 				if(sum > 0){
-					sleep = 5000;					
+					sleep = 2500;					
+				}
+				if(first > 0){
+					first--;
+					sleep = 2500;
 				}
 			
 				
-				try {
-					log("sleep: "+sleep);
+				try {					
 					Thread.sleep(sleep);
 				} catch (InterruptedException e) {
 					error("thread sleep error "+e.toString());
+					alert("thread sleep HIBA\n kérjük indítsa újra a progamot");
+					System.exit(1);
 				}
 				
 				if(i == 999){
@@ -164,7 +180,7 @@ public class Main {
 				log("zpl from file "+zpl_cache);
 			}
 		}else{
-			zpl_cache =  "^XA  ^MTD ^CFA,30   ^FO170,30^FD#prod#^FS  ^FO170,65^FD#suppl#^FS  ^FO170,100^FD#date_amount#^FS  ^BY3,3,100 ^FO170,150 ^BC^FD#id#^FS ^FO500,60 ^BQN,2,7 ^FDMM,#id#^FS ^XZ";
+			zpl_cache =  "^XA  ^MTD ^CFA,30   ^FO170,30^FD#prod#^FS  ^FO170,65^FD#suppl#^FS  ^FO170,100^FD#date_amount#^FS  ^BY3,3,100 ^FO170,150 ^BC^FD#id#^FS ^FO500,60 ^BQN,2,7 ^FDMM,A#id#^FS ^XZ";
 			log("zpl from code "+zpl_cache);
 		}		
 	}
@@ -198,7 +214,14 @@ public class Main {
 		while(str.contains(old)){
 			str = str.replace(old, New);
 		}
-		return str;
+		return stripAccents(str);
+	}
+	
+	public static String stripAccents(String s) 
+	{
+	    s = Normalizer.normalize(s, Normalizer.Form.NFD);
+	    s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+	    return s;
 	}
 	
 	public void error(String txt){
@@ -229,5 +252,9 @@ public class Main {
 		} catch (IOException e) {
 		   
 		}
+	}
+	
+	public void alert(String str){
+		JOptionPane.showMessageDialog(null,str);
 	}
 }

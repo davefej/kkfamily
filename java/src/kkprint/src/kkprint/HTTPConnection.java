@@ -1,4 +1,4 @@
-package print_web;
+package kkprint;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -36,10 +36,8 @@ public class HTTPConnection {
 					int id = Integer.parseInt(data[0]);
 					int amount = Integer.parseInt(data[1]);
 					if(main.print(id,amount,data[2],data[3],data[4],data[5])){	        		
-		        		main.log("print OK "+id);
 		        		return 1;
-		        	}else{	        		
-		        		main.log("print Error "+id);
+		        	}else{		        		
 		        		return -1;
 		        	}
 				}else{
@@ -89,19 +87,16 @@ public class HTTPConnection {
 		}
 
 		BufferedReader in = new BufferedReader(
-		        new InputStreamReader(con.getInputStream()));
+		        new InputStreamReader(con.getInputStream(),"UTF-8"));
 		String inputLine;
 		StringBuffer response = new StringBuffer();
 
 		while ((inputLine = in.readLine()) != null) {
 			response.append(inputLine);
 		}
-		in.close();
-		
+		in.close();		
 		return response.toString();
-
 	}
-
 	
 	private void sendError(String error){
 
@@ -109,8 +104,7 @@ public class HTTPConnection {
 
 		URL obj;
 		try {
-			obj = new URL(url);
-		
+			obj = new URL(url);		
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();	
 			// optional default is GET
 			con.setRequestMethod("GET");
@@ -121,8 +115,6 @@ public class HTTPConnection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-
 	}
 
 }

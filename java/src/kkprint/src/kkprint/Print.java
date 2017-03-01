@@ -1,4 +1,4 @@
-package print_web;
+package kkprint;
 
 
 import javax.print.Doc;
@@ -32,7 +32,8 @@ public class Print {
 			doc = new SimpleDoc(commands.getBytes("UTF-8"), flavor, null);
 		
 			if(job != null){								
-				job.print(doc, null);				
+				job.print(doc, null);
+				main.log("********\nprint\n**********\n"+str+"\n");
 			}
 				
 		} catch (Exception e) {
