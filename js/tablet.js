@@ -29,7 +29,7 @@ function output(id,mennyiseg){
 }
 
 function olderOutput(id,amount){
-	bootbox.confirm('<h3>Régebbi termék biztos, hogy kiadja?</h3>',function (yes){
+	bootbox.confirm('<h3>Újabb termék biztos, hogy kiadja?</h3>',function (yes){
 		if(yes){
 			createOutput(id,amount,true);			
 		}else{

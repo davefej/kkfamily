@@ -239,10 +239,11 @@ function updateAlert(id){
 	});
 }
 
-function updateInventory(id,amount){
+function updateInventory(id,amount,time){
 	update({
 		"id":id,
 		"amount":amount,
+		"time":time,
 		"type":"inventory"
 	});
 }

@@ -53,11 +53,24 @@ echo "<br/>...";
 require("../common/footer.php");
 
 function suppliesTable($results){
-	print '<table class="table table-hover sortable">';
+	
+	print '<table class="table table-hover">';
 	print '<thead>';
 	print '<tr>';
 	print '<th>';
 	productOptionStorage("");
+	print '</th>';
+	print '<th>.</th>';
+	print '<th>.</th>';
+	print '</tr>';
+	print '</thead>';
+	print '</table>';
+	
+	print '<table class="table table-hover sortable">';
+	print '<thead>';
+	print '<tr>';
+	print '<th>';
+	
 	print 'Alapanyag név</th>';
 	print '<th>Mennyiség</th>';
 	print '</tr>';
@@ -136,12 +149,22 @@ function listStorage($id){
 	$mysqli = connect();
 	if($results = $mysqli->query(palletSQL2($filter))){
 
+		print '<table class="table table-hover">';
+		print '<thead>';
+		print '<tr>';
+		print '<th>';
+		productOptionStorage("");
+		print '</th>';
+		print '<th>.</th>';
+		print '<th>.</th>';
+		print '</tr>';
+		print '</thead>';
+		print '</table>';
 		print '<table class="table table-hover sortable">';
 		print '<thead>';
 		print '<tr>';
 		print '<th>ID</th>';
 		print '<th>';
-		productOptionStorage($id);
 		print 'Alapanyag név</th>';
 		print '<th>Beszállító Neve</th>';
 		print '<th>Beérkezés ideje</th>';

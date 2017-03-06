@@ -170,7 +170,7 @@ function periodOutput($day,$last,$detail){
 			 }else{
 			 	$str .= '</table>';
 			 	print $str;
-			 	print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 80%"><strong>Semmmit nem adtak ki a raktárból!</strong></div>';
+			 	print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 85%"><strong>Semmmit nem adtak ki a raktárból!</strong></div>';
 			 	
 			 }
 
@@ -296,7 +296,7 @@ function periodSpare($day,$last,$detail){
 			}else{
 				$str .= '</table>';
 				print $str;
-				print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 80%"><strong>Semmmit nem adtak ki a raktárból!</strong></div>';
+				print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 85%"><strong>Semmmit nem adtak ki a raktárból!</strong></div>';
 					
 			}
 
@@ -416,7 +416,7 @@ function periodInput($day,$last,$detail){
 				 }else{
 				 	$str .= '</table>';
 				 	print $str;
-				 	print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 80%"><strong>Ma még semmmit nem adtak ki a raktárból!</strong></div>';
+				 	print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 85%"><strong>Ma még semmmit nem adtak ki a raktárból!</strong></div>';
 				 }
 				 
 				 $colors = array( 'rgba(255, 99, 132, 0.8)',
@@ -739,7 +739,7 @@ function productOption(){
 function productOptionStorage($filter){
 	$mysqli = connect();
 	if($results = $mysqli->query("SELECT * FROM product where deleted = false order by name")){
-		print '<select id="prod_select" onchange="filterProd()" style="width: 130%;" class="form-control">';
+		print '<select id="prod_select" onchange="filterProd()" style="width: 50%;" class="form-control">';
 
 		print '<option  value=""> Összes </option>';
 		while($row = $results->fetch_assoc()) {

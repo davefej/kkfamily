@@ -21,9 +21,10 @@ require("../common/header.php");
 						<div>
 						<?php 			
 							sqlExecute(
-						"SELECT a.id, a.type, a.param, a.param2,
-						a.time, u.name, a.seen from alert a, user u 
+						"SELECT a.id, a.type, a.param, a.param2, pr.name as prname,
+						a.time, u.name, a.seen from alert a, user u, pallet p, product pr
 						where u.id = a.user_id and a.deleted = false 
+						and a.param2=p.id and p.product_id = pr.id
 						and a.type='output' order by time desc ",
 						'alertoutputTable');
 						?>
@@ -196,6 +197,7 @@ function alertoutputTable($results){
 	print '<tr>';
 	print '<th>Kiadás id</th>';
 	print '<th>Raklap id</th>';
+	print '<th>Termék Név</th>';
 	print '<th>Raktáros</th>';
 	print '<th>Időpont</th>';
 	print '<th>Láttam</th>';
@@ -209,6 +211,7 @@ function alertoutputTable($results){
 		print '>';
 		print '<td>'.$row["param"].'</td>';
 		print '<td>'.$row["param2"].'</td>';
+		print '<td>'.$row["prname"].'</td>';
 		print '<td>'.$row["name"].'</td>';
 		print '<td>'.$row["time"].'</td>';
 		if($row["seen"] == '0' ){

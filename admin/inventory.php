@@ -36,7 +36,7 @@ function inventoryTable($results){
 		print '<td>'.$row["time"].'</td>';
 		print '<td>'.$row["rest"].'</td>';
 		print '<td>'.$row["user"].'</td>';
-		print '<td><button class="btn btn-sm btn-default" onclick="inventory_update('.$row["id"].','.$row["rest"].')">Szerkeszt</button></td>';
+		print '<td><button class="btn btn-sm btn-default" onclick="inventory_update('.$row["id"].','.$row["rest"].",'".$row["time"]."'".')">Szerkeszt</button></td>';
 		print '<td><button class="btn btn-sm btn-danger" onclick="deletePallet('.$row["id"].')">Töröl</button></td>';
 		print '</tr>';
 	}

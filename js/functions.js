@@ -94,9 +94,16 @@ function bbsave(){
 		
 	}else if(tipus == "inventory_update"){
 		
+		var time = $('#inventory_update_time').val()
+		var date = Date.parse(time);
+		if(isNaN(date)){
+			bootbox.alert("Hibás Dátum mező formátum ÉÉÉÉ-HH-NN ÓÓ:PP:MM")
+			return;
+		}
+		
 		var name = $('#inventory_update_amount').val()		
 		var id = $('#type').attr("id2");
-		updateInventory(id,name)
+		updateInventory(id,name,time)
 		
 	}
 	
@@ -303,7 +310,7 @@ str += "</table>";
 
 function editProduct(id){
 	var nev = $('#alapnev_'+id).html();
-	var kat = $('#alapkat_'+id).html();
+	var kat = $('#alapkat_'+id).attr("catid");
 	var min = $('#alapmin_'+id).html();
 	var exp = $('#alapexp_'+id).html();
 	var unit = $('#alapunit_'+id).html();
@@ -348,6 +355,7 @@ function editProduct(id){
 		str += "</tr>";
 	str += "</table>";
 	bootbox.alert(str);
+	$('#edit_prod_cat').val(kat);
 
 }
 
@@ -421,22 +429,28 @@ function editCategory(id){
 	bootbox.alert(str);
 }
 
-function inventory_update(id,amount){
+function inventory_update(id,amount,time){
 	var str = '<input type="hidden" id="type" value="inventory_update" id2="'+id+'"/>';
 	str += '<table class = "table table-hover">';
 	str += "<thead>";
 		str += "<tr>";
 			str += "<th>";
 				str += "Mennyiség";
-			str += "</th>";			
+			str += "</th>";	
+			str += "<th>";
+				str += "IDŐ";
+				str += "</th>";	
 		str += "</tr>";
 	str += "</thead>";
 		str += "<tr>";
 			str += "<td>";
 				str += "<input type='text' maxlength='50' value="+amount+" id='inventory_update_amount'>";
-			str += "<td>";
-		str += "</tr>";
-	str += "</table>";
+			str += "</td>";
+		str += "<td>";
+			str += "<input type='text' maxlength='50' value='"+time+"' id='inventory_update_time'>";
+		str += "</td>";
+	str += "</tr>";
+str += "</table>";
 	bootbox.alert(str);
 }
 

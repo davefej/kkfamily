@@ -6,7 +6,7 @@ require("../common/header.php");
 	sqlExecute(
 			"SELECT p.id as id, p.name as name, 
 			p.minimum as minimum, p.expire as expire, p.unit as unit,
-			c.name as cat FROM product p, category c 
+			c.name as cat, c.id as catid FROM product p, category c 
 			WHERE c.id = p.category_id and p.deleted = false",
 			'productTable');
 
@@ -37,7 +37,7 @@ function productTable($results){
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
 		print '<td id="alapnev_'.$row["id"].'">'.$row["name"].'</td>';
-		print '<td id="alapkat_'.$row["id"].'">'.$row["cat"].'</td>';
+		print '<td id="alapkat_'.$row["id"].'" catid="'.$row["catid"].'">'.$row["cat"].'</td>';
 		print '<td id="alapunit_'.$row["id"].'">'.$row["unit"].'</td>';
 		print '<td id="alapmin_'.$row["id"].'">'.$row["minimum"].'</td>';
 		print '<td id="alapexp_'.$row["id"].'">'.$row["expire"].'</td>';
