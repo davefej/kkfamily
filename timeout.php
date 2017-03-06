@@ -21,7 +21,7 @@ session_destroy();
 		<div class="container">
 			<div class="row">
     			<div class="span2 well col-lg-5"  style="float: none; margin: 0 auto;">
-    				<legend>Lejárt az idő, kérjük jelentkezzen be újra <a href="index.html">Log in!</a></legend>
+    				<legend>Kérjük jelentkezzen be újra <a href="index.html">Log in!</a></legend>
 					
 				</div>
 			</div>                

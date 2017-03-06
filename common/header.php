@@ -3,9 +3,9 @@
 		<?php
 		
 		session_start();
-		/*if(!isset($_HEADER["user_id"])){
+		if(!isset($_SESSION["user_id"])){
 			header('Location: ../timeout.php');
-		}*/
+		}
 		
 		$version = rand();
 			if($selected == "admin")
