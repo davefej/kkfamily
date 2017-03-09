@@ -591,10 +591,23 @@ function outputStatistic($weekday){
 		if($i==1 || $i == 3)
 			print '<tr>';
 		print '<td>';
-		$back = $i*7-1-6;
+		$back = ($i)*7-1-6;
 		$day = date('Y-m-d', strtotime("-".$back." days"));
-		$back = $i*7-1;
+		$back = ($i)*7-1;
 		$day2 = date('Y-m-d', strtotime("-".$back." days"));
+		
+		
+		$back = $back+((int)date( "w")-1)-$weekday;
+		
+		if((int)date( "w")-1 >= $weekday){
+			$back = $back-6;
+		}else{
+			$back = $back+1;
+		}
+		
+		
+		
+		$currdate = date('Y-m-d', strtotime("-".$back." days"));
 		
 		$mysqli = connect();
 		if($results = $mysqli->query(
@@ -608,7 +621,7 @@ function outputStatistic($weekday){
 					$str =  '<table class="table table-hover ">';
 					$str .= '<thead>';
 					$str .= '<tr class="tableHeader">';
-					$str .= '<th>'.$day2.' -> '.$day.'</th>';
+					$str .= '<th>'.strval($i).' hete '.$currdate.'</th>';
 					$str .= '<th>'.daymap($weekday).'</th>';
 					
 					$str .= '</tr>';
