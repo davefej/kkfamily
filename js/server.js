@@ -19,10 +19,11 @@ function newUser(name,password,user_type){
     },reload);
 }
 
-function newSupplier(name,address){
+function newSupplier(name,address,code){
 	insert({
     	"name":name,
     	"address":address,
+    	"code":code,
     	"type":"supplier"
     },reload);
 	
@@ -175,11 +176,12 @@ function updateUserPass(id,password){
 	});
 }
 
-function updateSupplier(id,name,address){
+function updateSupplier(id,name,address,code){
 	update({
 		"id":id,
 		"name":name,
 		"address":address,
+		"code":code,
 		"type":"supplier"
 	});
 }

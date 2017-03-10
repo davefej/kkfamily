@@ -13,7 +13,7 @@ if(array_key_exists("type",$data)){
 	}else if($data["type"] == "user_password"){
 		$sql = "UPDATE `user` SET `password` = '".$data['password']."' WHERE `user`.`id` = ".$data['id'];				
 	}else if($data["type"] == "supplier"){
-		$sql = "UPDATE `supplier` SET `name` = '".$data['name']."', `address` = '".$data['address']."' WHERE `id` = ".$data['id'];
+		$sql = "UPDATE `supplier` SET `supp_code` = '".$data['code']."', `name` = '".$data['name']."', `address` = '".$data['address']."' WHERE `id` = ".$data['id'];
 	}else if($data["type"] == "product"){
 		$sql = "UPDATE `product` SET `name` = '".$data['name']."', `category_id` = '".$data['category_id']."', `type` = '".$data['product_type']."' , `minimum` = '".$data['min']."', `expire` = '".$data['expire']."', `unit` = '".$data['unit']."' WHERE `product`.`id` = ".$data['id'];
 	}else if($data["type"] == "trash"){

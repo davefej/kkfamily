@@ -8,8 +8,6 @@
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
 	    </button>
 			<a class="navbar-brand" href="admin.php"><img alt="KK Family" src="../img/kkfamily_logo.png"></a>
 		</div>

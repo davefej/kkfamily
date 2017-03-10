@@ -18,7 +18,8 @@ function bbsave(){
 		
 		var name = $('#new_supplier_name').val()
 		var address = $('#new_supplier_address').val()
-		newSupplier(name,address)
+		var code = $('#new_supplier_code').val()
+		newSupplier(name,address,code)
 	
 	}else if(tipus == "createUser"){
 		
@@ -61,8 +62,9 @@ function bbsave(){
 		
 		var name = $('#edit_supplier_name').val()
 		var address = $('#edit_supplier_address').val()
+		var code = $('#edit_supplier_code').val()
 		var id = $('#type').attr("id2");
-		updateSupplier(id,name,address)
+		updateSupplier(id,name,address, code)
 		
 	}else if(tipus == "editProduct"){
 		
@@ -101,9 +103,9 @@ function bbsave(){
 			return;
 		}
 		
-		var name = $('#inventory_update_amount').val()		
+		var amount = $('#inventory_update_amount').val()		
 		var id = $('#type').attr("id2");
-		updateInventory(id,name,time)
+		updateInventory(id,amount,time)
 		
 	}
 	
@@ -160,9 +162,12 @@ function createProduct(){
 
 function createSupplier(){
 	var str = '<input type="hidden" id="type" value="createSupplier"/>';
-	str += '<table class = "table table-hover">';
+	str += '<table class = "table table-default">';
 	str += "<thead>";
 		str += "<tr>";
+			str += "<th>";
+				str += "Ügyfélkód";
+			str += "</th>";
 			str += "<th>";
 				str += "Név";
 			str += "</th>";
@@ -173,8 +178,11 @@ function createSupplier(){
 	str += "</thead>";
 		str += "<tr>";
 			str += "<td>";
+				str += "<input type='text' maxlength='50' id='new_supplier_code'>";
+			str += "</td>";
+			str += "<td>";
 				str += "<input type='text' maxlength='50' id='new_supplier_name'>";
-			str += "</th>";
+			str += "</td>";
 			str += "<td>";
 			str += "<input type='text' maxlength='50' id='new_supplier_address'>";
 			str += "</td>";
@@ -185,7 +193,7 @@ function createSupplier(){
 
 function createUser(){
 	var str = '<input type="hidden" id="type" value="createUser"/>';
-	str += '<table class = "table table-hover">';
+	str += '<table class = "table table-hover" style="width: 100%;">';
 	str += "<thead>";
 		str += "<tr>";
 			str += "<th>";
@@ -283,10 +291,14 @@ function createTrash(pallet_id,full){
 function editSupplier(id){
 	var nev = $('#besznev_'+id).html();
 	var cim = $('#beszcim_'+id).html();
+	var code = $('#beszkod_'+id).html();
 	var str = '<input type="hidden" id="type" value="editSupplier" id2="'+id+'"/>';
-	str += '<table class = "table table-hover">';
+	str += '<table class = "table table-default">';
 	str += "<thead>";
 		str += "<tr>";
+			str += "<th>";
+				str += "Ügyfélkód";
+			str += "</th>";
 			str += "<th>";
 				str += "Név";
 			str += "</th>";
@@ -297,8 +309,11 @@ function editSupplier(id){
 	str += "</thead>";
 		str += "<tr>";
 			str += "<td>";
+				str += "<input type='text' maxlength='50' value='"+code+"' id='edit_supplier_code'>";
+			str += "</td>";
+			str += "<td>";
 				str += "<input type='text' maxlength='50' value='"+nev+"' id='edit_supplier_name'>";
-			str += "</th>";
+			str += "</td>";
 			str += "<td>";
 			str += "<input type='text' maxlength='50' value='"+cim+"' id='edit_supplier_address'>";
 			str += "</td>";
@@ -444,7 +459,7 @@ function inventory_update(id,amount,time){
 	str += "</thead>";
 		str += "<tr>";
 			str += "<td>";
-				str += "<input type='text' maxlength='50' value="+amount+" id='inventory_update_amount'>";
+				str += "<input type='number' maxlength='50' value="+amount+" id='inventory_update_amount'>";
 			str += "</td>";
 		str += "<td>";
 			str += "<input type='text' maxlength='50' value='"+time+"' id='inventory_update_time'>";
@@ -538,10 +553,20 @@ function filterProd(){
 	
 }
 
-function filterProdOutput(){
-	var prod_id = $('#prod_select').val();
-	window.location = "kiadas.php?filter=prod&id="+prod_id;
-	
+function filterProdOutput(mobile){
+	if(mobile){
+		var prod_id = $('#prod_select_mobile').val();
+		window.location = "kiadas.php?filter=prod&id="+prod_id;
+	}
+	else{
+		var prod_id = $('#prod_select').val();
+		window.location = "kiadas.php?filter=prod&id="+prod_id;
+	}
+}
+
+function filterCategory(){
+	var cat_id = $('#cat_select').val();
+	window.location = "storage.php?filter=cat&id="+cat_id;
 }
 
 function makesound(){	

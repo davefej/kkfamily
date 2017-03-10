@@ -78,8 +78,11 @@ a:active{
 
 thead{
 	background-color: #555555;
-	text-align:center;
 	color:white;
+}
+
+thead>tr>th{
+	text-align:center;
 }
 
 .navbar-inverse .navbar-brand:hover, 

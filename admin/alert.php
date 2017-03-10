@@ -118,7 +118,7 @@ function alertinputTable($results){
 			foreach ($data as $i => $value) {
 					
 				if(is_numeric($value) && (2 == (int)$value || 1 == (int)$value) && $i != 'product'){
-					print minosegmap2($i).' => '.minosegmap((int)$value).'<br/>';
+					print minosegmap2($i).': '.minosegmap((int)$value).'<br/>';
 				}
 			}
 		}

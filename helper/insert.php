@@ -13,7 +13,7 @@ if(array_key_exists("type",$data)){
 	}else if($data["type"] == "user"){
 		$sql = "INSERT INTO `user` (`id`, `name`, `password`, `type`, `deleted`) VALUES (NULL, '".$data['name']."', '".$data['password']."', '".$data['user_type']."' , '0')";				
 	}else if($data["type"] == "supplier"){
-		$sql = "INSERT INTO `supplier` (`id`, `name`, `address`, `deleted`) VALUES (NULL, '".$data['name']."', '".$data['address']."', '0')";
+		$sql = "INSERT INTO `supplier` (`id`,`supp_code`, `name`, `address`, `deleted`) VALUES (NULL,'".$data['code']."', '".$data['name']."', '".$data['address']."', '0')";
 	}else if($data["type"] == "product"){
 		$sql = "INSERT INTO `product` (`id`, `name`, `category_id`, `type`, `minimum` , `expire` , `unit`, `deleted`) VALUES (NULL, '".$data['name']."', '".$data['category_id']."', '".$data['product_type']."', '".$data['min']."', '".$data['expire']."', '".$data['unit']."', '0')";
 	}else if($data["type"] == "quality_form"){

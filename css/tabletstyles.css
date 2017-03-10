@@ -112,3 +112,13 @@ input.tabletForm{
 
 #prod_select{
 	width: 80%;
+}
+
+.mobile{
+	display: none;
+}
+
+@media screen and (max-width: 770px) {
+	.mobile{ display: block; }
+	.desktop{ display: none; }
+}

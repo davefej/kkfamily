@@ -150,7 +150,7 @@ require("../common/header.php");
 	  				Fogyásban lévő termékek
 	  			</a>
 			</div>
-			<div id="collapsed6" class="panel-collapse collapse in">
+			<div id="collapsed6" class="panel-collapse collapse">
 			  	<table class="table">
 			  		<tr>
 			  		<td>
@@ -166,7 +166,6 @@ require("../common/header.php");
 			  	</table>
 			</div>
 	</div>
-</div>
 
 	  <div class="panel panel-danger">
 	  	<div class="panel-heading">

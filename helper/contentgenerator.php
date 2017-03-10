@@ -577,117 +577,117 @@ function inputStatistic($weekday,$day,$day2){
 function outputStatistic($weekday){
 	$data = array();
 	print '<table class="table">';
-	
+
 	print '<thead><tr class="tableTitle"><th>Napi Statisztikák</th><th></th></tr></thead>';
-	
+
 	print '<tr>';
 	print '<td>';
 	print daypicker($weekday);
 	print '</td>';
 	print '</tr>';
-	
-	
+
+
 	for($i=1; $i<=4; $i++){
 		if($i==1 || $i == 3)
 			print '<tr>';
-		print '<td>';
-		$back = ($i)*7-1-6;
-		$day = date('Y-m-d', strtotime("-".$back." days"));
-		$back = ($i)*7-1;
-		$day2 = date('Y-m-d', strtotime("-".$back." days"));
-		
-		
-		$back = $back+((int)date( "w")-1)-$weekday;
-		
-		if((int)date( "w")-1 >= $weekday){
-			$back = $back-6;
-		}else{
-			$back = $back+1;
-		}
-		
-		
-		
-		$currdate = date('Y-m-d', strtotime("-".$back." days"));
-		
-		$mysqli = connect();
-		if($results = $mysqli->query(
-				"SELECT pr.name as product, sum(o.amount) as amount
+			print '<td>';
+			$back = ($i)*7-1-6;
+			$day = date('Y-m-d', strtotime("-".$back." days"));
+			$back = ($i)*7-1;
+			$day2 = date('Y-m-d', strtotime("-".$back." days"));
+
+
+			$back = $back+((int)date( "w")-1)-$weekday;
+
+			if((int)date( "w")-1 >= $weekday){
+				$back = $back-6;
+			}else{
+				$back = $back+1;
+			}
+
+
+
+			$currdate = date('Y-m-d', strtotime("-".$back." days"));
+
+			$mysqli = connect();
+			if($results = $mysqli->query(
+					"SELECT pr.name as product, sum(o.amount) as amount
 			FROM pallet p, product pr, output o where pr.id=p.product_id and o.pallet_id = p.id and
 				o.time >= '".$day2." 00:00:00'
 			and o.time <= '".$day." 23:59:59' and
 			WEEKDAY(o.time) = '".$weekday."' and
 			 p.deleted = false and pr.deleted = false and
 			o.deleted = false group by product order by p.product_id ")){
-					$str =  '<table class="table table-hover ">';
-					$str .= '<thead>';
-					$str .= '<tr class="tableHeader">';
-					$str .= '<th>'.strval($i).' hete '.$currdate.'</th>';
-					$str .= '<th>'.daymap($weekday).'</th>';
+			$str =  '<table class="table table-hover ">';
+			$str .= '<thead>';
+			$str .= '<tr class="tableHeader">';
+			$str .= '<th>'.strval($i).' hete '.$currdate.'</th>';
+			$str .= '<th>'.daymap($weekday).'</th>';
+				
+			$str .= '</tr>';
+			$str .= '<tr>';
+			$str .= '<th>Alapanyag</th>';
+			$str .= '<th>Mennyiség</th>';
+			$str .= '</tr>';
+			$str .= '</thead>';
+			while($row = $results->fetch_assoc()) {
+				$prod = $row["product"];
+				if(array_key_exists($prod,$data))
+				{
+					$data[$prod] = $data[$prod]+(int)$row["amount"];
+				}else{
+					$data[$prod] = $row["amount"];
+				}
+				$str.= '<tr>';
+
+				$str.= '<td>'.$row["product"].'</td>';
+				$str.= '<td>'.$row["amount"].'</td>';
+
+				$str.= '</tr>';
+			}
+			$str.= '</table>';
+			print $str;
+			}else{
+				print "nincs adatbázis kapcsolat";
+				print mysqli_error($mysqli);
+			}
+
+
+			print '</td>';
+			if($i==2 || $i == 4)
+				print '</tr>';
 					
-					$str .= '</tr>';
-					$str .= '<tr>';
-					$str .= '<th>Alapanyag</th>';
-					$str .= '<th>Mennyiség</th>';
-					$str .= '</tr>';
-					$str .= '</thead>';
-					while($row = $results->fetch_assoc()) {
-						$prod = $row["product"];
-						if(array_key_exists($prod,$data))
-						{							
-							$data[$prod] = $data[$prod]+(int)$row["amount"];
-						}else{
-							$data[$prod] = $row["amount"];
-						}
-						$str.= '<tr>';
-		
-						$str.= '<td>'.$row["product"].'</td>';
-						$str.= '<td>'.$row["amount"].'</td>';
-		
-						$str.= '</tr>';
-					}
-					$str.= '</table>';
-					print $str;
-		}else{
-			print "nincs adatbázis kapcsolat";
-			print mysqli_error($mysqli);
-		}	
-		
-		
-		print '</td>';
-		if($i==2 || $i == 4)
-			print '</tr>';
-			
 	}
 	print '</table>';
-//ÖSSZEGZŐ
+	//ÖSSZEGZŐ
 	print '<br/>';
 	print '<hr style="width:90%">';
-	
+
 	$str =  '<table class="table table-hover ">';
 	$str .= '<thead><tr class="tableTitle"><th>Átlag</th></tr></thead>';
 	$str .= '<thead>';
 	$str .= '<tr class="tableHeader">';
 	$str .= '<th>'.$day2.' -> '.$day.'</th>';
 	$str .= '<th>'.daymap($weekday).'</th>';
-		
+
 	$str .= '</tr>';
 	$str .= '<tr>';
 	$str .= '<th>Alapanyag</th>';
 	$str .= '<th>Mennyiség</th>';
 	$str .= '</tr>';
 	$str .= '</thead>';
-		foreach ($data as $key => $value) {		 	
-			$average = $value / 4;
-			$str.= '<tr>';
+	foreach ($data as $key => $value) {
+		$average = $value / 4;
+		$str.= '<tr>';
 			
-			$str.= '<td>'.$key.'</td>';
-			$str.= '<td>'.$average.'</td>';
+		$str.= '<td>'.$key.'</td>';
+		$str.= '<td>'.$average.'</td>';
 			
-			$str.= '</tr>';
-		}
+		$str.= '</tr>';
+	}
 	$str .= '</table>';
 	print $str;
-	
+
 }
 
 function daymap($weekday){
@@ -774,11 +774,13 @@ function productOptionStorage($filter){
 	$mysqli->close();
 }
 
-function productOptionOutput($filter){
+function productOptionOutput($filter, $mobile){
 	$mysqli = connect();
 	if($results = $mysqli->query("SELECT * FROM product where deleted = false order by name")){
-		print '<select id="prod_select" onchange="filterProdOutput()" class="form-control tabletForm">';
-
+		if($mobile)
+			print '<select id="prod_select_mobile" onchange="filterProdOutput('.$mobile.')" class="form-control tabletForm">';
+		else
+			print '<select id="prod_select" onchange="filterProdOutput('.$mobile.')" class="form-control tabletForm">';
 		print '<option  value=""> Összes </option>';
 		while($row = $results->fetch_assoc()) {
 			if($filter === $row["id"]){
@@ -798,15 +800,19 @@ function productOptionOutput($filter){
 	$mysqli->close();
 }
 
-function categoryOption(){
+function categoryOption($filter){
 	$mysqli = connect();
 	if($results = $mysqli->query("SELECT * FROM category where deleted = false order by name")){
-		print '<select id="#_#" class="form-control">';
+		print '<select id="cat_select" onchange="filterCategory()" class="form-control">';
+		print '<option  value=""> Zöldség & Gyümölcs </option>';
 		while($row = $results->fetch_assoc()) {
-			print '<option  value="'.$row["id"].'">'.$row["name"].'</option>';
+			if($filter === $row["id"]){
+				print '<option  value="'.$row["id"].'" selected>'.$row["name"].'</option>';
+			}else{
+				print '<option  value="'.$row["id"].'">'.$row["name"].'</option>';
+			}
 		}
 		print '</select>';
-
 		$results->free();
 	}else{
 		print "nincs adatbázis kapcsolat";
