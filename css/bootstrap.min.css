@@ -133,6 +133,8 @@
   color: #fff;
   background-color: #555555;
   border-color: #555555;
+  width: 90px;
+  height: 60px;
 }
 .btn-primary:focus,
 .btn-primary.focus {

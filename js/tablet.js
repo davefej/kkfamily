@@ -18,6 +18,10 @@ function input(e){
 	var palletQuality = $('#palletQuality').val()
 	var decision = $('#decision').val()
 	  
+	/*
+	localStorage.supplier = supplier;
+	localStorage.product = product;
+	*/
 	newQualityForm(sumDifference, appearance, consistency, smell, color,
 			clearness, palletQuality, decision,product,supplier,amount)
 	

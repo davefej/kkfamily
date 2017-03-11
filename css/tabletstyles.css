@@ -73,6 +73,12 @@ thead{
 	margin: 0 auto;
 }
 
+.btn-primary{
+	width: 140px;
+  min-height: 100px;
+  heigth:90%;
+}
+
 .container-fluid{
 	width: 95%;
 }
