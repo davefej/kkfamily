@@ -49,3 +49,8 @@ function trash(id,mennyiseg){
 		}
 	});	
 }
+
+function idkiadas(){
+	var id = $("#idkiadasnum").val()
+	window.location = "loadpallet.php?id="+id;
+}

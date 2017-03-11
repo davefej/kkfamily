@@ -25,14 +25,14 @@
 	  	<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta charset="utf-8">
 		
-		<script src="../js/functions.js?v=16" ></script>
-		<script src="../js/server.js?v=16" ></script>
+		<script src="../js/functions.js?v=17" ></script>
+		<script src="../js/server.js?v=17" ></script>
 		<script src="../js/Chart.js"></script>
-		<script src="../js/sorttable.j6"></script>
+		<script src="../js/sorttable.js"></script>
 		
 	<?php  if($selected == "tablet"){	//TODO css rand		?>							
 				<link href="../js/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
-				<script src="../js/tablet.js?v=16"></script>
+				<script src="../js/tablet.js?v=17"></script>
 				<link rel="stylesheet" type="text/css" href="../css/tabletstyles.css?v=<?php echo $version;?>">
 	<?php }else{ ?>
 				<link href="../js/bootstrap-3.3.7-dist/css/bootstrap.css" rel="stylesheet">
