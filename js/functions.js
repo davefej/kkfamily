@@ -92,6 +92,8 @@ function bbsave(){
 		
 		var name = $('#edit_category_name').val()		
 		var id = $('#type').attr("id2");
+		
+
 		updateCategory(id,name)
 		
 	}else if(tipus == "inventory_update"){
@@ -105,7 +107,16 @@ function bbsave(){
 		
 		var amount = $('#inventory_update_amount').val()		
 		var id = $('#type').attr("id2");
-		updateInventory(id,amount,time)
+		var output_trash = $('#type').attr("output_trash");
+		amount = parseInt(amount)
+		output_trash = parseInt(output_trash)
+		if(isNaN(output_trash) || isNaN(amount)){
+			bootbox.alert("HIBA a Mennyiség értékben");
+			return;
+		}
+		amount = parseInt(amount + output_trash)
+		
+		updateInventory(id,amount.toString(),time)
 		
 	}
 	
@@ -444,8 +455,15 @@ function editCategory(id){
 	bootbox.alert(str);
 }
 
-function inventory_update(id,amount,time){
-	var str = '<input type="hidden" id="type" value="inventory_update" id2="'+id+'"/>';
+function inventory_update(id,amount,time,orig){
+	orig = parseInt(orig)
+	amount1 = parseInt(amount)
+	if(isNaN(orig) || isNaN(amount1)){
+		bootbox.alert("HIBA a Mennyiség értékben");
+		return;
+	}
+		var output_trash = orig-amount1;
+	var str = '<input type="hidden" id="type" value="inventory_update" output_trash="'+output_trash+'" id2="'+id+'"/>';
 	str += '<table class = "table table-hover">';
 	str += "<thead>";
 		str += "<tr>";
