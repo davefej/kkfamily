@@ -74,8 +74,13 @@ thead{
 }
 
 .btn-primary{
-	width: 90%;
-  	heigth:90%;
+	min-height: 80px;
+	min-width: 80px;
+}
+
+.btn-default{
+	min-height: 80px;
+	min-width: 80px;
 }
 
 .btn-danger{
@@ -112,7 +117,7 @@ td{
 
 select.tabletForm{
 	font-size: 160%;
-	height:150%;
+	height:180%;
 }
 
 input.tabletForm{
