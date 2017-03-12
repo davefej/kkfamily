@@ -57,9 +57,13 @@ function newPallet(product_id,supplier_id,amount,qualityForm){
     	"amount":amount,
     	"quality_form":qualityForm,
     	"type":"pallet"
-	},reload);
+	},clearAmount);
 }
 
+function clearAmount(){
+	bootbox.alert("Bevétel Sikeres!")
+	$("#suly").val(0);
+}
 
 function newOutput(pallet_id,amount,alert){	
 

@@ -25,8 +25,8 @@
 	  	<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta charset="utf-8">
 		
-		<script src="../js/functions.js?v=21" ></script>
-		<script src="../js/server.js?v=21" ></script>
+		<script src="../js/functions.js?v=22" ></script>
+		<script src="../js/server.js?v=22" ></script>
 		<script src="../js/Chart.js"></script>
 		<script src="../js/sorttable.js"></script>
 		
