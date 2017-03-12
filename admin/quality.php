@@ -5,32 +5,59 @@ $selected ="admin";
 $selector ="quality";
 require("../common/header.php");
 
-if(isset($_GET["date"])){
-	$month_begin  = $_GET['date'];
-	$month_end =  date('Y-m-t', strtotime($month_begin));
+
+if(isset($_GET['type'])){
+	if($_GET['type'] == "day"){
+		if(isset($_GET['day'])){
+			$begin  = $_GET['day'];
+			$end = $_GET['day'];
+			$only_month = date('n', strtotime($begin));
+			$only_day = date('j', strtotime($begin));
+		}else{
+			$day  = date("Y-m-d");
+			$only_month = "";
+			$only_day = "";
+		}
+	}else if($_GET['type'] == "month"){
+		if(isset($_GET['month'])){
+			$begin  = $_GET['month'];
+			$end =  date('Y-m-t', strtotime($begin));
+			$only_month = date('n', strtotime($begin));
+			$only_day = "";
+		}else{
+			$begin  = date("Y-m-d");
+			$end = date("Y-m-t");
+			$only_month = "";
+			$only_day = "";
+		}
+	}
+
 }else{
-	$month_begin  = date("Y-m-01");
-	$month_end = date("Y-m-t");
+	$begin  = date("Y-m-01");
+	$end = date("Y-m-t");
+	$only_month = "";
+	$only_day = "";
 }
 
 
-sqlExecute(
+sqlExecute3(
 		"SELECT p.id as id, pr.name as name, p.amount as amount, p.time as time,u.name as user, q.sum_difference, 
 		q.appearance, q.consistency, q.smell, q.color,  q.clearness, q.pallet_quality, q.decision
 		FROM product pr, pallet p,quantity_form q, user u
 		WHERE  pr.deleted = false and u.id = p.user_id and
-		p.time >= '".$month_begin." 00:00:00' and
-		p.time <= '".$month_end." 23:59:59'
+		p.time >= '".$begin." 00:00:00' and
+		p.time <= '".$end." 23:59:59'
 		and p.product_id = pr.id and p.quantity_form_id = q.id",
-		'qualityinputTable');
+		'qualityinputTable', $only_month, $only_day);
 
-function qualityinputTable($results){
+function qualityinputTable($results, $month, $day){
 	
 	print '<table class="table table-hover ">';
 	print '<thead>';
 	print '<tr>';
-	print '<th colspan="12" class="dateth">'.monthpicker().'</th>';
-	print '<th><button class="btn btn-sm btn-default" onclick="reloadQuality()">Betölt</button></th>';
+	print '<th colspan="12" class="dateth">'.datepicker($day, $month, true).'</th>';
+	print '<th><button class="btn btn-sm btn-default" onclick="reloadMonthlyQuality()">Havi betöltés</button></th>';
+	print '<th><button class="btn btn-sm btn-default" onclick="reloadDailyQuality()">Napi betöltés</button></th>';
 	print '</thead>';
 	
 	print '</table>';
@@ -43,12 +70,12 @@ function qualityinputTable($results){
 	print '<th>Beszállítás Dátuma</th>';
 	print '<th>Eredeti Súly</th>';
 	print '<th>Súly különbség</th>';
-	print '<th>Kinézet</th>';
+	print '<th>Külső megjelenés, kártevőmentesség</th>';
 	print '<th>Állag</th>';
 	print '<th>Illat</th>';
 	print '<th>Szín</th>';
-	print '<th>Tisztaság</th>';
-	print '<th>Raklap minőség</th>';
+	print '<th>Jármű tisztaság, hőfok</th>';
+	print '<th>Raklap, ládák minőség</th>';
 	print '<th>Raktáros</th>';
 	print '<th>Átvétel</th>';	
 	print '</tr>';

@@ -32,6 +32,20 @@ function sqlExecute2($sql,$proces,$param){
 	$mysqli->close();
 }
 
+function sqlExecute3($sql,$proces,$param, $param2){
+	$mysqli = connect();
+	if($results = $mysqli->query($sql)){
+
+		$proces($results,$param, $param2);
+
+		$results->free();
+	}else{
+		print mysqli_error($mysqli);
+		print "hiba";
+	}
+	$mysqli->close();
+}
+
 //** REST PALLET LISTING SQL QUERY**//
 
 function palletSQL(){
@@ -89,7 +103,7 @@ function palletSQL3($filter,$groupby){
 
 //** OTHER FUNCTIONS **//
 
-function periodOutput($day,$last,$detail){
+function periodOutput($day, $month, $first,$last,$detail){
 
 	$labels = array();
 	$data = array();
@@ -108,28 +122,34 @@ function periodOutput($day,$last,$detail){
  				FROM  pallet p, product pr, output o, user u
 			where pr.id=p.product_id and o.pallet_id = p.id and o.user_id = u.id
 			 and 
-			o.time >= '".$day." 00:00:00' and
+			o.time >= '".$first." 00:00:00' and
 			o.time <= '".$last." 23:59:59' 
 			and p.deleted = false and pr.deleted = false and o.deleted = false ".$groupby." order by product")){
 
 			 $str =  '<table class="table table-hover">';
 			 $str .= '<thead>';
 			 $str .= '<tr class="tableHeader">';
+			 if($detail && $first != $last){
+			 	$str .= '<th colspan=2>'.$first." <br> ".$last.'</th>';
+			 }else if($first != $last){
+			 	$str .= '<th colspan=2>'.$first." <br> ".$last.'</th>';
+			 }
+			 	
+			 if($first === $last){
+			 	$str .= '<th colspan=2>'.$first.'</th>';
+			 }
+			 	
+			 $str .= '<th class="dateth">'.datepicker($day, $month, true).'</th>';
+			 
+			 $str .= '<th><button class="btn btn-sm btn-default"  onclick="monthlyOutput()">Havi Szűrés</button></th>';
+			 $str .= '<th><button class="btn btn-sm btn-default" onclick="dailyOutput()">Napi Szűrés</button></th>';
 			 
 			 if($detail){
-			 	$str .= '<th>'.$day." -> ".$last.' Részletes<input id="detailscb" type="checkbox" name="detailscb" checked></th>';
+			 	$str .= '<th>Részletes<input id="detailscb" type="checkbox" name="detailscb" checked></th>';
 			 }else{
-			 	$str .= '<th>'.$day." -> ".$last.' Részletes<input id="detailscb" type="checkbox" name="detailscb" ></th>';
+			 	$str .= '<th> Részletes<input id="detailscb" type="checkbox" name="detailscb" ></th>';
 			 }
-			 
-			 
-			 $str .= '<th class="dateth">'.datepicker(true) .'</th>';
-
-			 $str .= '<th><button class="btn btn-sm btn-default"  onclick="dailyOutput()">Napi Szűrés</button></th>';
-			 $str .= '<th><button class="btn btn-sm btn-default"  onclick="monthlyOutput()">Havi Szűrés</button></th>';
-
-			 $str .= '<th></th>';
-			 $str .= '<th></th>';
+			 	
 			 $str .= '</tr>';
 			 $str .= '<tr>';
 			 $str .= '<th>Kiadás ID</th>';
@@ -216,7 +236,7 @@ function periodOutput($day,$last,$detail){
 	$mysqli->close();
 }
 
-function periodSpare($day,$last,$detail){
+function periodSpare($day, $month, $first,$last,$detail){
 
 	$labels = array();
 	$data = array();
@@ -235,7 +255,7 @@ function periodSpare($day,$last,$detail){
  				FROM  pallet p, product pr, trash t, user u
 			where pr.id=p.product_id and t.pallet_id = p.id and t.user_id = u.id
 			 and
-			t.time >= '".$day." 00:00:00' and
+			t.time >= '".$first." 00:00:00' and
 			t.time <= '".$last." 23:59:59'
 			and p.deleted = false and pr.deleted = false and t.deleted = false 
 			".$groupby." order by product")){
@@ -244,16 +264,26 @@ function periodSpare($day,$last,$detail){
 			$str .= '<thead>';
 			$str .= '<tr class="tableHeader">';
 				
-			if($detail){
-			 	$str .= '<th>'.$day." -> ".$last.' Részletes<input id="detailscb" type="checkbox" name="detailscb" checked></th>';
-			 }else{
-			 	$str .= '<th>'.$day." -> ".$last.' Részletes<input id="detailscb" type="checkbox" name="detailscb" ></th>';
-			 }
+			if($detail && $first != $last){
+				$str .= '<th>'.$first." <br> ".$last.'</th>';
+			}else if($first != $last){
+				$str .= '<th>'.$first." <br> ".$last.'</th>';
+			}
+				
+			if($first === $last){
+				$str .= '<th>'.$first.'</th>';
+			}
+				
+			$str .= '<th class="dateth">'.datepicker($day, $month, true).'</th>';
 			
-			$str .= '<th class="dateth">'.datepicker(true) .'</th>';
-
-			$str .= '<th><button class="btn btn-sm btn-default"  onclick="dailySpare()">Napi Szűrés</button></th>';
 			$str .= '<th><button class="btn btn-sm btn-default"  onclick="monthlySpare()">Havi Szűrés</button></th>';
+			$str .= '<th><button class="btn btn-sm btn-default" onclick="dailySpare()">Napi Szűrés</button></th>';
+			
+			if($detail){
+				$str .= '<th>Részletes<input id="detailscb" type="checkbox" name="detailscb" checked></th>';
+			}else{
+				$str .= '<th> Részletes<input id="detailscb" type="checkbox" name="detailscb" ></th>';
+			}
 
 			$str .= '<th></th>';
 			$str .= '</tr>';
@@ -262,7 +292,7 @@ function periodSpare($day,$last,$detail){
 			$str .= '<th>Alapanyag</th>';
 			$str .= '<th>Mennyiség</th>';
 			$str .= '<th>Kiadási idő</th>';
-			$str .= '<th>Raktáros</th>';
+			$str .= '<th colspan=2>Raktáros</th>';
 			$str .= '</tr>';
 			$str .= '</thead>';
 			$i =false;
@@ -342,7 +372,7 @@ function periodSpare($day,$last,$detail){
 	$mysqli->close();
 }
 
-function periodInput($day,$last,$detail){
+function periodInput($day, $month, $first,$last,$detail){
 	$labels = array();
 	$data = array();
 
@@ -357,7 +387,7 @@ function periodInput($day,$last,$detail){
 			"SELECT p.id as id, pr.name as product, s.name as supplier, p.amount as amount, u.name as user
 	 				FROM supplier s, pallet p, product pr, user u
 				where pr.id=p.product_id and p.supplier_id = s.id and u.id = p.user_id
-				 and  p.time >= '".$day." 00:00:00' and
+				 and  p.time >= '".$first." 00:00:00' and
 			p.time <= '".$last." 23:59:59' 
 			and p.deleted = false and pr.deleted = false ".$groupby." order by supplier")){
 
@@ -365,21 +395,30 @@ function periodInput($day,$last,$detail){
 				 $str = '<table class="table table-hover">';
 				 $str .= '<thead>';
 				 $str .= '<tr class="tableHeader">';
-				 if($detail){
-				 	$str .= '<th>'.$day." -> ".$last.' Részletes<input id="detailscb" type="checkbox" name="detailscb" checked></th>';
-				 }else{
-				 	$str .= '<th>'.$day." -> ".$last.' Részletes<input id="detailscb" type="checkbox" name="detailscb" ></th>';
+				 if($detail && $first != $last){
+				 	$str .= '<th>'.$first." <br> ".$last.'</th>';
+				 }else if($first != $last){
+				 	$str .= '<th>'.$first." <br> ".$last.'</th>';
 				 }
 				 
-				 $str .= '<th class="dateth">'.datepicker(true).'</th>';
+				 if($first === $last){
+				 	$str .= '<th>'.$first.'</th>';
+				 }
+				 
+				 $str .= '<th class="dateth">'.datepicker($day, $month, true).'</th>';
 
-				 $str .= '<th><button class="btn btn-sm btn-default" onclick="dailyInput()">Napi Szűrés</button></th>';
 				 $str .= '<th><button class="btn btn-sm btn-default"  onclick="monthlyInput()">Havi Szűrés</button></th>';
+				 $str .= '<th><button class="btn btn-sm btn-default" onclick="dailyInput()">Napi Szűrés</button></th>';
 				
-
+				 if($detail){
+				 	$str .= '<th>Részletes<input id="detailscb" type="checkbox" name="detailscb" checked></th>';
+				 }else{
+				 	$str .= '<th> Részletes<input id="detailscb" type="checkbox" name="detailscb" ></th>';
+				 }
+				 
 				 $str .= '</tr>';
 				 $str .= '<tr>';
-				 $str .= '<th>Alapanyag</th>';
+				 $str .= '<th colspan=2>Alapanyag</th>';
 				 $str .= '<th>Beszállító Neve</th>';
 				 $str .= '<th>Mennyiség</th>';
 				 $str .= '<th>Raktáros</th>';
@@ -398,7 +437,7 @@ function periodInput($day,$last,$detail){
 				 	}
 
 				 	$str .= '<tr>';
-				 	$str .= '<td>'.$row["product"].'</td>';
+				 	$str .= '<td colspan=2>'.$row["product"].'</td>';
 				 	$str .= '<td>'.$row["supplier"].'</td>';
 				 	$str .= '<td>'.$row["amount"].'</td>';
 				 	$str .= '<td>'.$row["user"].'</td>';
@@ -406,7 +445,6 @@ function periodInput($day,$last,$detail){
 				 	$i = true;
 
 				 }
-				 
 				$str .= '</table>';
 
 				if($i){
@@ -811,6 +849,23 @@ function categoryOption($filter){
 			}else{
 				print '<option  value="'.$row["id"].'">'.$row["name"].'</option>';
 			}
+		}
+		print '</select>';
+		$results->free();
+	}else{
+		print "nincs adatbázis kapcsolat";
+		print mysqli_error($mysqli);
+	}
+	// close connection
+	$mysqli->close();
+}
+
+function categoryOptions(){
+	$mysqli = connect();
+	if($results = $mysqli->query("SELECT * FROM category where deleted = false order by name")){
+		print '<select id="#_#" class="form-control">';
+		while($row = $results->fetch_assoc()) {
+			print '<option  value="'.$row["id"].'">'.$row["name"].'</option>';
 		}
 		print '</select>';
 		$results->free();

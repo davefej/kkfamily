@@ -241,3 +241,7 @@ input.tabletForm{
 .details{
 	color: white;
 }
+
+a:hover.details{
+	color:white;
+}

@@ -92,8 +92,6 @@ function bbsave(){
 		
 		var name = $('#edit_category_name').val()		
 		var id = $('#type').attr("id2");
-		
-
 		updateCategory(id,name)
 		
 	}else if(tipus == "inventory_update"){
@@ -250,8 +248,7 @@ function createCategory(){
 		str += "<tr>";
 			str += "<td>";
 				str += "<input type='text' maxlength='50' id='new_category_name'>";
-			str += "</th>";
-			str += "<td>";
+			str += "</td>";
 		str += "</tr>";
 	str += "</table>";
 	bootbox.alert(str);
@@ -270,7 +267,7 @@ function createOutput(pallet_id,full,old){
 		str += "<tr>";
 			str += "<td>";
 				str += "<input type='number' maxlength='50' value='"+full+"' id='output_amount' style='font-size: 130%; '>";
-			str += "</th>";
+			str += "</td>";
 		str += "</tr>";
 	str += "</table>";
 	bootbox.alert(str);
@@ -290,7 +287,7 @@ function createTrash(pallet_id,full){
 		str += "<tr>";
 			str += "<td>";
 				str += "<input type='number' maxlength='50' value='"+full+"' id='trash_amount'>";
-			str += "</th>";
+			str += "</td>";
 		str += "</tr>";
 	str += "</table>";
 	bootbox.alert(str);
@@ -364,7 +361,7 @@ function editProduct(id){
 		str += "<tr>";
 			str += "<td>";
 				str += "<input type='text' maxlength='50' value='"+nev+"' id='edit_prod_name'>";
-			str += "</th>";
+			str += "</td>";
 			str += "<td>";
 				str += $('#category_container').html().replace("#_#","edit_prod_cat");
 			str += "</td>";
@@ -401,7 +398,7 @@ function editUserName(id){
 		str += "<tr>";
 			str += "<td>";
 				str += "<input type='text' maxlength='50' value='"+nev+"' id='edit_user_name'>";
-			str += "</th>";
+			str += "</td>";
 			
 		str += "</tr>";
 	str += "</table>";
@@ -425,7 +422,7 @@ function editUserPass(id){
 		str += "<tr>";
 			str += "<td>";
 				str += "<input type='password' maxlength='50'  id='edit_user_pass'>";
-			str += "</th>";
+			str += "</td>";
 			
 		str += "</tr>";
 	str += "</table>";
@@ -448,8 +445,7 @@ function editCategory(id){
 		str += "<tr>";
 			str += "<td>";
 				str += "<input type='text' maxlength='50' value="+nev+" id='edit_category_name'>";
-			str += "</th>";
-			str += "<td>";
+			str += "</td>";
 		str += "</tr>";
 	str += "</table>";
 	bootbox.alert(str);
@@ -472,7 +468,7 @@ function inventory_update(id,amount,time,orig){
 			str += "</th>";	
 			str += "<th>";
 				str += "IDŐ";
-				str += "</th>";	
+			str += "</th>";	
 		str += "</tr>";
 	str += "</thead>";
 		str += "<tr>";
@@ -487,7 +483,7 @@ str += "</table>";
 	bootbox.alert(str);
 }
 
-///OTEHR/////////
+///OTHER/////////
 
 
 
@@ -648,9 +644,17 @@ function changecolor(i){
 	});
 }
 
-function reloadQuality (){	
+function reloadMonthlyQuality (){	
+	var day = $('#date_day').val()
 	var month = $('#date_month').val()
 	var year  = new Date().getFullYear();
-	window.location = "quality.php?date="+year+"-"+month+"-01";
+	window.location = "quality.php?type=month&month="+year+"-"+month+"-01";
+}
+
+function reloadDailyQuality (){
+	var day = $('#date_day').val()
+	var month = $('#date_month').val()
+	var year  = new Date().getFullYear();
+	window.location = "quality.php?type=day&day="+year+"-"+month+"-"+day;
 }
 

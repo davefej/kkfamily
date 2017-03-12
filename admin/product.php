@@ -14,7 +14,7 @@ require("../common/header.php");
 ?>
 
 <div id="category_container" class="hiddendiv" >
-<?php categoryOption();?>
+	<?php categoryOptions();?>
 </div>
 
 <?php 

@@ -42,7 +42,7 @@
 						Mennyiségi eltérés
 					</td>
 					<td>
-						Külső megjelenés
+						Külső megjelenés, kártevőmentesség
 					</td>
 					<td>
 						Állag
@@ -259,14 +259,4 @@
 
 <?php 
 require("../common/footer.php");
-
 ?>
-<script>
-if(localStorage.supplier){
-	$('#besz').val(localStorage.supplier)
-}
-if(localStorage.product){
-	$('#alap').val(localStorage.product)
-}
-
-</script>

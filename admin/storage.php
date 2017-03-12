@@ -234,7 +234,7 @@ function listStorageByProduct($id){
 }
 
 function listStorageByCategory($id){
-	$filter  = "and pr.id = '".$id."' ";
+	$filter  = "and pr.category_id = '".$id."' ";
 	
 	$labels = array();
 	$data = array();

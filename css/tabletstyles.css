@@ -74,9 +74,13 @@ thead{
 }
 
 .btn-primary{
-	width: 140px;
-  min-height: 100px;
-  heigth:90%;
+	width: 90%;
+  	heigth:90%;
+}
+
+.btn-danger{
+	width: 90px;
+	height:60px;
 }
 
 .container-fluid{

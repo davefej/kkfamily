@@ -48,7 +48,7 @@ require("../common/header.php");
 		                                title: {
 		                                    display: true,
 		                                    text: 'Raktárkészlet',
-		                                    fontColor: "#FFFFFF",
+		                                    fontColor: "#777",
 		                                    fontSize: 18
 		                                }
 		                            }
@@ -102,7 +102,7 @@ require("../common/header.php");
 		                                title: {
 		                                    display: true,
 		                                    text: 'Raktárkészlet',
-		                                    fontColor: "#FFFFFF",
+		                                    fontColor: "#777",
 		                                    fontSize: 18
 		                                }
 		                            }
@@ -188,7 +188,7 @@ require("../common/header.php");
 		  </div>
 		</div>
 
-	
+</div>
 <?php 
 require("../common/footer.php");
 
