@@ -82,20 +82,24 @@ function alertcallback(json,response){
 
 function newQualityForm(sumDifference, appearance, consistency, smell, color,
 		clearness, palletQuality, decision,product,supplier,amount){
-	insert({
-		"sum_difference":sumDifference,
-		"appearance":appearance,
-		"consistency":consistency,
-		"smell":smell,
-		"color":color,
-		"clearness":clearness,
-		"pallet_quality":palletQuality,
-		"decision":decision,
-		"type":"quality_form",
-		"product":product,
-		"supplier":supplier,
-		"amount":amount
-	},palletcallback);
+		bootbox.confirm('<h3>Biztosan el akarja menteni?</h3>',function (yes){
+		if(yes){
+			insert({
+				"sum_difference":sumDifference,
+				"appearance":appearance,
+				"consistency":consistency,
+				"smell":smell,
+				"color":color,
+				"clearness":clearness,
+				"pallet_quality":palletQuality,
+				"decision":decision,
+				"type":"quality_form",
+				"product":product,
+				"supplier":supplier,
+				"amount":amount
+			},palletcallback);		
+		}
+	});
 }
 
 function palletcallback(json,response){

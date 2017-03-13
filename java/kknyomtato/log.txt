@@ -1,0 +1,32 @@
+
+2017-02-28 09:23:49
+dbconf loaded!
+
+
+2017-02-28 09:38:53
+dbconf loaded!
+
+
+2017-02-28 09:38:53
+Nyomtató azonosító :0
+
+
+2017-02-28 09:38:53
+zpl from code ^XA  ^MTD ^CFA,30   ^FO170,30^FD#prod#^FS  ^FO170,65^FD#suppl#^FS  ^FO170,100^FD#date_amount#^FS  ^BY3,3,100 ^FO170,150 ^BC^FD#id#^FS ^FO500,60 ^BQN,2,7 ^FDMM,#id#^FS ^XZ
+
+
+2017-02-28 09:38:53
+updated: 0
+
+
+2017-02-28 09:38:53
+sleep: 20000
+
+
+2017-02-28 09:39:13
+updated: 0
+
+
+2017-02-28 09:39:13
+sleep: 20000
+

@@ -12,6 +12,7 @@ function bbsave(){
 		var min = $('#new_prod_min').val()
 		var expire = $('#new_prod_exp').val()
 		var unit = $('#new_prod_unit').val()
+		
 		newProduct(name,category_id,min,expire,unit,0)
 		
 	}else if(tipus == "createSupplier"){
@@ -45,7 +46,11 @@ function bbsave(){
 		if(parseInt(max) < parseInt(amount)){
 			bootbox.alert("Túl Nagy mennyiség, max:"+max);
 		}else{
-			newOutput(pallet_id,amount,old)
+			bootbox.confirm('<h3>Biztos kiadja?<br>Mennyiség: '+amount+'</h3>',function (yes){
+				if(yes){
+					newOutput(pallet_id,amount,old);			
+				}
+			});
 		}
 		
 		

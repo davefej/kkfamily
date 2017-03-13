@@ -2,8 +2,6 @@
 	$selected = "tablet";
 	$selector = "bevetel";
 	require("../common/header.php");
-	
-
 ?>
 <div class="container-fluid">
 	<div class="centerBlock">
