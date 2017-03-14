@@ -60,6 +60,16 @@ function newPallet(product_id,supplier_id,amount,qualityForm){
 	},clearAmount);
 }
 
+function newPalletDel(product_id,supplier_id,amount,qualityForm){	
+	insert({
+    	"product_id":product_id,
+    	"supplier_id":supplier_id,
+    	"amount":amount,
+    	"quality_form":qualityForm,
+    	"type":"palletdel"
+	},clearAmount);
+}
+
 function clearAmount(){
 	//bootbox.alert("Bevétel Sikeres!")
 	$("#suly").val(0);
@@ -139,6 +149,7 @@ function palletcallback(json,response){
 	if(json.decision  == "accept" || json.decision  == "accept2"){//ÁTVÉVE
 		newPallet(json.product,json.supplier,json.amount,response)
 	}else{
+		newPalletDel(json.product,json.supplier,json.amount,response)
 		newAlert("input",response,JSON.stringify(json))	
 	}
 	
@@ -294,6 +305,13 @@ function updatePrinted(id){
 	update({
 		"id":id,
 		"type":"printing"
+	});
+}
+
+function rePrint(id){
+	update({
+		"id":id,
+		"type":"reprint"
 	});
 }
 

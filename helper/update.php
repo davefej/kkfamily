@@ -28,7 +28,11 @@ if(array_key_exists("type",$data)){
 		$sql = "UPDATE `pallet` SET `amount` = '".$data['amount']."', `time` = '".$data['time']."'  WHERE `id` = ".$data['id'];
 	}else if($data["type"] == "printing"){
 		$sql = "UPDATE `pallet` SET `printed` = 1  WHERE `id` = ".$data['id'];
+	}else if($data["type"] == "reprint"){
+		$sql = "UPDATE `pallet` SET `printed` = 0  WHERE `id` = ".$data['id'];
 	}
+	
+	
 	
 	
 	if(isset($_SESSION['user_id'])){

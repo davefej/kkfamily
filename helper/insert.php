@@ -26,6 +26,8 @@ if(array_key_exists("type",$data)){
 				$sql = "INSERT INTO `trash` (`id`, `pallet_id`, `amount`, `time`, `user_id`, `deleted`) VALUES (NULL, '".$data['pallet_id']."', '".$data['amount']."', CURRENT_TIMESTAMP, '".$_SESSION['user_id']."', '0')";
 			}else if($data["type"] == "pallet"){
 				$sql = "INSERT INTO `pallet` (`id`, `quantity_form_id`, `product_id`, `supplier_id`, `time`, `amount`, `printed`, `user_id`, `deleted`) VALUES (NULL, '".$data['quality_form']."', '".$data['product_id']."', '".$data['supplier_id']."', CURRENT_TIMESTAMP, '".$data['amount']."', '0', '".$_SESSION['user_id']."', '0')";
+			}else if($data["type"] == "palletdel"){
+				$sql = "INSERT INTO `pallet` (`id`, `quantity_form_id`, `product_id`, `supplier_id`, `time`, `amount`, `printed`, `user_id`, `deleted`) VALUES (NULL, '".$data['quality_form']."', '".$data['product_id']."', '".$data['supplier_id']."', CURRENT_TIMESTAMP, '".$data['amount']."', '0', '".$_SESSION['user_id']."', '1')";
 			}else if($data["type"] == "output"){
 				$sql = "INSERT INTO `output` (`id`, `pallet_id`, `amount`, `time`, `user_id`, `deleted`) VALUES (NULL, '".$data['pallet_id']."', '".$data['amount']."', CURRENT_TIMESTAMP, '".$_SESSION['user_id']."', '0')";
 			}else if($data["type"] == "alert"){
