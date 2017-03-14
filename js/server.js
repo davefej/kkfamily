@@ -61,8 +61,8 @@ function newPallet(product_id,supplier_id,amount,qualityForm){
 }
 
 function clearAmount(){
-	bootbox.alert("Bevétel Sikeres!")
-	$("#suly").val(0);
+	//bootbox.alert("Bevétel Sikeres!")
+	//$("#suly").val(0);
 }
 
 function newOutput(pallet_id,amount,alert){	
@@ -71,7 +71,7 @@ function newOutput(pallet_id,amount,alert){
     	"pallet_id":pallet_id,
     	"amount":amount,    	
     	"type":"output"
-	},alertcallback);
+	},alertcallback); 
 }
 
 function alertcallback(json,response){
@@ -82,8 +82,27 @@ function alertcallback(json,response){
 
 function newQualityForm(sumDifference, appearance, consistency, smell, color,
 		clearness, palletQuality, decision,product,supplier,amount){
-		bootbox.confirm('<h3>Biztosan el akarja menteni?</h3>',function (yes){
-		if(yes){
+		if(decision == "accept"){
+			bootbox.confirm('<h3>Biztosan el akarja menteni?</h3>',function (yes){
+				if(yes){
+					insert({
+						"sum_difference":sumDifference,
+						"appearance":appearance,
+						"consistency":consistency,
+						"smell":smell,
+						"color":color,
+						"clearness":clearness,
+						"pallet_quality":palletQuality,
+						"decision":decision,
+						"type":"quality_form",
+						"product":product,
+						"supplier":supplier,
+						"amount":amount
+					},palletcallback);		
+				}
+			});
+		}
+		else{
 			insert({
 				"sum_difference":sumDifference,
 				"appearance":appearance,
@@ -97,9 +116,8 @@ function newQualityForm(sumDifference, appearance, consistency, smell, color,
 				"product":product,
 				"supplier":supplier,
 				"amount":amount
-			},palletcallback);		
+			},palletcallback);
 		}
-	});
 }
 
 function palletcallback(json,response){
@@ -107,8 +125,11 @@ function palletcallback(json,response){
 	if(json.decision  == "accept"){//ÁTVÉVE
 		newPallet(json.product,json.supplier,json.amount,response)
 	}else{
-		//TODO
-		newAlert("input",response,JSON.stringify(json))
+		bootbox.confirm("<h3>Biztosan nem veszi át a terméket?</h3>",function (yes){
+			if(yes){
+				newAlert("input",response,JSON.stringify(json))
+			}
+		});
 	}
 	
 }
@@ -138,7 +159,8 @@ function insert(json,callback){
         	
         	if(callback && typeof callback === "function"){
         		if(callback.name == "reload"){
-        			bootbox.alert("Létrehozás Sikeres! OK"+"<input type='hidden' id='type' value='reload'/>")
+        			//bootbox.alert("Létrehozás Sikeres! OK"+"<input type='hidden' id='type' value='reload'/>")
+        			location.reload();
         		}else{
         			callback(json,response);
         		}

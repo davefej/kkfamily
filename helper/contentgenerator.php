@@ -151,6 +151,11 @@ function periodOutput($day, $month, $first,$last,$detail){
 			 }
 			 	
 			 $str .= '</tr>';
+			 $str .= '</thead>';
+			 $str .= '</table>';
+			 
+			 $str .=  '<table class="table table-hover sortable">';
+			 $str .= '</thead>';
 			 $str .= '<tr>';
 			 $str .= '<th>Kiadás ID</th>';
 			 $str .= '<th>Raklap ID</th>';
@@ -396,27 +401,31 @@ function periodInput($day, $month, $first,$last,$detail){
 				 $str .= '<thead>';
 				 $str .= '<tr class="tableHeader">';
 				 if($detail && $first != $last){
-				 	$str .= '<th>'.$first." <br> ".$last.'</th>';
+				 	$str .= '<td>'.$first." <br> ".$last.'</td>';
 				 }else if($first != $last){
-				 	$str .= '<th>'.$first." <br> ".$last.'</th>';
+				 	$str .= '<td>'.$first." <br> ".$last.'</td>';
 				 }
 				 
 				 if($first === $last){
-				 	$str .= '<th>'.$first.'</th>';
+				 	$str .= '<td>'.$first.'</td>';
 				 }
 				 
-				 $str .= '<th class="dateth">'.datepicker($day, $month, true).'</th>';
+				 $str .= '<td class="dateth">'.datepicker($day, $month, true).'</td>';
 
-				 $str .= '<th><button class="btn btn-sm btn-default"  onclick="monthlyInput()">Havi Szűrés</button></th>';
-				 $str .= '<th><button class="btn btn-sm btn-default" onclick="dailyInput()">Napi Szűrés</button></th>';
+				 $str .= '<td><button class="btn btn-sm btn-default"  onclick="monthlyInput()">Havi Szűrés</button></td>';
+				 $str .= '<td><button class="btn btn-sm btn-default" onclick="dailyInput()">Napi Szűrés</button></td>';
 				
 				 if($detail){
-				 	$str .= '<th>Részletes<input id="detailscb" type="checkbox" name="detailscb" checked></th>';
+				 	$str .= '<td>Részletes<input id="detailscb" type="checkbox" name="detailscb" checked></td>';
 				 }else{
-				 	$str .= '<th> Részletes<input id="detailscb" type="checkbox" name="detailscb" ></th>';
+				 	$str .= '<td> Részletes<input id="detailscb" type="checkbox" name="detailscb" ></td>';
 				 }
 				 
 				 $str .= '</tr>';
+				 $str .= '</thead>';
+				 $str .= '</table>';
+				 $str .= '<table class="table table-hover sortable">';
+				 $str .= '<thead>';
 				 $str .= '<tr>';
 				 $str .= '<th colspan=2>Alapanyag</th>';
 				 $str .= '<th>Beszállító Neve</th>';
