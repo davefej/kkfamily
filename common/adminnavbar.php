@@ -30,7 +30,7 @@
 			</ul>
 
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="../logout.php">Kijelentkezés</a></li>
+				<li><a href="../logout.php">Kilépés</a></li>
 			</ul>
 		</div><!-- /.navbar-collapse -->
 	</div><!-- /.container-fluid -->

@@ -3,6 +3,10 @@
 $selected ="admin";
 $selector ="alert";
 require("../common/header.php");
+
+$day = date('Y-m-d', strtotime("-7 days"));
+
+updateAlert();
 ?>
 
 <br/>
@@ -24,7 +28,7 @@ require("../common/header.php");
 						"SELECT a.id, a.type, a.param, a.param2, pr.name as prname,
 						a.time, u.name, a.seen from alert a, user u, pallet p, product pr
 						where u.id = a.user_id and a.deleted = false 
-						and a.param2=p.id and p.product_id = pr.id
+						and a.param2=p.id and p.product_id = pr.id and a.time > '".$day." 00:00:00' 
 						and a.type='output' order by time desc ",
 						'alertoutputTable');
 						?>
@@ -51,7 +55,7 @@ require("../common/header.php");
 							sqlExecute(
 						"SELECT a.id, a.type, a.param, a.param2, a.time,
 						u.name, a.seen from alert a, user u 
-						where u.id = a.user_id and a.deleted = false 
+						where u.id = a.user_id and a.deleted = false and a.time > '".$day." 00:00:00' 
 						and a.type='trash' order by time desc ",
 						'alertspareTable');
 						?>
@@ -78,7 +82,7 @@ require("../common/header.php");
 				sqlExecute(
 						"SELECT a.id, a.type, a.param, a.param2, a.time,
 						u.name,a.seen from alert a, user u 
-						where u.id = a.user_id and a.deleted = false 
+						where u.id = a.user_id and a.deleted = false and a.time > '".$day." 00:00:00' 
 						and a.type='input' order by time desc ",
 						'alertinputTable');
 						?>
@@ -255,4 +259,13 @@ function alertspareTable($results){
 	}
 	print '</table>';
 }
+
+
+function updateAlert(){
+	$day = date('Y-m-d', strtotime("-7 days"));
+	$day2 =  date('Y-m-d', strtotime("-1 days"));
+	$SQL = "UPDATE alert SET seen = '1' WHERE time >= '".$day." 00:00:00' and time < '".$day2." 00:00:00' and seen = '0'";
+	update($SQL);
+}
+
 ?>

@@ -399,7 +399,7 @@ function alertcheck(){
         			
         			$('#alerta').html(  "Jelzés "+"<span class='hasalert label label-danger'>"+response+"</span>" );
         			
-        			if(alertnum != -1 && window.location.href.indexOf("alert.php") > -1){
+        			if(alertnum != -1 && window.location.href.indexOf("alert.php") > -1 && alertnum != response){
         				location.reload();
 					}
         			alertnum = response;

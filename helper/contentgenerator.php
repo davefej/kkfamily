@@ -889,7 +889,7 @@ function categoryOptions(){
 function getDataById($id){
 	$mysqli = connect();
 	$pr_id = 0;	
-	if($results = $mysqli->query("SELECT product_id as pid FROM pallet where id = ".$id)){
+	if($results = $mysqli->query("SELECT product_id as pid FROM pallet where deleted = false and id = ".$id)){
 		while($row = $results->fetch_assoc()) {
 			$pr_id = $row["pid"];			
 		}
@@ -907,17 +907,19 @@ function getDataById($id){
 	$filter  = "and pr.id = '".$pr_id."' ";	
 	
 	if($results = $mysqli->query(palletSQL2($filter))){
-		print '<table class="table table-hover">';
-		print '<thead>';
-		print '<tr>';
-		print '<th style="text-align:center;">ID</th>';
-		print '<th style="text-align:center;">Alapanyag</th>';
-		print '<th style="text-align:center;">Mennyiség</th>';
-		print '<th style="text-align:center;">Beszállító</th>';
-		print '<th style="text-align:center;">Idő</th>';
-		print '</tr>';
-		print '</thead>';
+		$str_head = "";
+		$str_head .= '<table class="table table-hover">';
+		$str_head .= '<thead>';
+		$str_head .= '<tr>';
+		$str_head .= '<th style="text-align:center;">ID</th>';
+		$str_head .= '<th style="text-align:center;">Alapanyag</th>';
+		$str_head .= '<th style="text-align:center;">Mennyiség</th>';
+		$str_head .= '<th style="text-align:center;">Beszállító</th>';
+		$str_head .= '<th style="text-align:center;">Idő</th>';
+		$str_head .= '</tr>';
+		$str_head .= '</thead>';
 		$firstprods = array();
+		$printed = false;
 		while($row = $results->fetch_assoc()) {
 			$str = '<tr>';
 			$str .= '<td>'.$row["id"].'</td>';
@@ -942,11 +944,22 @@ function getDataById($id){
 			$str .= '</table>';
 			
 			if($row["id"] == $id){
-				print $str;
-				break;
+				if((int)$row["rest"] > 0){
+					print $str_head;
+					print $str;
+					$printed = true;
+					break;
+				}
+				
+			}else{
+				$printed = false;
 			}
 			
 		}
+		if(!$printed){
+			print "<h1>ÜRES RAKLAP</h1>";
+		}
+		
 		$results->free();
 	}else{
 		print "nincs adatbázis kapcsolat";
@@ -956,7 +969,6 @@ function getDataById($id){
 	// close connection
 	$mysqli->close();
 }
-
 
 
 ?>
