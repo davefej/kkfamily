@@ -62,7 +62,7 @@ function newPallet(product_id,supplier_id,amount,qualityForm){
 
 function clearAmount(){
 	//bootbox.alert("Bevétel Sikeres!")
-	//$("#suly").val(0);
+	$("#suly").val(0);
 }
 
 function newOutput(pallet_id,amount,alert){	
@@ -82,7 +82,14 @@ function alertcallback(json,response){
 
 function newQualityForm(sumDifference, appearance, consistency, smell, color,
 		clearness, palletQuality, decision,product,supplier,amount){
-		if(decision == "accept"){
+		if(decision == "accept" || decision == "accept2"){
+			
+			if(decision == "accept"){
+				decision = "0"
+			}else if(decision == "accept2"){
+				decision = "1"
+			}
+			
 			bootbox.confirm('<h3>Biztosan el akarja menteni?</h3>',function (yes){
 				if(yes){
 					insert({
@@ -103,33 +110,36 @@ function newQualityForm(sumDifference, appearance, consistency, smell, color,
 			});
 		}
 		else{
-			insert({
-				"sum_difference":sumDifference,
-				"appearance":appearance,
-				"consistency":consistency,
-				"smell":smell,
-				"color":color,
-				"clearness":clearness,
-				"pallet_quality":palletQuality,
-				"decision":decision,
-				"type":"quality_form",
-				"product":product,
-				"supplier":supplier,
-				"amount":amount
-			},palletcallback);
+			if(decision == "decline"){
+				decision = "2"
+			}
+			bootbox.confirm("<h3>Biztosan nem veszi át a terméket?</h3>",function (yes){
+				if(yes){
+						insert({
+							"sum_difference":sumDifference,
+							"appearance":appearance,
+							"consistency":consistency,
+							"smell":smell,
+							"color":color,
+							"clearness":clearness,
+							"pallet_quality":palletQuality,
+							"decision":decision,
+							"type":"quality_form",
+							"product":product,
+							"supplier":supplier,
+							"amount":amount
+						},palletcallback);
+				}
+			});
 		}
 }
 
 function palletcallback(json,response){
 	
-	if(json.decision  == "accept"){//ÁTVÉVE
+	if(json.decision  == "accept" || json.decision  == "accept2"){//ÁTVÉVE
 		newPallet(json.product,json.supplier,json.amount,response)
 	}else{
-		bootbox.confirm("<h3>Biztosan nem veszi át a terméket?</h3>",function (yes){
-			if(yes){
-				newAlert("input",response,JSON.stringify(json))
-			}
-		});
+		newAlert("input",response,JSON.stringify(json))	
 	}
 	
 }

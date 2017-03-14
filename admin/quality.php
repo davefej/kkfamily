@@ -96,6 +96,8 @@ function qualityinputTable($results, $month, $day){
 		print '<td>'.$row["user"].'</td>';
 		if($row["decision"] == "0"){
 			print '<td>Átvéve</td>';
+		}else if($row["decision"] == "1"){
+			print '<td>Reklamáció (Átvéve)</td>';
 		}else{
 			print '<td>Nincs átvéve</td>';
 		}

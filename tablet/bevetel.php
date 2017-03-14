@@ -67,49 +67,56 @@
 					</td>
 					<td>
 						<select class="form-control tabletForm" id="appearance">
-						  <option value="1">1 - Rossz</option>
-						  <option value="2">2 - Közepes</option>
-						  <option value="3" selected>3 - Jó</option>
+						 <option value="0">0 - Komoly Probléma</option>
+						  <option value="1">1 - Nem átvehető</option>
+						  <option value="2">2 - Átvehető</option>
+						  <option value="3" selected>3 - Megfelelő</option>
 						</select>
 					</td>
 					<td>
 						<select class="form-control tabletForm" id="consistency">
-						  <option value="1">1 - Rossz</option>
-						  <option value="2">2 - Közepes</option>
-						  <option value="3" selected>3 - Jó</option>
+						<option value="0">0 - Komoly Probléma</option>
+						  <option value="1">1 - Nem átvehető</option>
+						  <option value="2">2 - Átvehető</option>
+						  <option value="3" selected>3 - Megfelelő</option>
 						</select>
 					</td>
 					<td>
 						<select class="form-control tabletForm" id="smell">
-						  <option value="1">1 - Rossz</option>
-						  <option value="2">2 - Közepes</option>
-						  <option value="3" selected>3 - Jó</option>
+						 <option value="0">0 - Komoly Probléma</option>
+						  <option value="1">1 - Nem átvehető</option>
+						  <option value="2">2 - Átvehető</option>
+						  <option value="3" selected>3 - Megfelelő</option>
 						</select>
 					</td>
 					<td>
 						<select class="form-control tabletForm" id="color">
-						  <option value="1">1 - Rossz</option>
-						  <option value="2">2 - Közepes</option>
-						  <option value="3" selected>3 - Jó</option>
+						 <option value="0">0 - Komoly Probléma</option>
+						  <option value="1">1 - Nem átvehető</option>
+						  <option value="2">2 - Átvehető</option>
+						  <option value="3" selected>3 - Megfelelő</option>
 						</select>
 					</td>
 					<td>
 						<select class="form-control tabletForm" id="clearness">
-						  <option value="1">1 - Rossz</option>
-						  <option value="2">2 - Közepes</option>
-						  <option value="3" selected>3 - Jó</option>
+						 <option value="0">0 - Komoly Probléma</option>
+						  <option value="1">1 - Nem átvehető</option>
+						  <option value="2">2 - Átvehető</option>
+						  <option value="3" selected>3 - Megfelelő</option>
 						</select>
 					</td>
 					<td>
 						<select class="form-control tabletForm" id="palletQuality">
-						  <option value="1">1 - Rossz</option>
-						  <option value="2">2 - Közepes</option>
-						  <option value="3" selected>3 - Jó</option>
+						  <option value="0">0 - Komoly Probléma</option>
+						  <option value="1">1 - Nem átvehető</option>
+						  <option value="2">2 - Átvehető</option>
+						  <option value="3" selected>3 - Megfelelő</option>
 						</select>
 					</td>
 					<td style="width: 150px">
 						<select class="form-control tabletForm" id="decision">
 						  <option value="accept">Átvesz</option>
+						   <option value="accept2">Reklamáció (átvétel)</option>
 						  <option value="decline">Visszautasít</option>
 						</select>
 					</td>
@@ -167,9 +174,10 @@
 					</td>
 					<td>
 						<select class="form-control tabletForm" id="appearance">
-						  <option value="1">1 - Rossz</option>
-						  <option value="2">2 - Közepes</option>
-						  <option value="3" selected>3 - Jó</option>
+						 <option value="0">0 - Komoly Probléma</option>
+						  <option value="1">1 - Nem átvehető</option>
+						  <option value="2">2 - Átvehető</option>
+						  <option value="3" selected>3 - Megfelelő</option>
 						</select>
 					</td>
 				</tr>
@@ -179,9 +187,10 @@
 					</td>
 					<td>
 						<select class="form-control tabletForm" id="consistency">
-						  <option value="1">1 - Rossz</option>
-						  <option value="2">2 - Közepes</option>
-						  <option value="3" selected>3 - Jó</option>
+						<option value="0">0 - Komoly Probléma</option>
+						  <option value="1">1 - Nem átvehető</option>
+						  <option value="2">2 - Átvehető</option>
+						  <option value="3" selected>3 - Megfelelő</option>
 						</select>
 					</td>
 				</tr>
@@ -191,9 +200,10 @@
 					</td>
 					<td>
 						<select class="form-control tabletForm" id="smell">
-						  <option value="1">1 - Rossz</option>
-						  <option value="2">2 - Közepes</option>
-						  <option value="3" selected>3 - Jó</option>
+						 <option value="0">0 - Komoly Probléma</option>
+						  <option value="1">1 - Nem átvehető</option>
+						  <option value="2">2 - Átvehető</option>
+						  <option value="3" selected>3 - Megfelelő</option>
 						</select>
 					</td>
 				</tr>
@@ -203,9 +213,10 @@
 					</td>
 					<td>
 						<select class="form-control tabletForm" id="color">
-						  <option value="1">1 - Rossz</option>
-						  <option value="2">2 - Közepes</option>
-						  <option value="3" selected>3 - Jó</option>
+						 <option value="0">0 - Komoly Probléma</option>
+						  <option value="1">1 - Nem átvehető</option>
+						  <option value="2">2 - Átvehető</option>
+						  <option value="3" selected>3 - Megfelelő</option>
 						</select>
 					</td>
 				</tr>
@@ -215,9 +226,10 @@
 					</td>
 					<td>
 						<select class="form-control tabletForm" id="clearness">
-						  <option value="1">1 - Rossz</option>
-						  <option value="2">2 - Közepes</option>
-						  <option value="3" selected>3 - Jó</option>
+						<option value="0">0 - Komoly Probléma</option>
+						  <option value="1">1 - Nem átvehető</option>
+						  <option value="2">2 - Átvehető</option>
+						  <option value="3" selected>3 - Megfelelő</option>
 						</select>
 					</td>
 				</tr>
@@ -227,12 +239,13 @@
 					</td>
 					<td>
 						<select class="form-control tabletForm" id="palletQuality">
-						  <option value="1">1 - Rossz</option>
-						  <option value="2">2 - Közepes</option>
-						  <option value="3" selected>3 - Jó</option>
+						 <option value="0">0 - Komoly Probléma</option>
+						  <option value="1">1 - Nem átvehető</option>
+						  <option value="2">2 - Átvehető</option>
+						  <option value="3" selected>3 - Megfelelő</option>
 						</select>
 					</td>
-				</tr>
+				</tr>				
 				<tr>
 					<td>
 						Döntés
