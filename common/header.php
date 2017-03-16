@@ -2,11 +2,16 @@
 	<head>
 		<?php
 		
-		session_start();
+		$bool = session_start();
+		//echo $bool ? 'true' : 'false';
 		if(!isset($_SESSION["user_id"])){
 			header('Location: ../timeout.php');
 		}
-		
+		if(isset($_SESSION["user_id"])){
+			echo "USERSESISOn ".strval(isset($_SESSION["user_id"]))." ".$_SESSION["user_id"];
+		}else{
+			echo "USERSESISOn NOT SET ";
+		}
 		$version = rand();
 			if($selected == "admin")
 				echo "<title> Kezelőfelület | KK Family</title>";
@@ -26,13 +31,13 @@
 		<meta charset="utf-8">
 		
 		<script src="../js/functions.js?v=23" ></script>
-		<script src="../js/server.js?v=23" ></script>
+		<script src="../js/server.js?v=24" ></script>
 		<script src="../js/Chart.js"></script>
 		<script src="../js/sorttable.js"></script>
 		
 	<?php  if($selected == "tablet"){	//TODO css rand		?>							
 				<link href="../js/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
-				<script src="../js/tablet.js?v=23"></script>
+				<script src="../js/tablet.js?v=24"></script>
 				<link rel="stylesheet" type="text/css" href="../css/tabletstyles.css?v=1">
 	<?php }else{ ?>
 				<link href="../js/bootstrap-3.3.7-dist/css/bootstrap.css" rel="stylesheet">

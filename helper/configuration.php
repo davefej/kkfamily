@@ -6,6 +6,9 @@ function getconfig($name){
 }
 
 function errorlog($error){
+	if($error == "0"){
+		return;
+	}
 	$myfile = fopen("error.txt", "a");
 	fwrite($myfile, "\r\n". date('Y-m-d h:i:sa'). "\r\n");
 	fwrite($myfile, $error);

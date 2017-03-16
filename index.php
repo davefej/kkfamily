@@ -1,9 +1,14 @@
 <?php
 
+function errorlog2($error){
+	$myfile = fopen("error.txt", "a");
+	fwrite($myfile, "\r\n". date('Y-m-d h:i:sa'). "\r\n");
+	fwrite($myfile, $error);
+	fclose($myfile);
+}
 	
 	if(isset($_POST["username"]) && isset($_POST["password"])){
-		session_start();
-		
+		$bool = session_start();
 		require 'helper/mysqli.php';
 		$ret = login($_POST["username"],$_POST["password"]);
 		$login_data = explode("_", $ret);
@@ -20,8 +25,6 @@
 	}else{
 		header('Location: index.html');
 	}
-
-
 
 		
 ?>

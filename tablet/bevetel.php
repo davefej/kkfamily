@@ -6,7 +6,7 @@
 <div class="container-fluid">
 	<div class="centerBlock">
 		<form method="post">
-			<table class="table table-striped tabletTable desktop">
+			<table id="beveteltable" class="table table-striped tabletTable desktop">
 				<thead>
 					<tr>
 						<th colspan="3">
@@ -127,7 +127,7 @@
 					</td>
 				</tr>
 			</table>
-		
+		<!-- 
 			<table class="table table-striped tabletTable mobile">
 				<tr>
 					<td>
@@ -135,7 +135,7 @@
 					</td>
 					<td>
 						<?php 
-							supplierOption();
+								supplierOption();
 						?>
 					</td>
 				</tr>
@@ -263,6 +263,8 @@
 					</td>
 				</tr>
 			</table>
+			
+			 -->
 		</form>
 	</div>
 </div>
@@ -271,3 +273,10 @@
 <?php 
 require("../common/footer.php");
 ?>
+<script>
+if(screen.width < 770){
+	$("#beveteltable").removeClass("desktop");
+
+	$("#beveteltable").addClass("mobile");
+}
+</script>

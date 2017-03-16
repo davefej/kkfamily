@@ -146,7 +146,7 @@ function newQualityForm(sumDifference, appearance, consistency, smell, color,
 
 function palletcallback(json,response){
 	
-	if(json.decision  == "accept" || json.decision  == "accept2"){//ÁTVÉVE
+	if(json.decision  == "0" || json.decision  == "1" || json.decision  == "accept2" || json.decision  == "accept"){//ÁTVÉVE
 		newPallet(json.product,json.supplier,json.amount,response)
 	}else{
 		newPalletDel(json.product,json.supplier,json.amount,response)
