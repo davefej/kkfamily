@@ -23,13 +23,13 @@
 				<tr>
 					<td colspan="3">
 						<?php 
-							supplierOption();
+							supplierOption(false);
 						?>
 					</td>
 				
 					<td colspan="3">
 						<?php 
-							productOption();
+							productOption(false);
 						?>	
 					<td colspan="3">
 						<input class="form-control tabletForm" id="suly" type="number" />
@@ -127,15 +127,15 @@
 					</td>
 				</tr>
 			</table>
-		<!-- 
-			<table class="table table-striped tabletTable mobile">
+		
+			<table id="beveteltablemobile" class="table table-striped tabletTable mobile">
 				<tr>
 					<td>
 						Beszállító
 					</td>
 					<td>
 						<?php 
-								supplierOption();
+								supplierOption(true);
 						?>
 					</td>
 				</tr>
@@ -145,7 +145,7 @@
 					</td>
 					<td>
 						<?php 
-							productOption();
+							productOption(true);
 						?>
 					</td>
 				</tr>
@@ -154,7 +154,7 @@
 						Mennyiség
 					</td>
 					<td>
-						<input class="form-control tabletForm" id="suly" type="number" />
+						<input class="form-control tabletForm" id="suly-mobile" type="number" />
 					</td>
 				</tr>
 			</table>
@@ -165,7 +165,7 @@
 						Mennyiségi eltérés
 					</td>
 					<td>
-						<input type="number" class="form-control tabletForm" id="sumDifference" value=0>
+						<input type="number" class="form-control tabletForm" id="sumDifference-mobile" value=0>
 					</td>
 				</tr>
 				<tr>
@@ -173,7 +173,7 @@
 						Külső megjelenés
 					</td>
 					<td>
-						<select class="form-control tabletForm" id="appearance">
+						<select class="form-control tabletForm" id="appearance-mobile">
 						 <option value="0">0 - Komoly Probléma</option>
 						  <option value="1">1 - Nem átvehető</option>
 						  <option value="2">2 - Átvehető</option>
@@ -186,7 +186,7 @@
 						Állag
 					</td>
 					<td>
-						<select class="form-control tabletForm" id="consistency">
+						<select class="form-control tabletForm" id="consistency-mobile">
 						<option value="0">0 - Komoly Probléma</option>
 						  <option value="1">1 - Nem átvehető</option>
 						  <option value="2">2 - Átvehető</option>
@@ -199,7 +199,7 @@
 						Illat
 					</td>
 					<td>
-						<select class="form-control tabletForm" id="smell">
+						<select class="form-control tabletForm" id="smell-mobile">
 						 <option value="0">0 - Komoly Probléma</option>
 						  <option value="1">1 - Nem átvehető</option>
 						  <option value="2">2 - Átvehető</option>
@@ -212,7 +212,7 @@
 						Szín
 					</td>
 					<td>
-						<select class="form-control tabletForm" id="color">
+						<select class="form-control tabletForm" id="color-mobile">
 						 <option value="0">0 - Komoly Probléma</option>
 						  <option value="1">1 - Nem átvehető</option>
 						  <option value="2">2 - Átvehető</option>
@@ -225,7 +225,7 @@
 						Jármű tisztaság, hőfok
 					</td>
 					<td>
-						<select class="form-control tabletForm" id="clearness">
+						<select class="form-control tabletForm" id="clearness-mobile">
 						<option value="0">0 - Komoly Probléma</option>
 						  <option value="1">1 - Nem átvehető</option>
 						  <option value="2">2 - Átvehető</option>
@@ -238,7 +238,7 @@
 						Raklap, ládák minősége
 					</td>
 					<td>
-						<select class="form-control tabletForm" id="palletQuality">
+						<select class="form-control tabletForm" id="palletQuality-mobile">
 						 <option value="0">0 - Komoly Probléma</option>
 						  <option value="1">1 - Nem átvehető</option>
 						  <option value="2">2 - Átvehető</option>
@@ -251,7 +251,7 @@
 						Döntés
 					</td>
 					<td style="width: 150px">
-						<select class="form-control tabletForm" id="decision">
+						<select class="form-control tabletForm" id="decision-mobile">
 						  <option value="accept">Átvesz</option>
 						  <option value="decline">Visszautasít</option>
 						</select>
@@ -259,7 +259,7 @@
 				</tr>
 				<tr>
 					<td colspan="2">
-						<button class="btn btn-primary btn-block btn-lg" onclick="input(event)">Mentés</button>
+						<button class="btn btn-primary btn-block btn-lg" onclick="inputMobile(event)">Mentés</button>
 					</td>
 				</tr>
 			</table>

@@ -28,6 +28,32 @@ function input(e){
 	return false;
 }
 
+function inputMobile(e){
+	e.preventDefault();     // stops default button action, e.g. submitting a form
+    e.stopPropagation();
+	var supplier = $('#besz-mobile').val()
+	var product = $('#alap-mobile').val()
+	var amount = $('#suly-mobile').val()
+	
+	var sumDifference = $('#sumDifference-mobile').val()
+	var appearance = $('#appearance-mobile').val()
+	var consistency = $('#consistency-mobile').val()
+	var smell = $('#smell-mobile').val()
+	var color = $('#color-mobile').val()
+	var clearness = $('#clearness-mobile').val()
+	var palletQuality = $('#palletQuality-mobile').val()
+	var decision = $('#decision-mobile').val()
+	  
+	/*
+	localStorage.supplier = supplier;
+	localStorage.product = product;
+	*/
+	newQualityForm(sumDifference, appearance, consistency, smell, color,
+			clearness, palletQuality, decision,product,supplier,amount)
+	
+	return false;
+}
+
 function output(id,mennyiseg){	
 	createOutput(id,mennyiseg,false);
 }

@@ -758,10 +758,13 @@ function daymap($weekday){
 
 ////***OPTION FIELDS***////
 
-function supplierOption(){
+function supplierOption($mobile){
 	$mysqli = connect();
 	if($results = $mysqli->query("SELECT * FROM supplier WHERE deleted = false order by name")){
-		print '<select id="besz" class="form-control tabletForm">';
+		if($mobile)
+			print '<select id="besz-mobile" class="form-control tabletForm">';
+		else
+			print '<select id="besz" class="form-control tabletForm">';
 		while($row = $results->fetch_assoc()) {
 			print '<option value="'.$row["id"].'">'.$row["name"].'</option>';
 		}
@@ -776,11 +779,14 @@ function supplierOption(){
 	$mysqli->close();
 }
 
-function productOption(){
+function productOption($mobile = true){
 
 	$mysqli = connect();
 	if($results = $mysqli->query("SELECT * FROM product where deleted = false order by name")){
-		print '<select id="alap" class="form-control tabletForm">';
+		if($mobile)
+			print '<select id="alap-mobile" class="form-control tabletForm">';
+		else
+			print '<select id="alap" class="form-control tabletForm">';
 		while($row = $results->fetch_assoc()) {
 			print '<option  value="'.$row["id"].'">'.$row["name"].'</option>';
 		}

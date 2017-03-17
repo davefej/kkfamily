@@ -34,7 +34,7 @@
 			else if($row["printed"] == 1)
 				print '<td><button class="btn" onclick="rePrint('.$row["id"].')">ÚJRA NYOMTAT</button></td>';	
 			else
-				print '<td><button class="btn btn-danger" onclick="updatePrinted('.$row["id"].')">Nyomtatva</button></td>';
+				print '<td><button class="btn btn-danger" onclick="updatePrinted('.$row["id"].')">Nyomtat</button></td>';
 			
 			
 				
