@@ -34,7 +34,8 @@
 			else if($row["printed"] == 1)
 				print '<td><button class="btn" onclick="rePrint('.$row["id"].')">ÚJRA NYOMTAT</button></td>';	
 			else
-				print '<td><button class="btn btn-danger" onclick="updatePrinted('.$row["id"].')">Nyomtat</button></td>';
+				print "<td>Nyomtatóra vár</td>";
+				//print '<td><button class="btn btn-danger" onclick="updatePrinted('.$row["id"].')">Nyomtat</button></td>';
 			
 			
 				
