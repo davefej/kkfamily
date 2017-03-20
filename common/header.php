@@ -8,9 +8,9 @@
 			header('Location: ../timeout.php');
 		}
 		if(isset($_SESSION["user_id"])){
-			echo "USERSESISOn ".strval(isset($_SESSION["user_id"]))." ".$_SESSION["user_id"];
+			//echo "USERSESISOn ".strval(isset($_SESSION["user_id"]))." ".$_SESSION["user_id"];
 		}else{
-			echo "USERSESISOn NOT SET ";
+			echo "USERSESSION HIBA, NOT SET ";
 		}
 		$version = rand();
 			if($selected == "admin")

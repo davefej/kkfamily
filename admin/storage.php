@@ -152,6 +152,7 @@ function listStorageByProduct($id){
 	$labels = array();
 	$data = array();
 	$mysqli = connect();
+	$summ = 0;
 	if($results = $mysqli->query(palletSQL2($filter))){
 
 		print '<table class="table table-hover">';
@@ -181,7 +182,7 @@ function listStorageByProduct($id){
 		while($row = $results->fetch_assoc()) {
 			array_push($labels,$row["product"]);
 			array_push($data,(int)$row["rest"]);
-				
+			$summ += (int) $row["rest"];
 			print '<tr>';
 			print '<td>'.$row["id"].'</td>';
 			print '<td>'.$row["product"].'</td>';
@@ -191,6 +192,14 @@ function listStorageByProduct($id){
 			print '<td>'.$row["user"].'</td>';
 			print '</tr>';
 		}
+		print '<tr class="summtr">';
+		print '<td colspan="3"></td>';
+		print '<td >Összesen:</td>';
+		print '<td ><b>'.strval($summ).'</b></td>';
+		print '<td ></td>';
+		print '</tr>';
+		
+		
 		print '</table>';
 
 		$colors = array( 'rgba(255, 99, 132, 0.8)',

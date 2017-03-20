@@ -245,3 +245,11 @@ input.tabletForm{
 a:hover.details{
 	color:white;
 }
+
+.summtr{
+	background-color:rgba(114, 75, 75, 0.75);
+}
+
+.summtr:hover td{
+	background-color:rgba(114, 75, 75, 0.75);
+}

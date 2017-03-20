@@ -382,19 +382,27 @@ function periodInput($day, $month, $first,$last,$detail){
 	$data = array();
 
 	if($detail){
-		$groupby = "";
-	}else{
-		$groupby = " group by pr.id ";
-	}
-	
-	$mysqli = connect();
-	if($results = $mysqli->query(
-			"SELECT p.id as id, pr.name as product, s.name as supplier, p.amount as amount, u.name as user
+		
+		$sql = "SELECT p.id as id, pr.name as product, s.name as supplier, p.amount as amount, u.name as user
 	 				FROM supplier s, pallet p, product pr, user u
 				where pr.id=p.product_id and p.supplier_id = s.id and u.id = p.user_id
 				 and  p.time >= '".$first." 00:00:00' and
 			p.time <= '".$last." 23:59:59' 
-			and p.deleted = false and pr.deleted = false ".$groupby." order by supplier")){
+			and p.deleted = false and pr.deleted = false order by supplier";
+	}else{
+		
+		$sql = "SELECT p.id as id, pr.name as product, s.name as supplier, sum(p.amount) as amount, u.name as user
+	 				FROM supplier s, pallet p, product pr, user u
+				where pr.id=p.product_id and p.supplier_id = s.id and u.id = p.user_id
+				 and  p.time >= '".$first." 00:00:00' and
+			p.time <= '".$last." 23:59:59'
+			and p.deleted = false and pr.deleted = false group by pr.id order by supplier";
+		
+	}
+	
+	$mysqli = connect();
+	if($results = $mysqli->query($sql
+			)){
 
 
 				 $str = '<table class="table table-hover">';
