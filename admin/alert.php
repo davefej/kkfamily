@@ -129,7 +129,7 @@ function alertinputTable($results){
 		print '</td>';
 		print '<td>'.$row["name"].'</td>';
 		print '<td>'.$row["time"].'</td>';
-		print '<td> <button class="btn btn-default btn-md" onclick="bootbox.alert('.mymessage($data).')">Üzenet</button></td>';
+		print '<td> <button class="btn btn-default btn-md" onclick="bootbox.alert('.mymessage($data,$row["time"]).')">Üzenet</button></td>';
 		if($row["seen"] == '0' ){
 			print '<td><button class="btn btn-sm btn-danger" onclick="updateAlert('.$row["id"].')">OK</button></td>';
 		}else{
@@ -173,10 +173,9 @@ function minosegmap2($i){
 
 
 
-function mymessage($data){
-	$str = "'<h2>Kedves Ügyfelünk!</h2>";
-	$str .= "<br/>Rossz minőségű árut szállítottak üzemünkbe.";
-	$str .= "<br/>Az áruval alábbi problémáink voltak:<br/>";
+function mymessage($data,$time){
+	$str = "'<h2>Tisztelt Beszállító Partnerünk!</h2>";
+	$str .= "<br/>Szeretnénk tájékoztatni, hogy a ". substr($time, 0, 10)."-án ". substr($time, 11, 5)."-kor beszállított XYZ termék áruátvétele során az átvételre szakosított személyzet a következő problémákat találta:";
 	$str .= "<ul>";
 	if($data != null){
 		foreach ($data as $i => $value) {
@@ -187,11 +186,11 @@ function mymessage($data){
 			}
 		}
 	}
+	
 	$str .= "</ul>";
-	$str .= "<p>Az áruátvételt megtagadtuk</p>";
-
+	$str .= "<br/>Szeretnénk kérni a hibásan küldött termék(ek) esetében cégünk illetékesével meghatározni a további teendőket.<br/>";
 	$str .= "Üdvözlettel<br/><br/>";
-	$str .= "KKFAMILY<br/><br/>'";
+	$str .= "K&K Family Kft.<br/><br/>'";
 	return $str;
 }
 
