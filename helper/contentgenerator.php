@@ -109,22 +109,29 @@ function periodOutput($day, $month, $first,$last,$detail){
 	$data = array();
 
 	if($detail){
-		$groupby = "";
-	}else{
-		$groupby = " group by pr.id ";
-	}
-	
-	
-	$mysqli = connect();
-	if($results = $mysqli->query(
-
-			"SELECT p.id as id, pr.name as product, o.amount as amount, o.time as time, u.name as user,o.id as o_id
+		$sql = "SELECT p.id as id, pr.name as product, o.amount as amount, o.time as time, u.name as user,o.id as o_id
  				FROM  pallet p, product pr, output o, user u
 			where pr.id=p.product_id and o.pallet_id = p.id and o.user_id = u.id
 			 and 
 			o.time >= '".$first." 00:00:00' and
 			o.time <= '".$last." 23:59:59' 
-			and p.deleted = false and pr.deleted = false and o.deleted = false ".$groupby." order by product")){
+			and p.deleted = false and pr.deleted = false and o.deleted = false order by product";
+	}else{
+		$sql = "SELECT p.id as id, pr.name as product, sum(o.amount) as amount, o.time as time, u.name as user,o.id as o_id
+ 				FROM  pallet p, product pr, output o, user u
+			where pr.id=p.product_id and o.pallet_id = p.id and o.user_id = u.id
+			 and
+			o.time >= '".$first." 00:00:00' and
+			o.time <= '".$last." 23:59:59'
+			and p.deleted = false and pr.deleted = false and o.deleted = false group by pr.id order by product";
+		
+	}
+	
+	
+	$mysqli = connect();
+	if($results = $mysqli->query(
+			$sql
+			)){
 
 			 $str =  '<table class="table table-hover">';
 			 $str .= '<thead>';
