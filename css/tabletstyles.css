@@ -137,3 +137,11 @@ input.tabletForm{
 	.mobile{ display: block; }
 	.desktop{ display: none; }
 }
+
+.newoutput{
+	background-color:rgba(210, 130, 75, 0.8);
+}
+
+.newoutput:hover{
+	background-color:rgba(210, 130, 75, 1);
+}

@@ -41,10 +41,10 @@ if(isset($_GET['type'])){
 
 
 sqlExecute3(
-		"SELECT p.id as id, pr.name as name, p.amount as amount, p.time as time,u.name as user, q.sum_difference, 
+		"SELECT p.id as id, pr.name as name, p.amount as amount,s.name as supp, p.time as time,u.name as user, q.sum_difference, 
 		q.appearance, q.consistency, q.smell, q.color,  q.clearness, q.pallet_quality, q.decision
-		FROM product pr, pallet p,quantity_form q, user u
-		WHERE  pr.deleted = false and u.id = p.user_id and
+		FROM product pr, pallet p,quantity_form q, user u, supplier s
+		WHERE  pr.deleted = false and u.id = p.user_id and s.id = p.supplier_id and
 		p.time >= '".$begin." 00:00:00' and
 		p.time <= '".$end." 23:59:59'
 		and p.product_id = pr.id and p.quantity_form_id = q.id",
@@ -67,10 +67,11 @@ function qualityinputTable($results, $month, $day){
 	print '<tr>';
 	print '<th>Raklap ID</th>';
 	print '<th>Alapanyag</th>';
+	print '<th>Beszállító</th>';
 	print '<th>Beszállítás Dátuma</th>';
 	print '<th>Eredeti Súly</th>';
 	print '<th>Súly különbség</th>';
-	print '<th>Külső megjelenés, kártevőmentesség</th>';
+	print '<th>Külső<br/>Megjelenés</th>';
 	print '<th>Állag</th>';
 	print '<th>Illat</th>';
 	print '<th>Szín</th>';
@@ -84,6 +85,7 @@ function qualityinputTable($results, $month, $day){
 		print '<tr>';
 		print '<td>'.$row["id"].'</td>';
 		print '<td>'.$row["name"].'</td>';
+		print '<td>'.$row["supp"].'</td>';
 		print '<td>'.$row["time"].'</td>';
 		print '<td>'.$row["amount"].'</td>';
 		print '<td>'.$row["sum_difference"].'</td>';

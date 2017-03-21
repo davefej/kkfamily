@@ -49,13 +49,12 @@ function outputTable($results,$id){
 		print '<td>'.$row["time"].'</td>';
 		print '<td>'.$row["rest"].'</td>';
 		$sum_rest += $row["rest"];
-	
-		if(in_array($row["product"],$firstprods))
+		if(array_key_exists($row["product"],$firstprods) &&  strtotime($row["time"]) > strtotime($firstprods[$row["product"]]) )
 		{
-			print '<td><button class="btn btn-lg btn-danger" onclick="olderOutput('.$row["id"].','.$row["rest"].')">Kiadás</button></td>';
+			print '<td><button class="btn btn-lg btn-danger newoutput" onclick="olderOutput('.$row["id"].','.$row["rest"].')">Új Kiad</button></td>';
 		}else{
 			print '<td><button class="btn btn-lg btn-danger" onclick="output('.$row["id"].','.$row["rest"].')">Kiadás</button></td>';
-			array_push($firstprods,$row["product"]);
+			$firstprods[$row["product"]] = substr($row["time"],0,10)." 23:59:59";
 		}
 	
 		print '</tr>';
@@ -85,12 +84,12 @@ function outputTableMobile($results, $id){
 		print '<td>'.$row["rest"].'</td>';
 		$sum_rest += $row["rest"];
 	
-		if(in_array($row["product"],$firstprods))
+		if(array_key_exists($row["product"],$firstprods) &&  strtotime($row["time"]) > strtotime($firstprods[$row["product"]]) )
 		{
-			print '<tr><td colspan=3><button class="btn btn-lg btn-danger" onclick="olderOutput('.$row["id"].','.$row["rest"].')">Kiadás</button></td></tr><tr><td colspan=3 style="background-color:#777;"></td></tr>';
+			print '<tr><td>'.$row["time"].'</td><td colspan=2><button class="btn btn-lg btn-danger newoutput" onclick="olderOutput('.$row["id"].','.$row["rest"].')">Új Kiad</button></td></tr><tr><td colspan=3 style="background-color:#777;"></td></tr>';
 		}else{
-			print '<tr><td colspan=3><button class="btn btn-lg btn-danger" onclick="output('.$row["id"].','.$row["rest"].')">Kiadás</button></td></tr><tr><td colspan=3 style="background-color:#777;"></td></tr>';
-			array_push($firstprods,$row["product"]);
+			print '<tr><td>'.$row["time"].'</td><td colspan=2><button class="btn btn-lg btn-danger" onclick="output('.$row["id"].','.$row["rest"].')">Kiadás</button></td></tr><tr><td colspan=3 style="background-color:#777;"></td></tr>';
+			$firstprods[$row["product"]] = substr($row["time"],0,10)." 23:59:59";
 		}
 	
 		print '</tr>';

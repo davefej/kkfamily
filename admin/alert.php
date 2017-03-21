@@ -43,7 +43,7 @@ updateAlert();
 		<div class="panel panel-success">
 			<div class="panel-heading">
 				<a data-toggle="collapse" href="#collapse5">
-	  				Selejbe dobott áruk
+	  				Selejtbe dobott áruk
 	  			</a>
 			</div>
 			<div id="collapse5" class="panel-collapse collapse in">

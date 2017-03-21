@@ -14,6 +14,7 @@
 		print '<table class="table table-hover sortable">';
 		print '<thead>';
 		print '<tr>';
+		print '<th>Raklap ID</th>';
 		print '<th>';
 		print 'Alapanyag név</th>';
 		print '<th>Nyomtatva</th>';
@@ -22,6 +23,7 @@
 		print '</thead>';
 		while($row = $results->fetch_assoc()) {
 			print '<tr>';
+			print '<td>'.$row["id"].'</td>';
 			print '<td>'.$row["product"].'</td>';
 			if($row["printed"] == 1)
 				print '<td><span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"></td>';
