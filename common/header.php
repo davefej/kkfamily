@@ -30,18 +30,18 @@
 	  	<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta charset="utf-8">
 		
-		<script src="../js/functions.js?v=23" ></script>
-		<script src="../js/server.js?v=24" ></script>
+		<script src="../js/functions.js?v=25" ></script>
+		<script src="../js/server.js?v=25" ></script>
 		<script src="../js/Chart.js"></script>
 		<script src="../js/sorttable.js"></script>
 		
 	<?php  if($selected == "tablet"){	//TODO css rand		?>							
 				<link href="../js/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
-				<script src="../js/tablet.js?v=24"></script>
-				<link rel="stylesheet" type="text/css" href="../css/tabletstyles.css?v=1">
+				<script src="../js/tablet.js?v=25"></script>
+				<link rel="stylesheet" type="text/css" href="../css/tabletstyles.css?v=2">
 	<?php }else{ ?>
 				<link href="../js/bootstrap-3.3.7-dist/css/bootstrap.css" rel="stylesheet">
-				<link rel="stylesheet" type="text/css" href="../css/styles.css?v=1">
+				<link rel="stylesheet" type="text/css" href="../css/styles.css?v=2">
 	<?php } ?>
 <?php 		
 	if(isset($_SESSION['theme']) && $_SESSION['theme'] != "0"){	

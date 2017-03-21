@@ -109,7 +109,7 @@ function periodOutput($day, $month, $first,$last,$detail){
 	$data = array();
 
 	if($detail){
-		$sql = "SELECT p.id as id, pr.name as product, o.amount as amount, o.time as time, u.name as user,o.id as o_id
+		$sql = "SELECT p.id as id, pr.name as product, o.amount as amount, o.time as time, u.name as user,o.id as o_id,p.time as origtime
  				FROM  pallet p, product pr, output o, user u
 			where pr.id=p.product_id and o.pallet_id = p.id and o.user_id = u.id
 			 and 
@@ -117,7 +117,7 @@ function periodOutput($day, $month, $first,$last,$detail){
 			o.time <= '".$last." 23:59:59' 
 			and p.deleted = false and pr.deleted = false and o.deleted = false order by product";
 	}else{
-		$sql = "SELECT p.id as id, pr.name as product, sum(o.amount) as amount, o.time as time, u.name as user,o.id as o_id
+		$sql = "SELECT p.id as id, pr.name as product, sum(o.amount) as amount, o.time as time, u.name as user,o.id as o_id,p.time as origtime
  				FROM  pallet p, product pr, output o, user u
 			where pr.id=p.product_id and o.pallet_id = p.id and o.user_id = u.id
 			 and
@@ -164,9 +164,10 @@ function periodOutput($day, $month, $first,$last,$detail){
 			 $str .=  '<table class="table table-hover sortable">';
 			 $str .= '</thead>';
 			 $str .= '<tr>';
-			 $str .= '<th>Kiadás ID</th>';
+			
 			 $str .= '<th>Raklap ID</th>';
 			 $str .= '<th>Alapanyag</th>';
+			 $str .= '<th>Bevétel ideje</th>';
 			 $str .= '<th>Mennyiség</th>';
 			 $str .= '<th>Kiadási idő</th>';
 			 $str .= '<th>Raktáros</th>';
@@ -184,10 +185,10 @@ function periodOutput($day, $month, $first,$last,$detail){
 			 		array_push($data,(int)$row["amount"]);
 			 	}
 			 	$str .= '<tr>';
-			 
-				$str .= '<td>'.$row["o_id"].'</td>';
+				
 				$str .= '<td>'.$row["id"].'</td>';
 				$str .= '<td>'.$row["product"].'</td>';
+				$str .= '<td>'.$row["origtime"].'</td>';
 				$str .= '<td>'.$row["amount"].'</td>';
 				$str .= '<td>'.$row["time"].'</td>';
 				$str .= '<td>'.$row["user"].'</td>';			 	
