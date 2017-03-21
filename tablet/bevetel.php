@@ -5,7 +5,7 @@
 ?>
 <div class="container-fluid">
 	<div class="centerBlock">
-		<form method="post">
+		
 			<table id="beveteltable" class="table table-striped tabletTable desktop">
 				<thead>
 					<tr>
@@ -265,7 +265,7 @@
 			</table>
 			
 			 -->
-		</form>
+		
 	</div>
 </div>
 

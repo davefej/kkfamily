@@ -47,7 +47,7 @@ sqlExecute3(
 		WHERE  pr.deleted = false and u.id = p.user_id and s.id = p.supplier_id and
 		p.time >= '".$begin." 00:00:00' and
 		p.time <= '".$end." 23:59:59'
-		and p.product_id = pr.id and p.quantity_form_id = q.id",
+		and p.product_id = pr.id and p.quantity_form_id = q.id and p.deleted = false",
 		'qualityinputTable', $only_month, $only_day);
 
 function qualityinputTable($results, $month, $day){

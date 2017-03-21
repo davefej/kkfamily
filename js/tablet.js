@@ -3,11 +3,18 @@ function goTo(url){
 }
 
 function input(e){
+	var amount = $('#suly').val()
+	
+	if(!amount || parseInt(amount) <=0){
+		bootbox.alert("Csak 0-nál nagyobb súlyút vételezhet be")
+		return false;
+	}
+	
 	e.preventDefault();     // stops default button action, e.g. submitting a form
     e.stopPropagation();
 	var supplier = $('#besz').val()
 	var product = $('#alap').val()
-	var amount = $('#suly').val()
+	
 	
 	var sumDifference = $('#sumDifference').val()
 	var appearance = $('#appearance').val()
@@ -29,11 +36,17 @@ function input(e){
 }
 
 function inputMobile(e){
+	var amount = $('#suly-mobile').val()
+	if(!amount || parseInt(amount) <=0){
+		bootbox.alert("Csak 0-nál nagyobb súlyút vételezhet be")
+		return false;
+	}
+	
 	e.preventDefault();     // stops default button action, e.g. submitting a form
     e.stopPropagation();
 	var supplier = $('#besz-mobile').val()
 	var product = $('#alap-mobile').val()
-	var amount = $('#suly-mobile').val()
+	
 	
 	var sumDifference = $('#sumDifference-mobile').val()
 	var appearance = $('#appearance-mobile').val()
