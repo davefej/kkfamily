@@ -109,18 +109,20 @@ function periodOutput($day, $month, $first,$last,$detail){
 	$data = array();
 
 	if($detail){
-		$sql = "SELECT p.id as id, pr.name as product, o.amount as amount, o.time as time, u.name as user,o.id as o_id,p.time as origtime
- 				FROM  pallet p, product pr, output o, user u
+		$sql = "SELECT p.id as id, pr.name as product, o.amount as amount, o.time as time,
+				u.name as user,o.id as o_id,p.time as origtime, s.name as supp 
+ 				FROM  pallet p, product pr, output o, user u, supplier s 
 			where pr.id=p.product_id and o.pallet_id = p.id and o.user_id = u.id
-			 and 
+			 and s.id = p.supplier_id and
 			o.time >= '".$first." 00:00:00' and
 			o.time <= '".$last." 23:59:59' 
 			and p.deleted = false and pr.deleted = false and o.deleted = false order by product";
 	}else{
-		$sql = "SELECT p.id as id, pr.name as product, sum(o.amount) as amount, o.time as time, u.name as user,o.id as o_id,p.time as origtime
- 				FROM  pallet p, product pr, output o, user u
+		$sql = "SELECT p.id as id, pr.name as product, sum(o.amount) as amount, o.time as time,
+				u.name as user,o.id as o_id,p.time as origtime, s.name as supp 
+ 				FROM  pallet p, product pr, output o, user u,  supplier s 
 			where pr.id=p.product_id and o.pallet_id = p.id and o.user_id = u.id
-			 and
+			 and s.id = p.supplier_id and
 			o.time >= '".$first." 00:00:00' and
 			o.time <= '".$last." 23:59:59'
 			and p.deleted = false and pr.deleted = false and o.deleted = false group by pr.id order by product";
@@ -167,7 +169,8 @@ function periodOutput($day, $month, $first,$last,$detail){
 			
 			 $str .= '<th>Raklap ID</th>';
 			 $str .= '<th>Alapanyag</th>';
-			 $str .= '<th>Bevétel ideje</th>';
+			 $str .= '<th>Beszállítás ideje</th>';
+			 $str .= '<th>Beszállító</th>';
 			 $str .= '<th>Mennyiség</th>';
 			 $str .= '<th>Kiadási idő</th>';
 			 $str .= '<th>Raktáros</th>';
@@ -189,6 +192,7 @@ function periodOutput($day, $month, $first,$last,$detail){
 				$str .= '<td>'.$row["id"].'</td>';
 				$str .= '<td>'.$row["product"].'</td>';
 				$str .= '<td>'.$row["origtime"].'</td>';
+				$str .= '<td>'.$row["supp"].'</td>';
 				$str .= '<td>'.$row["amount"].'</td>';
 				$str .= '<td>'.$row["time"].'</td>';
 				$str .= '<td>'.$row["user"].'</td>';			 	
@@ -385,15 +389,22 @@ function periodSpare($day, $month, $first,$last,$detail){
 	$mysqli->close();
 }
 
-function periodInput($day, $month, $first,$last,$detail){
+function periodInput($day, $month, $first,$last,$detail,$supp){
 	$labels = array();
 	$data = array();
 
+	if($supp != ""){
+		$supp_filter = "and s.id = '".$supp."' ";
+	}else{
+		$supp_filter = "";
+	}
+	
 	if($detail){
 		
 		$sql = "SELECT p.id as id, pr.name as product, s.name as supplier, p.amount as amount, u.name as user
 	 				FROM supplier s, pallet p, product pr, user u
-				where pr.id=p.product_id and p.supplier_id = s.id and u.id = p.user_id
+				where pr.id=p.product_id and p.supplier_id = s.id 
+				and u.id = p.user_id ".$supp_filter."
 				 and  p.time >= '".$first." 00:00:00' and
 			p.time <= '".$last." 23:59:59' 
 			and p.deleted = false and pr.deleted = false order by supplier";
@@ -401,7 +412,8 @@ function periodInput($day, $month, $first,$last,$detail){
 		
 		$sql = "SELECT p.id as id, pr.name as product, s.name as supplier, sum(p.amount) as amount, u.name as user
 	 				FROM supplier s, pallet p, product pr, user u
-				where pr.id=p.product_id and p.supplier_id = s.id and u.id = p.user_id
+				where pr.id=p.product_id and p.supplier_id = s.id 
+				and u.id = p.user_id ".$supp_filter."
 				 and  p.time >= '".$first." 00:00:00' and
 			p.time <= '".$last." 23:59:59'
 			and p.deleted = false and pr.deleted = false group by pr.id order by supplier";
@@ -428,7 +440,7 @@ function periodInput($day, $month, $first,$last,$detail){
 				 
 				 $str .= '<td class="dateth">'.datepicker($day, $month, true).'</td>';
 
-				 $str .= '<td><button class="btn btn-sm btn-default"  onclick="monthlyInput()">Havi Szűrés</button></td>';
+				 $str .= '<td>'.supplierOption2().'<button class="btn btn-sm btn-default"  onclick="monthlyInput()">Havi Szűrés</button></td>';
 				 $str .= '<td><button class="btn btn-sm btn-default" onclick="dailyInput()">Napi Szűrés</button></td>';
 				
 				 if($detail){
@@ -443,7 +455,10 @@ function periodInput($day, $month, $first,$last,$detail){
 				 $str .= '<table class="table table-hover sortable">';
 				 $str .= '<thead>';
 				 $str .= '<tr>';
-				 $str .= '<th colspan=2>Alapanyag</th>';
+				 if($detail){
+				 	$str .= '<th>Raklap ID</th>';
+				 }
+				 $str .= '<th colspan=2>Alapanyag</th>';		 
 				 $str .= '<th>Beszállító Neve</th>';
 				 $str .= '<th>Mennyiség</th>';
 				 $str .= '<th>Raktáros</th>';
@@ -462,6 +477,9 @@ function periodInput($day, $month, $first,$last,$detail){
 				 	}
 
 				 	$str .= '<tr>';
+				 	if($detail){
+				 		$str .= '<td>'.$row["id"].'</td>';
+				 	}
 				 	$str .= '<td colspan=2>'.$row["product"].'</td>';
 				 	$str .= '<td>'.$row["supplier"].'</td>';
 				 	$str .= '<td>'.$row["amount"].'</td>';
@@ -795,6 +813,30 @@ function supplierOption($mobile){
 	$mysqli->close();
 }
 
+function supplierOption2(){
+	
+	$mysqli = connect();
+	$str = "";
+	if($results = $mysqli->query("SELECT * FROM supplier WHERE deleted = false order by name")){
+		
+				$str .= '<select id="supp_opt" class="form-control beszselect">';
+				$str .= '<option value="">Beszállító</option>';
+				$str .= '<option value=""> --- </option>';
+				while($row = $results->fetch_assoc()) {
+					$str .= '<option value="'.$row["id"].'">'.$row["name"].'</option>';
+				}
+				$str .= '</select>';
+
+				$results->free();
+	}else{
+		print "nincs adatbázis kapcsolat";
+		print mysqli_error($mysqli);
+	}
+
+	$mysqli->close();
+	return $str;
+}
+
 function productOption($mobile = true){
 
 	$mysqli = connect();
@@ -992,5 +1034,68 @@ function getDataById($id){
 	$mysqli->close();
 }
 
+function supplySQL($timefilter){
+	return "select p.id as id, pr.name as product, pr.id as pr_id, s.name as supplier, p.time as time, u.name as user,p.amount as origamount, pr.minimum as min, p.printed as printed,
+				sum( IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0)) as rest
+				from pallet p
+				INNER JOIN product pr on p.product_id = pr.id and p.deleted = false
+				INNER JOIN supplier s on s.id = p.supplier_id
+				INNER JOIN user u on u.id = p.user_id
+				LEFT JOIN (
+	    			select t2.id as id ,t3.amount as trash,t2.amount as output from
+					(
+			           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false ".$timefilter." group by pallet_id
+			        )t2
+				LEFT JOIN
+				(
+		           SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false ".$timefilter." group by pallet_id
+		        )t3
+				ON t2.id = t3.id
+				UNION
+				select t2.id as id ,t2.amount as trash,t3.amount as output from
+				(
+	             	SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false ".$timefilter." group by pallet_id
+	        	)t2
+				LEFT JOIN
+				(
+		           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false ".$timefilter." group by pallet_id
+		        )t3
+				ON t2.id = t3.id
+	 			) t1
+	 			on p.id = t1.id GROUP BY pr_id
+						HAVING rest > 0
+						order by product, time";
+}
 
+function inventorySQL($timefilter){
+	return "select p.id as id, pr.name as product, pr.id as pr_id, s.name as supplier, p.time as time, u.name as user,p.amount as origamount, pr.minimum as min, p.printed as printed,
+				IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0) as rest, p.deleted as deleted
+				from pallet p
+				INNER JOIN product pr on p.product_id = pr.id and p.time > (CURDATE() - INTERVAL 1 MONTH) 
+				INNER JOIN supplier s on s.id = p.supplier_id
+				INNER JOIN user u on u.id = p.user_id
+				LEFT JOIN (
+	    			select t2.id as id ,t3.amount as trash,t2.amount as output from
+					(
+			           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false  group by pallet_id
+			        )t2
+				LEFT JOIN
+				(
+		           SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false  group by pallet_id
+		        )t3
+				ON t2.id = t3.id
+				UNION
+				select t2.id as id ,t2.amount as trash,t3.amount as output from
+				(
+	             	SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false  group by pallet_id
+	        	)t2
+				LEFT JOIN
+				(
+		           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false  group by pallet_id
+		        )t3
+				ON t2.id = t3.id
+	 			) t1
+	 			on p.id = t1.id
+						order by product, time";
+}
 ?>

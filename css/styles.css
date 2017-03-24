@@ -254,4 +254,40 @@ a:hover.details{
 	background-color:rgba(114, 75, 75, 0.75);
 }
 
+.beszselect{
+	width:30%;
+	display: inline;
+	margin-right:10px;
+}
+
+.followtop{
+	text-align:center;
+	margin:0 auto;
+	padding: 10px;
+	width:50%;
+}
+
+.printbutton{
+	
+    background-image: url("../img/printerlogo.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.deletedrow{
+	background-color:rgba(200, 100, 100, 0.75);
+}
+
+.deletedrow:hover td{
+	background-color:rgba(200, 100, 100, 0.85);
+}
+
+.zerorow{
+	background-color:rgba(200, 200, 100, 0.75);
+}
+
+.zerorow:hover td{
+	background-color:rgba(200, 200, 100, 0.85);
+}
+
 

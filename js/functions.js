@@ -508,13 +508,14 @@ function dailyOutput(){
 function dailyInput(){
 	var day = $('#date_day').val()
 	var month = $('#date_month').val()
+	var supp_opt = $('#supp_opt').val()
 	var year  = new Date().getFullYear();
 	if($("#detailscb").is(":checked")){
 		detail = "true";
 	}else{
 		detail = "false";
 	}
-	window.location = "input.php?type=day&day="+year+"-"+month+"-"+day+"&detail="+detail;
+	window.location = "input.php?type=day&day="+year+"-"+month+"-"+day+"&detail="+detail+"&supp="+supp_opt;
 }
 
 function dailySpare(){
@@ -530,8 +531,9 @@ function dailySpare(){
 }
 
 function monthlyOutput(){
-	var day = $('#date_day').val()
-	var month = $('#date_month').val()
+	var day = $('#date_day').val();
+	var month = $('#date_month').val();
+	
 	var year  = new Date().getFullYear();
 	if($("#detailscb").is(":checked")){
 		detail = "true";
@@ -545,13 +547,14 @@ function monthlyOutput(){
 function monthlyInput(){
 	var day = $('#date_day').val()
 	var month = $('#date_month').val()
+	var supp_opt = $('#supp_opt').val();
 	var year  = new Date().getFullYear();
 	if($("#detailscb").is(":checked")){
 		detail = "true";
 	}else{
 		detail = "false";
 	}
-	window.location = "input.php?type=month&month="+year+"-"+month+"-01"+"&detail="+detail;
+	window.location = "input.php?type=month&month="+year+"-"+month+"-01"+"&detail="+detail+"&supp="+supp_opt;
 }
 
 function monthlySpare(){
@@ -652,14 +655,95 @@ function changecolor(i){
 function reloadMonthlyQuality (){	
 	var day = $('#date_day').val()
 	var month = $('#date_month').val()
+	var qualityfilter = $('#qualityfilter').val()
+	if($("#detailscb").is(":checked")){
+		detail = "true";
+	}else{
+		detail = "false";
+	}
 	var year  = new Date().getFullYear();
-	window.location = "quality.php?type=month&month="+year+"-"+month+"-01";
+	window.location = "quality.php?type=month&month="+year+"-"+month+"-01&filter="+qualityfilter+"&summary="+detail;
 }
 
 function reloadDailyQuality (){
 	var day = $('#date_day').val()
 	var month = $('#date_month').val()
+	var qualityfilter = $('#qualityfilter').val()
+	if($("#detailscb").is(":checked")){
+		detail = "true";
+	}else{
+		detail = "false";
+	}
 	var year  = new Date().getFullYear();
-	window.location = "quality.php?type=day&day="+year+"-"+month+"-"+day;
+	window.location = "quality.php?type=day&day="+year+"-"+month+"-"+day+"&filter="+qualityfilter+"&summary="+detail;
 }
 
+function loadSupply(){
+	var day = $('#date_day').val()
+	var month = $('#date_month').val()
+	window.location = "supply.php?month="+month+"&day="+day;
+}
+
+function follow(){
+	var id = $('#followpalletid').val()
+	window.location = "follow.php?id="+id;
+}
+
+function startPrint(data,keys,header){
+	/*
+	 * var supply = [
+		{
+		       name: 'John Doe',
+		       email: 'john@doe.com',
+		       phone: '111-111-1111'
+		    },
+		    {
+		       name: 'Barry Allen',
+		       email: 'barry@flash.com',
+		       phone: '222-222-2222'
+		    },
+		    {
+		       name: 'Cool Dude',
+		       email: 'cool@dude.com',
+		       phone: '333-333-3333'
+		    }
+	]
+	printJS({
+			printable: supply, 
+			properties: ['name', 'email', 'phone'], 
+			type: 'json',
+			header: ""
+		})
+		*/
+	printJS({
+			printable: data, 
+			properties: keys, 
+			type: 'json',
+			header: header
+		})
+	
+}
+
+function supplyPrint(day,month){
+	
+	var day = $('#date_day').val()
+	var month = $('#date_month').val()
+	var year  = new Date().getFullYear();
+	$.ajax({
+        url: "../helper/ajaxcontent.php?type=supplyprint&day="+day+"&month="+month,
+        type: "get",
+        cache: false,
+        success: function (response) {        	
+        	if(response){
+        		startPrint(
+        				JSON.parse(response),
+        				["terméknév","mennyiség"],
+        				"NAPI KÉSZLET "+year+"-"+month+"-"+day
+        		)	
+        	}
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+        	bootbox.alert("Internet vagy szerver hiba<br/>"+textStatus+"<br/>"+errorThrown)
+        }
+    });
+}

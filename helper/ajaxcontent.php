@@ -14,7 +14,32 @@ if(isset($_GET['type'])){
 			outputStatistic($dw);				
 		}
 	}	
+	
+	
+	if($_GET['type'] == "supplyprint"){
+		if(isset($_GET['day']) && isset($_GET['month'])){
+			$year = date("Y");
+			$timefilter = " and time < '".$year."-".$_GET['month']."-".$_GET['day']." 00:00:00' ";
+			sqlExecute(supplySQL($timefilter),'supplieJSON');
+			
+		}else{
+			
+		}
+	}
 }
 
+function supplieJSON($results){
+	$arr = array();
+	while($row = $results->fetch_assoc()) {
+		
+		$item = array();
+		$item["terméknév"] = $row['product'];
+		$item["mennyiség"] = $row['rest'];
+
+		array_push($arr,$item);
+	}
+	$data = json_encode($arr,3);
+	print $data;
+}
 
 ?>

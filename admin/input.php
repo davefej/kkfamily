@@ -11,6 +11,12 @@ if(isset($_GET['detail'])){
 	}
 }
 
+if(isset($_GET['supp'])){
+	$supp = $_GET['supp'];
+}else{
+	$supp = "";
+}
+
 if(isset($_GET['type'])){
 	if($_GET['type'] == "day"){
 		if(isset($_GET['day'])){
@@ -22,7 +28,7 @@ if(isset($_GET['type'])){
 			$only_month = "";
 			$only_day = "";
 		}
-		periodInput($only_day, $only_month, $day,$day,$detail);
+		periodInput($only_day, $only_month, $day,$day,$detail,$supp);
 	}else if($_GET['type'] == "month"){
 		if(isset($_GET['month'])){
 			$month_begin  = $_GET['month'];
@@ -35,12 +41,12 @@ if(isset($_GET['type'])){
 			$only_month = "";
 			$only_day = "";
 		}
-		periodInput($only_day, $only_month, $month_begin,$month_end,$detail);
+		periodInput($only_day, $only_month, $month_begin,$month_end,$detail,$supp);
 	}
 	
 }else{
 	$day  = date("Y-m-d");
-	periodInput("","",$day,$day,$detail);
+	periodInput("","",$day,$day,$detail,$supp);
 }
 
 

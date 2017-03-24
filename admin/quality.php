@@ -39,23 +39,80 @@ if(isset($_GET['type'])){
 	$only_day = "";
 }
 
+if(isset($_GET['filter'])){
+	$filter = " and q.decision = '".$_GET['filter']."' ";
+	$dec = $_GET['filter'];
+}else{
+	$filter = "";
+	$dec = "0";
+}
 
-sqlExecute3(
-		"SELECT p.id as id, pr.name as name, p.amount as amount,s.name as supp, p.time as time,u.name as user, q.sum_difference, 
+$paramarray = array();
+$paramarray['only_month'] = $only_month;
+$paramarray['only_day'] = $only_day;
+$paramarray['decision'] = $dec;
+
+
+if(!isset($_GET['summary']) || $_GET['summary'] == "true"){
+	$paramarray['summary'] = false;
+
+	$SQL = "SELECT p.id as id, pr.name as name, sum(p.amount) as amount,s.name as supp, p.time as time,u.name as user, avg(q.sum_difference) as sum_difference,
+		avg(q.appearance) as appearance, avg(q.consistency) as consistency, avg(q.smell) as smell , avg(q.color) as color, avg( q.clearness) as clearness, avg(q.pallet_quality) as pallet_quality, q.decision
+		FROM product pr, pallet p,quantity_form q, user u, supplier s
+		WHERE  pr.deleted = false and u.id = p.user_id and s.id = p.supplier_id and
+		p.time >= '".$begin." 00:00:00' and
+		p.time <= '".$end." 23:59:59' ".$filter."
+		and p.product_id = pr.id and p.quantity_form_id = q.id and p.deleted = false 
+		GROUP BY s.id";
+}else{
+	$paramarray['summary'] = true;
+	$SQL ="SELECT p.id as id, pr.name as name, p.amount as amount,s.name as supp, p.time as time,u.name as user, q.sum_difference, 
 		q.appearance, q.consistency, q.smell, q.color,  q.clearness, q.pallet_quality, q.decision
 		FROM product pr, pallet p,quantity_form q, user u, supplier s
 		WHERE  pr.deleted = false and u.id = p.user_id and s.id = p.supplier_id and
 		p.time >= '".$begin." 00:00:00' and
-		p.time <= '".$end." 23:59:59'
-		and p.product_id = pr.id and p.quantity_form_id = q.id and p.deleted = false",
-		'qualityinputTable', $only_month, $only_day);
+		p.time <= '".$end." 23:59:59' ".$filter."
+		and p.product_id = pr.id and p.quantity_form_id = q.id and p.deleted = false";
+}
 
-function qualityinputTable($results, $month, $day){
+
+sqlExecute2($SQL,'qualityinputTable', $paramarray);
+
+function qualityinputTable($results, $paramarray){
+	$month = $paramarray['only_month'];
+	$day = $paramarray['only_day'];
+	$detail = $paramarray['summary'];
 	
 	print '<table class="table table-hover ">';
 	print '<thead>';
 	print '<tr>';
-	print '<th colspan="12" class="dateth">'.datepicker($day, $month, true).'</th>';
+	print '<th colspan="10" class="dateth">'.datepicker($day, $month, true).'</th>';
+	print '<th><select class="form-control" id="qualityfilter">';
+			print '<option value="0" ';
+			if( $paramarray['decision'] == "0"){
+				print 'selected';
+			}
+			print	' >Átvéve</option>';
+			print '<option value="1" ';
+			if( $paramarray['decision'] == "1"){
+				print 'selected';
+			}
+			print	' >Reklamáció (Átvéve)</option>';
+			
+			print '<option value="2" ';
+			if( $paramarray['decision'] == "2"){
+				print 'selected';
+			}
+			print	' >Nincs Átvéve</option>';
+			
+	print '</select></th>';
+	
+	if($detail){
+		print '<th>Összegzés<input id="detailscb" type="checkbox" name="detailscb" ></th>';
+	}else{
+		print '<th>Összegzés<input id="detailscb" type="checkbox" name="detailscb" checked></th>';
+	}
+	
 	print '<th><button class="btn btn-sm btn-default" onclick="reloadMonthlyQuality()">Havi betöltés</button></th>';
 	print '<th><button class="btn btn-sm btn-default" onclick="reloadDailyQuality()">Napi betöltés</button></th>';
 	print '</thead>';
@@ -101,7 +158,7 @@ function qualityinputTable($results, $month, $day){
 		}else if($row["decision"] == "1"){
 			print '<td>Reklamáció (Átvéve)</td>';
 		}else{
-			print '<td>Nincs átvéve</td>';
+			print '<td>Nincs Átvéve</td>';
 		}
 		
 		print '</tr>';

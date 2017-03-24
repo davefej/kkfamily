@@ -273,10 +273,3 @@
 <?php 
 require("../common/footer.php");
 ?>
-<script>
-if(screen.width < 770){
-	$("#beveteltable").removeClass("desktop");
-
-	$("#beveteltable").addClass("mobile");
-}
-</script>
