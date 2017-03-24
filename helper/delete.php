@@ -23,7 +23,10 @@ if($data["type"] == "category"){
 		$sql = "UPDATE `output` SET `deleted` = '1' WHERE `output`.`id` = ".$data['id'];
 	}else if($data["type"] == "alert"){
 		$sql = "UPDATE `alert` SET `deleted` = '1' WHERE `output`.`id` = ".$data['id'];
+	}else if($data["type"] == "restore_pallet"){
+		$sql = "UPDATE `pallet` SET `deleted` = '0' WHERE `pallet`.`id` = ".$data['id'];
 	}
+	
 	return update($sql); 
 }
  

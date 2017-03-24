@@ -290,4 +290,12 @@ a:hover.details{
 	background-color:rgba(200, 200, 100, 0.85);
 }
 
+.raktarlogin{
+	position:fixed;
+	top: 60px;
+	left:5px;
+	color:white;
+	 font-weight: bold;
+}
+
 

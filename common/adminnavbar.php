@@ -38,3 +38,12 @@
 		</div><!-- /.navbar-collapse -->
 	</div><!-- /.container-fluid -->
 </nav>
+<div class="raktarlogin">
+
+<?php 
+$log = lastlog();
+echo $log["user"];
+echo '<br>';
+echo $log["day"];
+?>
+</div>

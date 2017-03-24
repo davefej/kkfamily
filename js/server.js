@@ -376,6 +376,14 @@ function deletePallet(id){
 		"type":"pallet"
 	});
 }
+
+function undeletePallet(id){
+	Delete({
+		"id":id,
+		"type":"restore_pallet"
+	});
+}
+
 function deleteOutput(id){
 	Delete({
 		"id":id,
@@ -398,10 +406,17 @@ function Delete(json){
         type: "post",
         data: JSON.stringify(json) ,
         cache: false,
-        success: function (response) {           
-        	bootbox.alert("Sikeres törlés", function(){
-        		location.reload();
-        	})         
+        success: function (response) { 
+        	if(json.type.startsWith("restore")){
+        		bootbox.alert("Sikeres visszaállítás", function(){
+            		location.reload();
+            	}) 
+        	}else{
+        		bootbox.alert("Sikeres törlés", function(){
+            		location.reload();
+            	}) 
+        	}
+        	        
         },
         error: function(jqXHR, textStatus, errorThrown) {
         	bootbox.alert("Internet vagy szerver hiba<br/>"+textStatus+"<br/>"+errorThrown)
