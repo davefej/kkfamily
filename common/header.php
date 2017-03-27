@@ -31,21 +31,21 @@
 		<meta charset="utf-8">
 		
 		<script src="../js/print.min.js" type="text/javascript" ></script>
-		<script src="../js/functions.js?v=25" ></script>
-		<script src="../js/server.js?v=25" ></script>
+		<script src="../js/functions.js?v=26" ></script>
+		<script src="../js/server.js?v=26" ></script>
 		<script src="../js/Chart.js"></script>
 		<script src="../js/sorttable.js"></script>
 
 		
 	<?php  if($selected == "tablet"){	//TODO css rand		?>							
 				<link href="../js/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
-				<script src="../js/tablet.js?v=25"></script>
-				<link rel="stylesheet" type="text/css" href="../css/tabletstyles.css?v=2">
+				<script src="../js/tablet.js?v=26"></script>
+				<link rel="stylesheet" type="text/css" href="../css/tabletstyles.css?v=3">
 	<?php }else{ ?>
 				
 				<link rel="stylesheet" type="text/css" href="../css/print.min.css">
 				<link href="../js/bootstrap-3.3.7-dist/css/bootstrap.css" rel="stylesheet">
-				<link rel="stylesheet" type="text/css" href="../css/styles.css?v=2">
+				<link rel="stylesheet" type="text/css" href="../css/styles.css?v=3">
 	<?php } ?>
 <?php 		
 	if(isset($_SESSION['theme']) && $_SESSION['theme'] != "0"){	
