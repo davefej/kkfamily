@@ -63,7 +63,7 @@ if(!isset($_GET['summary']) || $_GET['summary'] == "true"){
 		p.time >= '".$begin." 00:00:00' and
 		p.time <= '".$end." 23:59:59' ".$filter."
 		and p.product_id = pr.id and p.quantity_form_id = q.id and p.deleted = false 
-		GROUP BY s.id";
+		GROUP BY s.id, pr.id";
 }else{
 	$paramarray['summary'] = true;
 	$SQL ="SELECT p.id as id, pr.name as name, p.amount as amount,s.name as supp, p.time as time,u.name as user, q.sum_difference, 
@@ -122,12 +122,22 @@ function qualityinputTable($results, $paramarray){
 	print '</tr>';
 	print '<thead>';
 	print '<tr>';
-	print '<th>Raklap ID</th>';
-	print '<th>Alapanyag</th>';
-	print '<th>Beszállító</th>';
-	print '<th>Beszállítás Dátuma</th>';
-	print '<th>Eredeti Súly</th>';
-	print '<th>Súly különbség</th>';
+	if(!$detail){
+		print '<th></th>';
+		print '<th>Termék</th>';
+		print '<th>Beszállító</th>';
+		print '<th></th>';
+		print '<th>Összesen</th>';
+		print '<th></th>';
+	}else{
+		print '<th>Raklap ID</th>';
+		print '<th>Alapanyag</th>';
+		print '<th>Beszállító</th>';
+		print '<th>Beszállítás Dátuma</th>';
+		print '<th>Eredeti Súly</th>';
+		print '<th>Súly különbség</th>';
+	}
+	
 	print '<th>Külső<br/>Megjelenés</th>';
 	print '<th>Állag</th>';
 	print '<th>Illat</th>';
@@ -140,12 +150,22 @@ function qualityinputTable($results, $paramarray){
 	print '</thead>';
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
-		print '<td>'.$row["id"].'</td>';
-		print '<td>'.$row["name"].'</td>';
-		print '<td>'.$row["supp"].'</td>';
-		print '<td>'.$row["time"].'</td>';
-		print '<td>'.$row["amount"].'</td>';
-		print '<td>'.$row["sum_difference"].'</td>';
+		if(!$detail){
+			print '<td></td>';
+			print '<td>'.$row["name"].'</td>';
+			print '<td>'.$row["supp"].'</td>';
+			print '<td></td>';
+			print '<td>'.$row["amount"].'</td>';
+			print '<td></td>';
+		}else{
+			print '<td>'.$row["id"].'</td>';
+			print '<td>'.$row["name"].'</td>';
+			print '<td>'.$row["supp"].'</td>';
+			print '<td>'.$row["time"].'</td>';
+			print '<td>'.$row["amount"].'</td>';
+			print '<td>'.$row["sum_difference"].'</td>';
+		}
+	
 		print '<td>'.$row["appearance"].'</td>';
 		print '<td>'.$row["consistency"].'</td>';
 		print '<td>'.$row["smell"].'</td>';
