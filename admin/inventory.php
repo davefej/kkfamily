@@ -3,23 +3,44 @@
 $selected ="admin";
 $selector ="inventory";
 require("../common/header.php");
-
-sqlExecute(
-		inventorySQL(),
-		'inventoryTable');
+if(isset($_GET["filter"]) && isset($_GET["id"]) && $_GET["id"] !== ""){
+	$prodfilter = " and pr.id = ".$_GET["id"]." ";
+	$id = $_GET["id"];
+}else{
+	$prodfilter = "";
+	$id = 0;
+}
+sqlExecute2(
+		inventorySQL($prodfilter),
+		'inventoryTable',$id);
 
 require("../common/footer.php");
 
-function inventoryTable($results){
+function inventoryTable($results,$id){
+	print '<table class="table table-hover">';
+	print '<thead>';
+	print '<tr class="tableHeader">';
+	print '<th colspan="4" >';
+	productOptionInventory($id);
+	print '</th>';
+	print '<th></th>';
+	print '<th></th>';
+	print '<th></th>';
+	print '<th></th>';
+	print '<th></th>';
+	print '<th></th>';
+	print '</thead>';
+	print '</table>';
+	
 	print '<table class="table table-hover sortable">';
 	print '<thead>';
 	print '<tr>';
 	print '<th>ID</th>';
-	print '<th>';
-	print 'Alapanyag név</th>';
+	print '<th>Alapanyag név</th>';
 	print '<th>Beszállító Neve</th>';
 	print '<th>Beérkezés ideje</th>';
 	print '<th>Mennyiség</th>';
+	print '<th>Mértékegység</th>';
 	print '<th>Bevételezési<br/>mennyiség</th>';
 	print '<th>Raktáros</th>';
 	print '<th>Módosít</th>';
@@ -42,7 +63,9 @@ function inventoryTable($results){
 		print '<td>'.$row["supplier"].'</td>';
 		print '<td>'.$row["time"].'</td>';
 		print '<td>'.$row["rest"].'</td>';
+		print '<td>'.$row["unit"].'</td>';
 		print '<td>'.$row["origamount"].'</td>';
+		
 		print '<td>'.$row["user"].'</td>';
 		
 		if($row["deleted"] == "0"){

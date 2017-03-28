@@ -6,10 +6,14 @@ if(isset($_GET['pass']) && $_GET['pass'] == "kkpass123"){
 	
 	if(isset($_GET['error'])){		
 		$myfile = fopen("printerror.txt", "a");
-		fwrite($myfile, "\r\n". date('Y-m-d h:i:sa'). "\r\n");
+		fwrite($myfile, "\r\n". date('Y-m-d H:i:s'). "\r\n");
 		fwrite($myfile, $_GET['error']);
 		fclose($myfile);
 		return;
+	}else{
+		$myfile = fopen("log/printerlog.txt", "w");
+		fwrite($myfile,date('Y-m-d H:i:s'));
+		fclose($myfile);
 	}
 	$id = "";
 	$str = "NO_DATA";

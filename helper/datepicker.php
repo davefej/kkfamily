@@ -1,8 +1,19 @@
 <?php
 
-function datepicker($day, $month, $bool){
+function datepicker($year,$day, $month, $bool){
 
-	$str = '<select class="form-control" id="date_month">';
+	
+	$str = '<select class="form-control datepicker" id="date_year">';
+	for($i=0;$i<10;$i++){
+		if($year == 2017+$i){
+			$str .= '<option value="'.strval(2017+$i).'" selected>'.strval(2017+$i).'</option>';
+		}else{
+			$str .= '<option value="'.strval(2017+$i).'">'.strval(2017+$i).'</option>';
+		}
+	}
+	$str .= '</select>';
+	
+	$str .= '<select class="form-control datepicker" id="date_month">';
 	
 	if($month > 12 || $month < 0){
 		$str .= '<option value="" selected>Month</option>';
@@ -18,7 +29,7 @@ function datepicker($day, $month, $bool){
 		$str .= '<option value="01">January</option>';
 	}
 	if($month == 2){
-		$str .= '<option value="02" selected>February</option>>';
+		$str .= '<option value="02" selected>February</option>';
 	}
 	else{
 		$str .= '<option value="02">February</option>';
@@ -85,7 +96,7 @@ function datepicker($day, $month, $bool){
 	}
 		      
 	$str .= '</select>
-			<select class="form-control" id="date_day">';
+			<select class="form-control datepicker" id="date_day">';
 	
 	if($day > 12 || $day < 0){
 		$str .= '<option value="" selected>Day</option>';

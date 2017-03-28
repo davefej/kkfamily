@@ -74,16 +74,16 @@ function suppliesTable($results){
 	print '<table class="table table-hover sortable">';
 	print '<thead>';
 	print '<tr>';
-	print '<th>';
-	
-	print 'Alapanyag név</th>';
+	print '<th>Alapanyag név</th>';
 	print '<th>Mennyiség</th>';
+	print '<th>Mértékegység</th>';
 	print '</tr>';
 	print '</thead>';
 	while($row = $results->fetch_assoc()) {
 		print '<tr>';
 		print '<td>'.$row["product"].'</td>';
 		print '<td>'.$row["rest"].'</td>';
+		print '<td>'.$row["unit"].'</td>';
 		print '</tr>';
 	}
 	print '</table>';
@@ -171,11 +171,11 @@ function listStorageByProduct($id){
 		print '<thead>';
 		print '<tr>';
 		print '<th>ID</th>';
-		print '<th>';
-		print 'Alapanyag név</th>';
+		print '<th>Alapanyag név</th>';
 		print '<th>Beszállító Neve</th>';
 		print '<th>Beérkezés ideje</th>';
 		print '<th>Mennyiség</th>';
+		print '<th>Mértékegység</th>';
 		print '<th>Raktáros</th>';
 		print '</tr>';
 		print '</thead>';
@@ -189,11 +189,12 @@ function listStorageByProduct($id){
 			print '<td>'.$row["supplier"].'</td>';
 			print '<td>'.$row["time"].'</td>';
 			print '<td>'.$row["rest"].'</td>';
+			print '<td>'.$row["unit"].'</td>';
 			print '<td>'.$row["user"].'</td>';
 			print '</tr>';
 		}
 		print '<tr class="summtr">';
-		print '<td colspan="3"></td>';
+		print '<td colspan="4"></td>';
 		print '<td >Összesen:</td>';
 		print '<td ><b>'.strval($summ).'</b></td>';
 		print '<td ></td>';
@@ -271,6 +272,7 @@ function listStorageByCategory($id){
 		print '<th>Beszállító Neve</th>';
 		print '<th>Beérkezés ideje</th>';
 		print '<th>Mennyiség</th>';
+		print '<th>Mértékegység</th>';
 		print '<th>Raktáros</th>';
 		print '</tr>';
 		print '</thead>';
@@ -284,6 +286,7 @@ function listStorageByCategory($id){
 			print '<td>'.$row["supplier"].'</td>';
 			print '<td>'.$row["time"].'</td>';
 			print '<td>'.$row["rest"].'</td>';
+			print '<td>'.$row["unit"].'</td>';
 			print '<td>'.$row["user"].'</td>';
 			print '</tr>';
 		}

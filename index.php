@@ -14,10 +14,12 @@ function errorlog2($error){
 		$login_data = explode("_", $ret);
 		if((int)$login_data[0] === 0){
 			$_SESSION['user_id'] = $login_data[1];
+			
 			loginlog($_POST["username"],"admin");
 			header('Location: admin/admin.php');
 		}else if((int)$login_data[0] === 1){
 			$_SESSION['user_id'] = $login_data[1];
+			$_SESSION['user_name'] = $_POST["username"];
 			loginlog($_POST["username"],"raktar");
 			header('Location: tablet/bevetel.php');
 		}else{

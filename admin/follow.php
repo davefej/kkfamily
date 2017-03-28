@@ -6,10 +6,16 @@ require("../common/header.php");
 ?>
 
 <div class="followtop">
-<input type="number" id="followpalletid" <?php if(isset($_GET["id"])){echo "value='".$_GET["id"]."'";} ?> >
-<button class="btn btn-sm btn-default" onclick="follow()" 
+ID:<input type="number" id="followpalletid" <?php if(isset($_GET["id"])){echo "value='".$_GET["id"]."'";} ?> >
+<button class="btn btn-sm btn-default" onclick="follow()" >Raklap Követés</button>
 
- >Betöltés</button>
+<?php if(isset($_GET["prodid"])){
+		echo productOptionStorage2($_GET["prodid"]);
+	}else{
+		echo productOptionStorage2("");
+	}
+	?>
+&nbsp;&nbsp;<button class="btn btn-sm btn-default" onclick="followProd()" >Termék Követés</button>
 </div>
 
 <?php 
@@ -152,6 +158,111 @@ if(isset($_GET["id"])){
 	
 	$mysqli->close();
 	
+}else if(isset($_GET["prodid"])){
+	$mysqli = connect();
+	$id = $_GET["prodid"];
+	$idfiler = "and pr.id = '".$id."' ";
+	$weekday = date("w");
+	$weekday = $weekday -1;
+	if($weekday == -1){
+		$weekday = 6;
+	}
+	
+	$labels = array();
+	$data = array();
+	$prodname ="";
+	
+	for($i=8; $i>=1; $i--){
+		$back = ($i)*7-1;
+		$back = $back+((int)date( "w")-1)-$weekday;
+		if((int)date( "w")-1 >= $weekday){
+			$back = $back-6;
+		}else{
+			$back = $back+1;
+		}
+		$currdate = date('Y-m-d', strtotime("-".$back." days"));
+		$timefilter = " and time < '".$currdate." 00:00:00' ";
+		
+		if($results = $mysqli->query(supplySQL($timefilter,$idfiler))){
+			while($row = $results->fetch_assoc()) {
+				$prodname = $row["product"];
+				array_push($labels,$currdate);
+				array_push($data,(int)$row["rest"]);
+				
+				//print $row['rest']."<br/> ";
+			}
+			$results->free();
+		
+		}else{
+			print mysqli_error($mysqli);
+			print "nincs adatbázis kapcsolat";
+		}
+
+	}
+	print '<h1 align="center">'.$prodname.'</h1>';
+	$colors = array( 'rgba(255, 99, 132, 0.8)',
+			'rgba(54, 162, 235, 0.8)',
+			'rgba(255, 206, 86, 0.8)',
+			'rgba(75, 192, 192, 0.8)',
+			'rgba(153, 102, 255, 0.8)');
+		
+	$backgroundColor = array();
+	for($i=0; $i < count($labels); $i++){
+		$num = $i%count($colors);
+		array_push($backgroundColor,$colors[$num]);
+	}
+		
+	$datasets = array(
+			"label" => "Raktárkészletek",
+			"backgroundColor" => $backgroundColor,
+			"borderWidth" => 0,
+			"data" => $data
+	);
+	$datasetsarray = array($datasets);
+	$json = array(
+			"labels" => $labels,
+			"datasets" => $datasetsarray
+	);
+		
+	$json_str = json_encode($json,True);
+		
+	print '<div id="follow_json" class="hiddendiv">'.$json_str.'</div>';
+	
+	?>
+	<div class="container-fluid" id="barChartContainer">
+	<canvas id="myBarChart" width="600" height="150">
+		<script>
+		var ctx = document.getElementById("myBarChart");
+		var data = document.getElementById('follow_json').innerHTML; 
+		try{
+			data = JSON.parse(data);
+		}catch(err){
+			cosole.log(err);
+		}
+		
+		var myBarChart = new Chart(ctx, {
+			type: 'bar',
+		    data: data,
+		    options: {
+		    	legend: {
+                    display: false
+                },
+		        scales: {
+		            yAxes: [{
+		                ticks: {
+		                    beginAtZero:true
+		                }
+		            }]
+		        }
+		    }
+	        
+	    });
+		</script>
+	</canvas>
+</div>
+	
+	
+	<?php 
 }
 
 require("../common/footer.php");

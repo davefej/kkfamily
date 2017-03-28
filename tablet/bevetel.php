@@ -2,6 +2,7 @@
 	$selected = "tablet";
 	$selector = "bevetel";
 	require("../common/header.php");
+	
 ?>
 <div class="container-fluid">
 	<div class="centerBlock">
@@ -264,12 +265,26 @@
 				</tr>
 			</table>
 			
-			 -->
+			
 		
 	</div>
 </div>
 
 
 <?php 
+
+if ($file = fopen("../log/printerlog.txt", "r")) {
+	while(!feof($file)) {
+		$line = fgets($file);
+		$last = strtotime($line);
+		$minsago = strtotime("-2 minutes");
+		
+		if($minsago > $last){
+			echo "<h1 align='center'>Nyomtató program nincs bekapcsolva!</h1>";
+		}
+		break;
+	}
+}
+
 require("../common/footer.php");
 ?>

@@ -24,7 +24,7 @@
 				<li <?php if($selector == "spare"){ echo "class=\"active\"";} ?>><a href="spare.php">Selejt</a></li>				
 				<li <?php if($selector == "alert"){ echo "class=\"active\"";} ?>><a id='alerta'  href="alert.php">Jelzés</a></li>
 				<li <?php if($selector == "inventory"){ echo "class=\"active\"";} ?>><a href="inventory.php">Leltár</a></li>
-				<li <?php if($selector == "statistics"){ echo "class=\"active\"";} ?>><a href="statistics.php">Statisztika</a></li>
+				<li <?php if($selector == "statistics"){ echo "class=\"active\"";} ?>><a href="statistics.php">Napi feladás</a></li>
 				<li <?php if($selector == "quality"){ echo "class=\"active\"";} ?>><a href="quality.php">Minőség</a></li>
 				<li <?php if($selector == "supply"){ echo "class=\"active\"";} ?>><a href="supply.php">Készlet</a></li>
 				<li <?php if($selector == "print"){ echo "class=\"active\"";} ?>><a href="print.php">Nyomtatás</a></li>

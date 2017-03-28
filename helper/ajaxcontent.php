@@ -17,10 +17,9 @@ if(isset($_GET['type'])){
 	
 	
 	if($_GET['type'] == "supplyprint"){
-		if(isset($_GET['day']) && isset($_GET['month'])){
-			$year = date("Y");
-			$timefilter = " and time < '".$year."-".$_GET['month']."-".$_GET['day']." 00:00:00' ";
-			sqlExecute(supplySQL($timefilter),'supplieJSON');
+		if(isset($_GET['day']) && isset($_GET['month']) && isset($_GET['year'])){
+			$timefilter = " and time < '".$_GET['year']."-".$_GET['month']."-".$_GET['day']." 00:00:00' ";
+			sqlExecute(supplySQL($timefilter,""),'supplieJSON');
 			
 		}else{
 			

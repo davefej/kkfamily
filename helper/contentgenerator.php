@@ -66,7 +66,8 @@ function palletSQL3($filter,$groupby){
 		$sum2=")";
 
 	}
-	return "select p.id as id, pr.name as product, pr.id as pr_id, s.name as supplier, p.time as time, u.name as user,p.amount as origamount, pr.minimum as min, p.printed as printed,
+	return "select p.id as id, pr.name as product, pr.id as pr_id,pr.unit as unit,
+			s.name as supplier, p.time as time, u.name as user,p.amount as origamount, pr.minimum as min, p.printed as printed,
 				".$sum1."IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0)".$sum2." as rest
 				from pallet p
 				INNER JOIN product pr on p.product_id = pr.id ".$filter." and p.deleted = false
@@ -103,13 +104,12 @@ function palletSQL3($filter,$groupby){
 
 //** OTHER FUNCTIONS **//
 
-function periodOutput($day, $month, $first,$last,$detail){
-
-	$labels = array();
-	$data = array();
+function periodOutput($year,$day, $month, $first,$last,$detail){
+	$jsonarray = array();
+	
 
 	if($detail){
-		$sql = "SELECT p.id as id, pr.name as product, o.amount as amount, o.time as time,
+		$sql = "SELECT p.id as id, pr.name as product,pr.unit as unit, o.amount as amount, o.time as time,
 				u.name as user,o.id as o_id,p.time as origtime, s.name as supp 
  				FROM  pallet p, product pr, output o, user u, supplier s 
 			where pr.id=p.product_id and o.pallet_id = p.id and o.user_id = u.id
@@ -118,7 +118,7 @@ function periodOutput($day, $month, $first,$last,$detail){
 			o.time <= '".$last." 23:59:59' 
 			and p.deleted = false and pr.deleted = false and o.deleted = false order by product";
 	}else{
-		$sql = "SELECT p.id as id, pr.name as product, sum(o.amount) as amount, o.time as time,
+		$sql = "SELECT p.id as id, pr.name as product,pr.unit as unit, sum(o.amount) as amount, o.time as time,
 				u.name as user,o.id as o_id,p.time as origtime, s.name as supp 
  				FROM  pallet p, product pr, output o, user u,  supplier s 
 			where pr.id=p.product_id and o.pallet_id = p.id and o.user_id = u.id
@@ -148,10 +148,13 @@ function periodOutput($day, $month, $first,$last,$detail){
 			 	$str .= '<th colspan=2>'.$first.'</th>';
 			 }
 			 	
-			 $str .= '<th class="dateth">'.datepicker($day, $month, true).'</th>';
+			 $str .= '<th class="dateth">'.datepicker($year,$day, $month, true).'</th>';
 			 
 			 $str .= '<th><button class="btn btn-sm btn-default"  onclick="monthlyOutput()">Havi Szűrés</button></th>';
-			 $str .= '<th><button class="btn btn-sm btn-default" onclick="dailyOutput()">Napi Szűrés</button></th>';
+			 $str .= '<th>
+			 			<button class="btn btn-sm btn-default" onclick="dailyOutput()">Napi Szűrés</button>
+			 			<button class="btn btn-sm btn-default printbutton" onclick="outputPrint()">
+		 			</th>';
 			 
 			 if($detail){
 			 	$str .= '<th>Részletes<input id="detailscb" type="checkbox" name="detailscb" checked></th>';
@@ -166,36 +169,50 @@ function periodOutput($day, $month, $first,$last,$detail){
 			 $str .=  '<table class="table table-hover sortable">';
 			 $str .= '</thead>';
 			 $str .= '<tr>';
-			
-			 $str .= '<th>Raklap ID</th>';
+			 if($detail){
+				 $str .= '<th>Raklap ID</th>';
+			 }
 			 $str .= '<th>Alapanyag</th>';
-			 $str .= '<th>Beszállítás ideje</th>';
-			 $str .= '<th>Beszállító</th>';
+			 if($detail){
+				 $str .= '<th>Beszállítás ideje</th>';
+				 $str .= '<th>Beszállító</th>';
+				 $str .= '<th>Kiadási idő</th>';
+			 }
 			 $str .= '<th>Mennyiség</th>';
-			 $str .= '<th>Kiadási idő</th>';
-			 $str .= '<th>Raktáros</th>';
-			 
+			 $str .= '<th>Mértékegység</th>';
+			 if($detail){
+			 	$str .= '<th>Raktáros</th>';
+			 }
 			 $str .= '</tr>';
 			 $str .= '</thead>';
 			 $i =false;
 			 while($row = $results->fetch_assoc()) {
-			 	if(in_array($row["product"],$labels))
-			 	{
-			 		$key = array_search($row["product"],$labels);
-			 		$data[$key] = $data[$key]+(int)$row["amount"];
-			 	}else{
-			 		array_push($labels,$row["product"]);
-			 		array_push($data,(int)$row["amount"]);
+			 	$arritem = array();
+			 	$arritem['termék'] =$row["product"];
+			 	$arritem['mennyiség'] = $row["amount"]." ".$row["unit"];
+			 	if($detail){
+			 		$arritem['bevétel'] = $row["origtime"];
+			 		$arritem['beszállító'] = $row["supp"];
+			 		$arritem['kiadás'] = $row["time"];
 			 	}
+			 	array_push($jsonarray, $arritem);
+			 	
 			 	$str .= '<tr>';
 				
-				$str .= '<td>'.$row["id"].'</td>';
+			 	if($detail){
+					$str .= '<td>'.$row["id"].'</td>';
+			 	}
 				$str .= '<td>'.$row["product"].'</td>';
-				$str .= '<td>'.$row["origtime"].'</td>';
-				$str .= '<td>'.$row["supp"].'</td>';
+				if($detail){
+					$str .= '<td>'.$row["origtime"].'</td>';
+					$str .= '<td>'.$row["supp"].'</td>';
+					$str .= '<td>'.$row["time"].'</td>';
+				}
 				$str .= '<td>'.$row["amount"].'</td>';
-				$str .= '<td>'.$row["time"].'</td>';
-				$str .= '<td>'.$row["user"].'</td>';			 	
+				$str .= '<td>'.$row["unit"].'</td>';
+				if($detail){
+					$str .= '<td>'.$row["user"].'</td>';	
+				}
 			 	$str .= '</tr>';
 			 	$i =true;
 		 	}
@@ -210,39 +227,15 @@ function periodOutput($day, $month, $first,$last,$detail){
 			 	print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 85%"><strong>Semmmit nem adtak ki a raktárból!</strong></div>';
 			 	
 			 }
-
-			 $colors = array( 'rgba(255, 99, 132, 0.8)',
-			 		'rgba(54, 162, 235, 0.8)',
-			 		'rgba(255, 206, 86, 0.8)',
-			 		'rgba(75, 192, 192, 0.8)',
-			 		'rgba(153, 102, 255, 0.8)');
-
-			 $backgroundColor = array();
-			 for($i=0; $i < count($labels); $i++){
-			 	$num = $i%count($colors);
-			 	array_push($backgroundColor,$colors[$num]);
+		 
+			 if($first == $last){
+			 	$title = "Kiadás ".$first." napon";
+			 }else{
+			 	$title = "Kiadás ".substr($first,0,7)." hónapban";
 			 }
-
-			 $hoverBackgroundColor = array();
-			 for($i=0; $i < count($labels); $i++){
-			 	$num = $i%count($colors);
-			 	array_push($hoverBackgroundColor,$colors[$num]);
-			 }
-
-			 $datasets = array(
-			 		"data" => $data,
-			 		"backgroundColor" => $backgroundColor,
-			 		"hoverBackgroundColor" => $hoverBackgroundColor
-			 );
-			 $datasetsarray = array($datasets);
-			 $json = array(
-			 		"labels" => $labels,
-			 		"datasets" => $datasetsarray
-			 );
-
-			 $json_str = json_encode($json,True);
-
-			 print '<div id="dailyOutput_json" class="hiddendiv">'.$json_str.'</div>';
+			 $json_str = json_encode($jsonarray,True);
+			 print '<div id="printhelper_json" class="hiddendiv" detail="'.strval($detail).'"
+				 		title="'.$title.'">'.$json_str.'</div>';
 
 			 $results->free();
 	}else{
@@ -253,29 +246,35 @@ function periodOutput($day, $month, $first,$last,$detail){
 	$mysqli->close();
 }
 
-function periodSpare($day, $month, $first,$last,$detail){
-
-	$labels = array();
-	$data = array();
-
-	if($detail){
-		$groupby = "";
-	}else{
-		$groupby = " group by pr.id ";
-	}
+function periodSpare($year,$day, $month, $first,$last,$detail){
+	$jsonarray = array();
 	
 
-	$mysqli = connect();
-	if($results = $mysqli->query(
-
-			"SELECT p.id as id, pr.name as product, t.amount as amount, t.time as time, u.name as user
+	if($detail){
+		
+		$SQL = "SELECT p.id as id, pr.name as product,pr.unit as unit,  t.amount as amount, 
+				t.time as time, u.name as user, s.name as sname, p.time as origtime
+ 				FROM  pallet p, product pr, trash t, user u, supplier s
+			where pr.id=p.product_id and t.pallet_id = p.id and t.user_id = u.id
+			 and s.id = p.supplier_id and
+			t.time >= '".$first." 00:00:00' and
+			t.time <= '".$last." 23:59:59'
+			and p.deleted = false and pr.deleted = false and t.deleted = false 
+			 order by product";
+	}else{
+		$SQL ="SELECT p.id as id, pr.name as product,pr.unit as unit,  t.amount as amount, t.time as time, u.name as user
  				FROM  pallet p, product pr, trash t, user u
 			where pr.id=p.product_id and t.pallet_id = p.id and t.user_id = u.id
 			 and
 			t.time >= '".$first." 00:00:00' and
 			t.time <= '".$last." 23:59:59'
-			and p.deleted = false and pr.deleted = false and t.deleted = false 
-			".$groupby." order by product")){
+			and p.deleted = false and pr.deleted = false and t.deleted = false
+			group by pr.id  order by product";
+	}
+	
+
+	$mysqli = connect();
+	if($results = $mysqli->query($SQL)){
 
 			$str =  '<table class="table table-hover">';
 			$str .= '<thead>';
@@ -291,11 +290,11 @@ function periodSpare($day, $month, $first,$last,$detail){
 				$str .= '<th>'.$first.'</th>';
 			}
 				
-			$str .= '<th class="dateth">'.datepicker($day, $month, true).'</th>';
+			$str .= '<th class="dateth" colspan="2">'.datepicker($year,$day, $month, true).'</th>';
 			
 			$str .= '<th><button class="btn btn-sm btn-default"  onclick="monthlySpare()">Havi Szűrés</button></th>';
 			$str .= '<th><button class="btn btn-sm btn-default" onclick="dailySpare()">Napi Szűrés</button></th>';
-			
+			$str .= '<th><button class="btn btn-sm btn-default printbutton" onclick="sparePrint()"></th>';
 			if($detail){
 				$str .= '<th>Részletes<input id="detailscb" type="checkbox" name="detailscb" checked></th>';
 			}else{
@@ -303,32 +302,63 @@ function periodSpare($day, $month, $first,$last,$detail){
 			}
 
 			$str .= '<th></th>';
+			if($detail){
+				$str .= '<th></th>';
+				$str .= '<th></th>';
+			}
 			$str .= '</tr>';
 			$str .= '<tr>';
-			$str .= '<th>ID</th>';
-			$str .= '<th>Alapanyag</th>';
-			$str .= '<th>Mennyiség</th>';
-			$str .= '<th>Kiadási idő</th>';
-			$str .= '<th colspan=2>Raktáros</th>';
+			if($detail){
+				$str .= '<th>Raklap ID</th>';
+			}
+			
+			if(!$detail){
+				$colspan = "colspan='3'";
+			}else{
+				$colspan = "";
+			}
+			
+			$str .= '<th '.$colspan.'>Alapanyag</th>';
+			$str .= '<th '.$colspan.'>Mennyiség</th>';
+			$str .= '<th '.$colspan.'>Mértékegység</th>';
+			
+			if($detail){
+				$str .= '<th>Beszállító neve</th>';
+				$str .= '<th>Beszállítás dátuma</th>';
+				$str .= '<th>Kiadási idő</th>';
+				$str .= '<th colspan=2>Raktáros</th>';
+			}
+			
+			
 			$str .= '</tr>';
 			$str .= '</thead>';
 			$i =false;
 			while($row = $results->fetch_assoc()) {
-				if(in_array($row["product"],$labels))
-				{
-					$key = array_search($row["product"],$labels);
-					$data[$key] = $data[$key]+(int)$row["amount"];
-				}else{
-					array_push($labels,$row["product"]);
-					array_push($data,(int)$row["amount"]);
+				$arritem = array();
+				$arritem['termék'] =$row["product"];
+				$arritem['mennyiség'] = $row["amount"]." ".$row["unit"];
+				if($detail){
+					$arritem['bevétel'] = $row["origtime"];
+					$arritem['beszállító'] = $row["sname"];
+					$arritem['selejt'] = $row["time"];
 				}
+				array_push($jsonarray, $arritem);
 				$str .= '<tr>';
-
-				$str .= '<td>'.$row["id"].'</td>';
-				$str .= '<td>'.$row["product"].'</td>';
-				$str .= '<td>'.$row["amount"].'</td>';
-				$str .= '<td>'.$row["time"].'</td>';
-				$str .= '<td>'.$row["user"].'</td>';
+				
+				if($detail){
+					$str .= '<td>'.$row["id"].'</td>';
+				}
+				$str .= '<td '.$colspan.'>'.$row["product"].'</td>';
+				$str .= '<td '.$colspan.'>'.$row["amount"].'</td>';
+				$str .= '<td '.$colspan.'>'.$row["unit"].'</td>';
+				if($detail){
+					$str .= '<td>'.$row["sname"].'</td>';
+					$str .= '<td>'.$row["origtime"].'</td>';
+					$str .= '<td>'.$row["time"].'</td>';
+					$str .= '<td>'.$row["user"].'</td>';
+				}
+				
+				
 					
 
 				$str .= '</tr>';
@@ -347,38 +377,17 @@ function periodSpare($day, $month, $first,$last,$detail){
 					
 			}
 
-			$colors = array( 'rgba(255, 99, 132, 0.8)',
-					'rgba(54, 162, 235, 0.8)',
-					'rgba(255, 206, 86, 0.8)',
-					'rgba(75, 192, 192, 0.8)',
-					'rgba(153, 102, 255, 0.8)');
+			
 
-			$backgroundColor = array();
-			for($i=0; $i < count($labels); $i++){
-				$num = $i%count($colors);
-				array_push($backgroundColor,$colors[$num]);
+			
+			if($first == $last){
+				$title = "Selejt ".$first." napon";
+			}else{
+				$title = "Selejt ".substr($first,0,7)." hónapban";
 			}
-
-			$hoverBackgroundColor = array();
-			for($i=0; $i < count($labels); $i++){
-				$num = $i%count($colors);
-				array_push($hoverBackgroundColor,$colors[$num]);
-			}
-
-			$datasets = array(
-					"data" => $data,
-					"backgroundColor" => $backgroundColor,
-					"hoverBackgroundColor" => $hoverBackgroundColor
-			);
-			$datasetsarray = array($datasets);
-			$json = array(
-					"labels" => $labels,
-					"datasets" => $datasetsarray
-			);
-
-			$json_str = json_encode($json,True);
-
-			print '<div id="dailyOutput_json" class="hiddendiv">'.$json_str.'</div>';
+			$json_str = json_encode($jsonarray,True);
+			print '<div id="printhelper_json" class="hiddendiv" detail="'.strval($detail).'"
+				 		title="'.$title.'">'.$json_str.'</div>';
 
 			$results->free();
 	}else{
@@ -389,10 +398,9 @@ function periodSpare($day, $month, $first,$last,$detail){
 	$mysqli->close();
 }
 
-function periodInput($day, $month, $first,$last,$detail,$supp){
-	$labels = array();
-	$data = array();
-
+function periodInput($year,$day, $month, $first,$last,$detail,$supp){
+	
+	$jsonarray = array();
 	if($supp != ""){
 		$supp_filter = "and s.id = '".$supp."' ";
 	}else{
@@ -401,7 +409,7 @@ function periodInput($day, $month, $first,$last,$detail,$supp){
 	
 	if($detail){
 		
-		$sql = "SELECT p.id as id, pr.name as product, s.name as supplier, p.amount as amount, u.name as user
+		$sql = "SELECT p.id as id, pr.name as product,pr.unit as unit, s.name as supplier, p.amount as amount, u.name as user, p.time as time
 	 				FROM supplier s, pallet p, product pr, user u
 				where pr.id=p.product_id and p.supplier_id = s.id 
 				and u.id = p.user_id ".$supp_filter."
@@ -410,7 +418,7 @@ function periodInput($day, $month, $first,$last,$detail,$supp){
 			and p.deleted = false and pr.deleted = false order by supplier";
 	}else{
 		
-		$sql = "SELECT p.id as id, pr.name as product, s.name as supplier, sum(p.amount) as amount, u.name as user
+		$sql = "SELECT p.id as id, pr.name as product,pr.unit as unit, s.name as supplier, sum(p.amount) as amount, u.name as user
 	 				FROM supplier s, pallet p, product pr, user u
 				where pr.id=p.product_id and p.supplier_id = s.id 
 				and u.id = p.user_id ".$supp_filter."
@@ -438,15 +446,18 @@ function periodInput($day, $month, $first,$last,$detail,$supp){
 				 	$str .= '<td>'.$first.'</td>';
 				 }
 				 
-				 $str .= '<td class="dateth">'.datepicker($day, $month, true).'</td>';
+				 $str .= '<td class="dateth">'.datepicker($year,$day, $month, true).'</td>';
 
-				 $str .= '<td>'.supplierOption2().'<button class="btn btn-sm btn-default"  onclick="monthlyInput()">Havi Szűrés</button></td>';
-				 $str .= '<td><button class="btn btn-sm btn-default" onclick="dailyInput()">Napi Szűrés</button></td>';
+				 $str .= '<td>'.supplierOption2($supp).'<button class="btn btn-sm btn-default"  onclick="monthlyInput()">Havi Szűrés</button></td>';
+				 $str .= '<td>
+				 			<button class="btn btn-sm btn-default" onclick="dailyInput()">Napi Szűrés</button>
+				 			<button class="btn btn-sm btn-default printbutton" onclick="inputPrint()">
+				 		 </td>';
 				
 				 if($detail){
 				 	$str .= '<td>Részletes<input id="detailscb" type="checkbox" name="detailscb" checked></td>';
 				 }else{
-				 	$str .= '<td> Részletes<input id="detailscb" type="checkbox" name="detailscb" ></td>';
+				 	$str .= '<td>Részletes<input id="detailscb" type="checkbox" name="detailscb" ></td>';
 				 }
 				 
 				 $str .= '</tr>';
@@ -457,33 +468,44 @@ function periodInput($day, $month, $first,$last,$detail,$supp){
 				 $str .= '<tr>';
 				 if($detail){
 				 	$str .= '<th>Raklap ID</th>';
+				 	
 				 }
 				 $str .= '<th colspan=2>Alapanyag</th>';		 
-				 $str .= '<th>Beszállító Neve</th>';
 				 $str .= '<th>Mennyiség</th>';
-				 $str .= '<th>Raktáros</th>';
+				 $str .= '<th>Mértékegység</th>';
+				 if($detail){
+				 	$str .= '<th>Beszállító Neve</th>';
+				 	$str .= '<th>Bevétel ideje</th>';
+				 	$str .= '<th>Raktáros</th>';
+				 }
+				
 				 $str .= '</tr>';
 				 $str .= '</thead>';
 
 				 $i = false;
 				 while($row = $results->fetch_assoc()) {
-				 	if(in_array($row["product"],$labels))
-				 	{
-				 		$key = array_search($row["product"],$labels);
-				 		$data[$key] = $data[$key]+(int)$row["amount"];
-				 	}else{
-				 		array_push($labels,$row["product"]);
-				 		array_push($data,(int)$row["amount"]);
+				 	$arritem = array();
+				 	$arritem['termék'] =$row["product"];
+				 	$arritem['mennyiség'] = $row["amount"]." ".$row["unit"];
+				 	if($detail){
+					 	$arritem['bevétel'] = $row["time"];
+					 	$arritem['beszállító'] = $row["supplier"];
 				 	}
-
+				 	array_push($jsonarray, $arritem);
 				 	$str .= '<tr>';
 				 	if($detail){
 				 		$str .= '<td>'.$row["id"].'</td>';
 				 	}
 				 	$str .= '<td colspan=2>'.$row["product"].'</td>';
-				 	$str .= '<td>'.$row["supplier"].'</td>';
 				 	$str .= '<td>'.$row["amount"].'</td>';
-				 	$str .= '<td>'.$row["user"].'</td>';
+				 	$str .= '<td>'.$row["unit"].'</td>';
+				 	if($detail){
+				 		$str .= '<td>'.$row["supplier"].'</td>';
+				 		$str .= '<td>'.$row["time"].'</td>';
+				 		$str .= '<td>'.$row["user"].'</td>';
+				 	}
+				
+				 	
 				 	$str .= '</tr>';
 				 	$i = true;
 
@@ -500,38 +522,14 @@ function periodInput($day, $month, $first,$last,$detail,$supp){
 				 	print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 85%"><strong>Ma még semmmit nem adtak ki a raktárból!</strong></div>';
 				 }
 				 
-				 $colors = array( 'rgba(255, 99, 132, 0.8)',
-				 		'rgba(54, 162, 235, 0.8)',
-				 		'rgba(255, 206, 86, 0.8)',
-				 		'rgba(75, 192, 192, 0.8)',
-				 		'rgba(153, 102, 255, 0.8)');
-
-				 $backgroundColor = array();
-				 for($i=0; $i < count($labels); $i++){
-				 	$num = $i%count($colors);
-				 	array_push($backgroundColor,$colors[$num]);
+				 if($first == $last){
+				 	$title = "Bevétel ".$first." napon";
+				 }else{
+				 	$title = "Bevétel ".substr($first,0,7)." hónapban";
 				 }
-
-				 $hoverBackgroundColor = array();
-				 for($i=0; $i < count($labels); $i++){
-				 	$num = $i%count($colors);
-				 	array_push($hoverBackgroundColor,$colors[$num]);
-				 }
-
-				 $datasets = array(
-				 		"data" => $data,
-				 		"backgroundColor" => $backgroundColor,
-				 		"hoverBackgroundColor" => $hoverBackgroundColor
-				 );
-				 $datasetsarray = array($datasets);
-				 $json = array(
-				 		"labels" => $labels,
-				 		"datasets" => $datasetsarray
-				 );
-
-				 $json_str = json_encode($json,True);
-
-				 print '<div id="dailyInput_json" class="hiddendiv">'.$json_str.'</div>';
+				 $json_str = json_encode($jsonarray,True);
+				 print '<div id="printhelper_json" class="hiddendiv" detail="'.strval($detail).'"
+				 		title="'.$title.'">'.$json_str.'</div>';
 
 				 // Frees the memory associated with a result
 				 $results->free();
@@ -657,6 +655,7 @@ function inputStatistic($weekday,$day,$day2){
 
 function outputStatistic($weekday){
 	$data = array();
+	$unit = array();
 	print '<table class="table">';
 
 	print '<thead><tr class="tableTitle"><th>Napi Statisztikák</th><th></th></tr></thead>';
@@ -669,8 +668,10 @@ function outputStatistic($weekday){
 
 
 	for($i=1; $i<=4; $i++){
-		if($i==1 || $i == 3)
+		if($i==1 || $i == 3){
 			print '<tr>';
+		}
+			
 			print '<td>';
 			$back = ($i)*7-1-6;
 			$day = date('Y-m-d', strtotime("-".$back." days"));
@@ -692,7 +693,7 @@ function outputStatistic($weekday){
 
 			$mysqli = connect();
 			if($results = $mysqli->query(
-					"SELECT pr.name as product, sum(o.amount) as amount
+					"SELECT pr.name as product, sum(o.amount) as amount,pr.unit as unit
 			FROM pallet p, product pr, output o where pr.id=p.product_id and o.pallet_id = p.id and
 				o.time >= '".$day2." 00:00:00'
 			and o.time <= '".$day." 23:59:59' and
@@ -703,12 +704,13 @@ function outputStatistic($weekday){
 			$str .= '<thead>';
 			$str .= '<tr class="tableHeader">';
 			$str .= '<th>'.strval($i).' hete '.$currdate.'</th>';
-			$str .= '<th>'.daymap($weekday).'</th>';
+			$str .= '<th colspan="2">'.daymap($weekday).'</th>';
 				
 			$str .= '</tr>';
 			$str .= '<tr>';
 			$str .= '<th>Alapanyag</th>';
 			$str .= '<th>Mennyiség</th>';
+			$str .= '<th>Mértékegység</th>';
 			$str .= '</tr>';
 			$str .= '</thead>';
 			while($row = $results->fetch_assoc()) {
@@ -719,10 +721,13 @@ function outputStatistic($weekday){
 				}else{
 					$data[$prod] = $row["amount"];
 				}
+				
+				$unit[$prod] = $row["unit"];
 				$str.= '<tr>';
 
 				$str.= '<td>'.$row["product"].'</td>';
 				$str.= '<td>'.$row["amount"].'</td>';
+				$str.= '<td>'.$row["unit"].'</td>';
 
 				$str.= '</tr>';
 			}
@@ -745,16 +750,17 @@ function outputStatistic($weekday){
 	print '<hr style="width:90%">';
 
 	$str =  '<table class="table table-hover ">';
-	$str .= '<thead><tr class="tableTitle"><th>Átlag</th></tr></thead>';
-	$str .= '<thead>';
-	$str .= '<tr class="tableHeader">';
-	$str .= '<th>'.$day2.' -> '.$day.'</th>';
-	$str .= '<th>'.daymap($weekday).'</th>';
-
-	$str .= '</tr>';
+	$str .= '<thead><tr class="tableHeader">';
+	$str .= '<th>Átlag</th>';
+	$str .= '<th ><button class="btn btn-sm btn-default printbutton" onclick="statisticsPrint()"></th>';
+	$str .= '<th >'.daymap($weekday).'</th>';
+	$str .= '</tr></thead><thead>';
+	
 	$str .= '<tr>';
 	$str .= '<th>Alapanyag</th>';
+	
 	$str .= '<th>Mennyiség</th>';
+	$str .= '<th>Mértékegység</th>';
 	$str .= '</tr>';
 	$str .= '</thead>';
 	foreach ($data as $key => $value) {
@@ -762,8 +768,9 @@ function outputStatistic($weekday){
 		$str.= '<tr>';
 			
 		$str.= '<td>'.$key.'</td>';
-		$str.= '<td>'.$average.'</td>';
-			
+		
+		$str.= '<td><input type="number" value="'.$average.'" prodname="'.$key.'" unit="'.$unit[$key].'" class="statistic_amountinput"/></td>';
+		$str.= '<td>'.$unit[$key].'</td>';
 		$str.= '</tr>';
 	}
 	$str .= '</table>';
@@ -813,7 +820,7 @@ function supplierOption($mobile){
 	$mysqli->close();
 }
 
-function supplierOption2(){
+function supplierOption2($selected){
 	
 	$mysqli = connect();
 	$str = "";
@@ -823,7 +830,12 @@ function supplierOption2(){
 				$str .= '<option value="">Beszállító</option>';
 				$str .= '<option value=""> --- </option>';
 				while($row = $results->fetch_assoc()) {
-					$str .= '<option value="'.$row["id"].'">'.$row["name"].'</option>';
+					if($selected == $row["id"]){
+						$str .= '<option value="'.$row["id"].'" selected>'.$row["name"].'</option>';
+					}else{
+						$str .= '<option value="'.$row["id"].'" >'.$row["name"].'</option>';
+					}
+					
 				}
 				$str .= '</select>';
 
@@ -873,6 +885,57 @@ function productOptionStorage($filter){
 				print '<option  value="'.$row["id"].'">'.$row["name"].'</option>';
 			}
 				
+		}
+		print '</select>';
+
+		$results->free();
+	}else{
+		print "nincs adatbázis kapcsolat";
+		print mysqli_error($mysqli);
+	}
+	// close connection
+	$mysqli->close();
+}
+
+function productOptionInventory($filter){
+	$mysqli = connect();
+	if($results = $mysqli->query("SELECT * FROM product where deleted = false order by name")){
+		print '<select id="prod_select" onchange="filterInventoryProd()" style="width: 50%;" class="form-control">';
+
+		print '<option  value=""> Összes </option>';
+		while($row = $results->fetch_assoc()) {
+			if($filter === $row["id"]){
+				print '<option value="'.$row["id"].'" selected>'.$row["name"].'</option>';
+			}else{
+				print '<option  value="'.$row["id"].'">'.$row["name"].'</option>';
+			}
+
+		}
+		print '</select>';
+
+		$results->free();
+	}else{
+		print "nincs adatbázis kapcsolat";
+		print mysqli_error($mysqli);
+	}
+	// close connection
+	$mysqli->close();
+}
+
+function productOptionStorage2($filter){
+	$mysqli = connect();
+	if($results = $mysqli->query("SELECT * FROM product where deleted = false order by name")){
+		print '<select id="follow_prod_select" style="width: 50%;" class="form-control noblock">';
+
+		print '<option  value=""> Termék </option>';
+		print '<option  value=""> --- </option>';
+		while($row = $results->fetch_assoc()) {
+			if($filter === $row["id"]){
+				print '<option value="'.$row["id"].'" selected>'.$row["name"].'</option>';
+			}else{
+				print '<option  value="'.$row["id"].'">'.$row["name"].'</option>';
+			}
+
 		}
 		print '</select>';
 
@@ -1034,11 +1097,11 @@ function getDataById($id){
 	$mysqli->close();
 }
 
-function supplySQL($timefilter){
-	return "select p.id as id, pr.name as product, pr.id as pr_id, s.name as supplier, p.time as time, u.name as user,p.amount as origamount, pr.minimum as min, p.printed as printed,
+function supplySQL($timefilter,$prodfilter){
+	return "select p.id as id, pr.name as product, pr.id as pr_id,pr.unit as unit, s.name as supplier, p.time as time, u.name as user,sum(p.amount) as origamount, pr.minimum as min, p.printed as printed,
 				sum( IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0)) as rest
 				from pallet p
-				INNER JOIN product pr on p.product_id = pr.id and p.deleted = false
+				INNER JOIN product pr on p.product_id = pr.id and p.deleted = false  ".$prodfilter." ".$timefilter." 
 				INNER JOIN supplier s on s.id = p.supplier_id
 				INNER JOIN user u on u.id = p.user_id
 				LEFT JOIN (
@@ -1067,11 +1130,11 @@ function supplySQL($timefilter){
 						order by product, time";
 }
 
-function inventorySQL($timefilter){
-	return "select p.id as id, pr.name as product, pr.id as pr_id, s.name as supplier, p.time as time, u.name as user,p.amount as origamount, pr.minimum as min, p.printed as printed,
+function inventorySQL($prodfilter){
+	return "select p.id as id, pr.name as product, pr.id as pr_id,pr.unit as unit, s.name as supplier, p.time as time, u.name as user,p.amount as origamount, pr.minimum as min, p.printed as printed,
 				IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0) as rest, p.deleted as deleted
 				from pallet p
-				INNER JOIN product pr on p.product_id = pr.id and p.time > (CURDATE() - INTERVAL 1 MONTH) 
+				INNER JOIN product pr on p.product_id = pr.id and p.time > (CURDATE() - INTERVAL 1 MONTH) ".$prodfilter." 
 				INNER JOIN supplier s on s.id = p.supplier_id
 				INNER JOIN user u on u.id = p.user_id
 				LEFT JOIN (
@@ -1098,4 +1161,41 @@ function inventorySQL($timefilter){
 	 			on p.id = t1.id
 						order by product, time";
 }
+
+function suppnameFromId($id){
+	$suppname = "";
+	$mysqli = connect();
+	if($results = $mysqli->query("SELECT name from supplier WHERE id = ".$id)){
+	
+		while($row = $results->fetch_assoc()) {
+			$suppname = $row['name'];
+		}
+	
+		$results->free();
+	}else{
+		print mysqli_error($mysqli);
+		print "nincs adatbázis kapcsolat";
+	}
+	$mysqli->close();
+	return $suppname;
+}
+
+function prodnameFromId($id){
+	$suppname = "";
+	$mysqli = connect();
+	if($results = $mysqli->query("SELECT name from product WHERE id = ".$id)){
+
+		while($row = $results->fetch_assoc()) {
+			$suppname = $row['name'];
+		}
+
+		$results->free();
+	}else{
+		print mysqli_error($mysqli);
+		print "nincs adatbázis kapcsolat";
+	}
+	$mysqli->close();
+	return $suppname;
+}
+
 ?>

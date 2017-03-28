@@ -495,7 +495,7 @@ str += "</table>";
 function dailyOutput(){
 	var day = $('#date_day').val()
 	var month = $('#date_month').val()
-	var year  = new Date().getFullYear();
+	var year = $('#date_year').val()
 	if($("#detailscb").is(":checked")){
 		detail = "true";
 	}else{
@@ -509,7 +509,7 @@ function dailyInput(){
 	var day = $('#date_day').val()
 	var month = $('#date_month').val()
 	var supp_opt = $('#supp_opt').val()
-	var year  = new Date().getFullYear();
+	var year = $('#date_year').val()
 	if($("#detailscb").is(":checked")){
 		detail = "true";
 	}else{
@@ -521,7 +521,7 @@ function dailyInput(){
 function dailySpare(){
 	var day = $('#date_day').val()
 	var month = $('#date_month').val()
-	var year  = new Date().getFullYear();
+	var year = $('#date_year').val()
 	if($("#detailscb").is(":checked")){
 		detail = "true";
 	}else{
@@ -534,7 +534,7 @@ function monthlyOutput(){
 	var day = $('#date_day').val();
 	var month = $('#date_month').val();
 	
-	var year  = new Date().getFullYear();
+	var year = $('#date_year').val()
 	if($("#detailscb").is(":checked")){
 		detail = "true";
 	}else{
@@ -548,7 +548,7 @@ function monthlyInput(){
 	var day = $('#date_day').val()
 	var month = $('#date_month').val()
 	var supp_opt = $('#supp_opt').val();
-	var year  = new Date().getFullYear();
+	var year = $('#date_year').val()
 	if($("#detailscb").is(":checked")){
 		detail = "true";
 	}else{
@@ -560,7 +560,7 @@ function monthlyInput(){
 function monthlySpare(){
 	var day = $('#date_day').val()
 	var month = $('#date_month').val()
-	var year  = new Date().getFullYear();
+	var year = $('#date_year').val()
 	if($("#detailscb").is(":checked")){
 		detail = "true";
 	}else{
@@ -572,7 +572,11 @@ function monthlySpare(){
 function filterProd(){
 	var prod_id = $('#prod_select').val();
 	window.location = "storage.php?filter=prod&id="+prod_id;
-	
+}
+
+function filterInventoryProd(){
+	var prod_id = $('#prod_select').val();
+	window.location = "inventory.php?filter=prod&id="+prod_id;	
 }
 
 function filterProdOutput(mobile){
@@ -655,38 +659,46 @@ function changecolor(i){
 function reloadMonthlyQuality (){	
 	var day = $('#date_day').val()
 	var month = $('#date_month').val()
+	var year  = $('#date_year').val()
 	var qualityfilter = $('#qualityfilter').val()
 	if($("#detailscb").is(":checked")){
 		detail = "true";
 	}else{
 		detail = "false";
 	}
-	var year  = new Date().getFullYear();
+	
 	window.location = "quality.php?type=month&month="+year+"-"+month+"-01&filter="+qualityfilter+"&summary="+detail;
 }
 
 function reloadDailyQuality (){
 	var day = $('#date_day').val()
 	var month = $('#date_month').val()
+	var year  = $('#date_year').val()
 	var qualityfilter = $('#qualityfilter').val()
 	if($("#detailscb").is(":checked")){
 		detail = "true";
 	}else{
 		detail = "false";
 	}
-	var year  = new Date().getFullYear();
+	
 	window.location = "quality.php?type=day&day="+year+"-"+month+"-"+day+"&filter="+qualityfilter+"&summary="+detail;
 }
 
 function loadSupply(){
 	var day = $('#date_day').val()
 	var month = $('#date_month').val()
-	window.location = "supply.php?month="+month+"&day="+day;
+	var year = $('#date_year').val()
+	window.location = "supply.php?month="+month+"&day="+day+"&year="+year;
 }
 
 function follow(){
 	var id = $('#followpalletid').val()
 	window.location = "follow.php?id="+id;
+}
+
+function followProd(){
+	var id = $('#follow_prod_select').val()
+	window.location = "follow.php?prodid="+id;
 }
 
 function startPrint(data,keys,header){
@@ -724,13 +736,13 @@ function startPrint(data,keys,header){
 	
 }
 
-function supplyPrint(day,month){
+function supplyPrint(){
 	
 	var day = $('#date_day').val()
 	var month = $('#date_month').val()
-	var year  = new Date().getFullYear();
+	var year = $('#date_year').val()
 	$.ajax({
-        url: "../helper/ajaxcontent.php?type=supplyprint&day="+day+"&month="+month,
+        url: "../helper/ajaxcontent.php?type=supplyprint&day="+day+"&month="+month+"&year="+year,
         type: "get",
         cache: false,
         success: function (response) {        	
@@ -747,3 +759,106 @@ function supplyPrint(day,month){
         }
     });
 }
+
+
+function statisticsPrint(){
+	var today = new Date();
+	var time = today.toISOString().substring(0, 10);
+	var arr = [];
+	$('.statistic_amountinput').each(function() {
+		arr.push({
+			"termék":$(this).attr( "prodname" ),
+			"mennyiség":$(this).val()+" "+$(this).attr( "unit" )
+		})
+	   
+	});
+	
+	startPrint(
+			arr,
+			["termék","mennyiség"],
+			"Napi Statisztika "+time
+	)	
+}
+
+function sparePrint(){
+	var data = $('#printhelper_json').html()
+	data = JSON.parse(data);
+	var details = $('#printhelper_json').attr("detail") == "1";
+	var title = $('#printhelper_json').attr("title")
+	
+	if(details){
+		title += " (Részletes)";
+		headers = ["termék","mennyiség","bevétel","selejt","beszállító"];
+	}else{
+		title += " (Összegzett)";
+		headers = ["termék","mennyiség"];
+	}
+	startPrint(
+			data,
+			headers,
+			title
+	)
+}
+
+function outputPrint(){
+	var data = $('#printhelper_json').html()
+	data = JSON.parse(data);
+	var details = $('#printhelper_json').attr("detail") == "1";
+	var title = $('#printhelper_json').attr("title")
+	
+	if(details){
+		title += " (Részletes)";
+		headers = ["termék","mennyiség","bevétel","kiadás","beszállító"];
+	}else{
+		title += " (Összegzett)";
+		headers = ["termék","mennyiség"];
+	}
+	startPrint(
+			data,
+			headers,
+			title
+	)
+}
+
+function inputPrint(){
+	var data = $('#printhelper_json').html()
+	data = JSON.parse(data);
+	var details = $('#printhelper_json').attr("detail") == "1";
+	var title = $('#printhelper_json').attr("title")
+	
+	if(details){
+		title += " (Részletes)";
+		headers = ["termék","mennyiség","bevétel","beszállító"];
+	}else{
+		title += " (Összegzett)";
+		headers = ["termék","mennyiség"];
+	}
+	startPrint(
+			data,
+			headers,
+			title
+	)
+}
+
+function qualityPrint(){
+	var data = $('#printhelper_json').html()
+	data = JSON.parse(data);
+	var details = $('#printhelper_json').attr("detail") == "1";
+	var title = $('#printhelper_json').attr("title")
+	
+	if(details){
+		title += " (Részletes)";
+		headers = ["termék","mennyiség","bevétel","beszállító",
+			"megjelenés","állag","illat","szín","tisztaság-hőfok","raklap-minőség"];
+	}else{
+		title += " (Összegzett)";
+		headers = ["termék","mennyiség","beszállító",
+			"megjelenés","állag","illat","szín","tisztaság-hőfok","raklap-minőség"];
+	}
+	startPrint(
+			data,
+			headers,
+			title
+	)
+}
+

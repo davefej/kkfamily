@@ -19,8 +19,18 @@
 				<li <?php if($selector =="spare"){ echo "class=\"active\"";} ?> ><a href="spare.php">SELEJT</a></li>
 				<li <?php if($selector =="openqr"){ echo "class=\"active\"";} ?> ><a href="openqr.php">QR CODE</a></li>
 				<li <?php if($selector =="idkiadas"){ echo "class=\"active\"";} ?> ><a href="idkiadas.php">ID BEÍRÁS</a></li>
+				<li <?php if($selector =="raktar"){ echo "class=\"active\"";} ?> ><a href="raktar.php">Raktár</a></li>
+				
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
+			<?php 
+			if(isset($_SESSION['user_name'])){
+				$user = $_SESSION['user_name'];
+			}else{
+					$user = "";
+				}
+			?>
+				<li><a> User: <?php echo $user; ?></a></li>
 				<li><a href="../logout.php">Kijelentkezés</a></li>
 			</ul>		
 		</div><!-- /.navbar-collapse -->

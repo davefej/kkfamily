@@ -103,6 +103,8 @@ function alertinputTable($results){
 	print '<tr>';
 	print '<th>Minőség id</th>';
 	print '<th>Hibák</th>';
+	print '<th>Beszállító</th>';
+	print '<th>Mennyiség</th>';
 	print '<th>Raktáros</th>';
 	print '<th>Időpont</th>';
 	print '<th>Üzenet</th>';
@@ -118,18 +120,35 @@ function alertinputTable($results){
 		print '<td>'.$row["param"].'</td>';
 		$data = json_decode($row["param2"],True);
 		print '<td>';
+		$supplier_id = 0;
+		$amount = 0;
+		$prod = 0;
 		if($data != null){
 			foreach ($data as $i => $value) {
 					
-				if(is_numeric($value) && (2 == (int)$value || 1 == (int)$value) && $i != 'product'){
-					print minosegmap2($i).': '.minosegmap((int)$value).'<br/>';
+				if(is_numeric($value) && (2 == (int)$value || 1 == (int)$value) && $i != 'product' &&
+						$i != 'decision' && $i != 'supplier' && $i != 'amount'){
+					print minosegmap($i,(int)$value).'<br/>';
+					
+				}
+				
+				if($i == 'supplier'){
+					$supplier_id = $value;
+				}
+				if($i == 'amount'){
+					$amount = $value;
+				}
+				if($i == 'product'){
+					$prod = $value;
 				}
 			}
 		}
 		print '</td>';
+		print '<td>'.suppnameFromId($supplier_id).'</td>';
+		print '<td>'.$amount.'</td>';
 		print '<td>'.$row["name"].'</td>';
 		print '<td>'.$row["time"].'</td>';
-		print '<td> <button class="btn btn-default btn-md" onclick="bootbox.alert('.mymessage($data,$row["time"]).')">Üzenet</button></td>';
+		print '<td> <button class="btn btn-default btn-md" onclick="bootbox.alert('.mymessage($data,$row["time"],$prod).')">Üzenet</button></td>';
 		if($row["seen"] == '0' ){
 			print '<td><button class="btn btn-sm btn-danger" onclick="updateAlert('.$row["id"].')">OK</button></td>';
 		}else{
@@ -141,47 +160,57 @@ function alertinputTable($results){
 }
 
 
-function minosegmap($i){
-	if($i === 1){
-		return "Rossz";
-	}else if($i === 2){
-		return "Közepes";
-	}else if($i === 3){
-		return "OK";
-	}else{
-		return '';
+function minosegmap($name,$i){
+	$str = false;
+	if($name === "appearance"){
+		$str = "Kinézet";
+	}else if($name === "consistency"){
+		$str = "Állag";
+	}else if($name === "smell"){
+		$str = "Illat";
+	}else if($name === "color"){
+		$str = "Szín";
+	}else if($name === "clearness"){
+		$str = "Tisztaság Hőfok";
+	}else if($name === "pallet_quality"){
+		$str = "Raklap minőság";
+	}else if($name === "sum_difference"){
+		$str = "Súly különbség : ".strval($i);
+		$i =0;
 	}
+	
+	if($str){
+		if($i === 1){
+			$str .= " : Rossz";
+		}else if($i === 2){
+			$str .= " : Közepes";
+		}else if($i === 3){
+			$str .= " : Jó";
+		}
+	}
+	return $str;
 }
 
-function minosegmap2($i){
-	if($i === "appearance"){
-		return "Kinézet";
-	}else if($i === "consistency"){
-		return "Állag";
-	}else if($i === "smell"){
-		return "Illat";
-	}else if($i === "color"){
-		return "Szín";
-	}else if($i === "clearness"){
-		return "Tisztaság Hőfok";
-	}else if($i === "pallet_quality"){
-		return "Raklap minőság";
-	}else{
-		return '';
-	}
-}
 
 
 
-function mymessage($data,$time){
+
+
+
+function mymessage($data,$time,$prod){
+
+	
+	
+	
 	$str = "'<h2>Tisztelt Beszállító Partnerünk!</h2>";
-	$str .= "<br/>Szeretnénk tájékoztatni, hogy a ". substr($time, 0, 10)."-án ". substr($time, 11, 5)."-kor beszállított XYZ termék áruátvétele során az átvételre szakosított személyzet a következő problémákat találta:";
+	$str .= "<br/>Szeretnénk tájékoztatni, hogy a ". substr($time, 0, 10)."-án ". substr($time, 11, 5)."-kor beszállított ".prodnameFromId($prod)." termék áruátvétele során az átvételre szakosított személyzet a következő problémákat találta:";
 	$str .= "<ul>";
 	if($data != null){
 		foreach ($data as $i => $value) {
 
-			if(is_numeric($value) && (2 == (int)$value || 1 == (int)$value) && $i != 'product'){
-				$str .= "<li>".minosegmap2($i)." : ".minosegmap((int)$value)." </li>";
+			if(is_numeric($value) && (2 == (int)$value || 1 == (int)$value) && $i != 'product' &&
+				$i != 'decision' && $i != 'supplier' && $i != 'amount'){
+					$str .= "<li>".minosegmap($i,(int)$value)." </li>";
 
 			}
 		}
