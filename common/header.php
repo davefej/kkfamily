@@ -39,12 +39,12 @@
 		
 	<?php  if($selected == "tablet"){	//TODO css rand		?>							
 				<link href="../js/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
-				<script src="../js/tablet.js?v=27"></script>
+				<script src="../js/tablet.js?v=28"></script>
 				<link rel="stylesheet" type="text/css" href="../css/tabletstyles.css?v=3">
 	<?php }else{ ?>
 				
 				<link rel="stylesheet" type="text/css" href="../css/print.min.css">
-				<link href="../js/bootstrap-3.3.7-dist/css/bootstrap.cssv=2" rel="stylesheet">
+				<link href="../js/bootstrap-3.3.7-dist/css/bootstrap.css?v=2" rel="stylesheet">
 				<link rel="stylesheet" type="text/css" href="../css/styles.css?v=4">
 	<?php } ?>
 <?php 		

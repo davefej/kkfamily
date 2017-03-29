@@ -750,7 +750,7 @@ function supplyPrint(){
         		startPrint(
         				JSON.parse(response),
         				["terméknév","mennyiség"],
-        				"NAPI KÉSZLET "+year+"-"+month+"-"+day
+        				"NYITÓ KÉSZLET "+year+"-"+month+"-"+day
         		)	
         	}
         },
