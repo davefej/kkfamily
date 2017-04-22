@@ -763,7 +763,8 @@ function supplyPrint(){
 
 function statisticsPrint(){
 	var today = new Date();
-	var time = today.toISOString().substring(0, 10);
+	today.setDate(today.getDate() + 1);
+	var tomorrow = today.toISOString().substring(0, 10);
 	var arr = [];
 	$('.statistic_amountinput').each(function() {
 		arr.push({
@@ -776,7 +777,7 @@ function statisticsPrint(){
 	startPrint(
 			arr,
 			["termék","mennyiség"],
-			"Napi Statisztika "+time
+			"Napi Feladás "+tomorrow
 	)	
 }
 

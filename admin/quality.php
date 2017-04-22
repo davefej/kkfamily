@@ -153,9 +153,9 @@ function qualityinputTable($results, $paramarray){
 		print '<th>Besz. Dátuma</th>';
 		print '<th>Bevett Menny</th>';
 		print '<th>Me</th>';
-		print '<th>Súly diff</th>';
+		
 	}
-	
+	print '<th>Súly diff</th>';
 	print '<th>Külső<br/>Megj.</th>';
 	print '<th>Állag</th>';
 	print '<th>Illat</th>';
@@ -200,9 +200,10 @@ function qualityinputTable($results, $paramarray){
 			print '<td>'.$row["time"].'</td>';
 			print '<td>'.$row["amount"].'</td>';
 			print '<td>'.$row["unit"].'</td>';
-			print '<td>'.$row["sum_difference"].'</td>';
+			
 		}
 	
+		print '<td>'.$row["sum_difference"].'</td>';
 		print '<td>'.$row["appearance"].'</td>';
 		print '<td>'.$row["consistency"].'</td>';
 		print '<td>'.$row["smell"].'</td>';

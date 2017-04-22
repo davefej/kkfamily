@@ -749,12 +749,12 @@ function outputStatistic($weekday){
 	print '<br/>';
 	print '<hr style="width:90%">';
 
-	$str =  '<table class="table table-hover ">';
+	$str =  '<table class="table table-hover sortable">';
 	$str .= '<thead><tr class="tableHeader">';
 	$str .= '<th>Átlag</th>';
 	$str .= '<th ><button class="btn btn-sm btn-default printbutton" onclick="statisticsPrint()"></th>';
 	$str .= '<th >'.daymap($weekday).'</th>';
-	$str .= '</tr></thead><thead>';
+	$str .= '</tr>';
 	
 	$str .= '<tr>';
 	$str .= '<th>Alapanyag</th>';
@@ -763,6 +763,9 @@ function outputStatistic($weekday){
 	$str .= '<th>Mértékegység</th>';
 	$str .= '</tr>';
 	$str .= '</thead>';
+	
+	ksort($data);
+	
 	foreach ($data as $key => $value) {
 		$average = $value / 4;
 		$str.= '<tr>';

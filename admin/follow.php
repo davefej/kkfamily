@@ -172,7 +172,7 @@ if(isset($_GET["id"])){
 	$data = array();
 	$prodname ="";
 	
-	for($i=8; $i>=1; $i--){
+	for($i=8; $i>=3; $i--){
 		$back = ($i)*7-1;
 		$back = $back+((int)date( "w")-1)-$weekday;
 		if((int)date( "w")-1 >= $weekday){
@@ -199,6 +199,28 @@ if(isset($_GET["id"])){
 		}
 
 	}
+	
+	for($i=7; $i>=0; $i--){
+		$back = ($i);		
+		$currdate = date('Y-m-d', strtotime("-".$back." days"));
+		$timefilter = " and time < '".$currdate." 00:00:00' ";	
+		if($results = $mysqli->query(supplySQL($timefilter,$idfiler))){
+			while($row = $results->fetch_assoc()) {
+				$prodname = $row["product"];
+				array_push($labels,$currdate);
+				array_push($data,(int)$row["rest"]);
+	
+				//print $row['rest']."<br/> ";
+			}
+			$results->free();
+	
+		}else{
+			print mysqli_error($mysqli);
+			print "nincs adatbázis kapcsolat";
+		}
+	
+	}
+	
 	print '<h1 align="center">'.$prodname.'</h1>';
 	$colors = array( 'rgba(255, 99, 132, 0.8)',
 			'rgba(54, 162, 235, 0.8)',
