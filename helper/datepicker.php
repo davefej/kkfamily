@@ -1,9 +1,12 @@
 <?php
 
-function datepicker($year,$day, $month, $bool){
+function datepicker($year,$day, $month, $postfix){
 
+	if($postfix === true || $postfix === false){
+		$postfix = "";
+	}
 	
-	$str = '<select class="form-control datepicker" id="date_year">';
+	$str = '<select class="form-control datepicker" id="date_year'.$postfix.'">';
 	for($i=0;$i<10;$i++){
 		if($year == 2017+$i){
 			$str .= '<option value="'.strval(2017+$i).'" selected>'.strval(2017+$i).'</option>';
@@ -13,7 +16,7 @@ function datepicker($year,$day, $month, $bool){
 	}
 	$str .= '</select>';
 	
-	$str .= '<select class="form-control datepicker" id="date_month">';
+	$str .= '<select class="form-control datepicker" id="date_month'.$postfix.'">';
 	
 	if($month > 12 || $month < 0){
 		$str .= '<option value="" selected>Month</option>';
@@ -96,7 +99,7 @@ function datepicker($year,$day, $month, $bool){
 	}
 		      
 	$str .= '</select>
-			<select class="form-control datepicker" id="date_day">';
+			<select class="form-control datepicker" id="date_day'.$postfix.'">';
 	
 	if($day > 12 || $day < 0){
 		$str .= '<option value="" selected>Day</option>';

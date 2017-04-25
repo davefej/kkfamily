@@ -38,6 +38,24 @@
 				</tr>
 				<tr>
 					<td>
+						Bevétel Dátuma:
+					</td>
+					<td colspan="4">
+						<?php 
+							$today = date("Y-m-d");
+							$today_det = explode("-",$today);
+							echo datepicker((int)$today_det[0],(int)$today_det[2],(int)$today_det[1],false);
+						?>	
+					</td>
+					<td>
+						Lejárat:
+					</td>	
+					<td>
+						<input type="number" id="expire" value="0" class="form-control tabletForm"></input>
+					</td>
+				</tr>
+				<tr>
+					<td>
 						Mennyiségi eltérés
 					</td>
 					<td>
@@ -158,6 +176,28 @@
 						<input class="form-control tabletForm" id="suly-mobile" type="number" />
 					</td>
 				</tr>
+				
+				<tr>
+					<td>
+						Bevétel Dátuma:
+					</td>
+					<td colspan="4">
+						<?php 
+							$today = date("Y-m-d");
+							$today_det = explode("-",$today);
+							echo datepicker((int)$today_det[0],(int)$today_det[2],(int)$today_det[1],"-mobile");
+						?>	
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Lejárat:
+					</td>	
+					<td>
+						<input type="number" id="expire-mobile" value="0" class="form-control tabletForm"></input>
+					</td>
+				</tr>
+				
 			</table>
 			<br>
 			<table class="table table-striped tabletTable mobile">

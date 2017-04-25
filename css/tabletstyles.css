@@ -145,3 +145,16 @@ input.tabletForm{
 .newoutput:hover{
 	background-color:rgba(210, 130, 75, 1);
 }
+#date_year{
+	display: inline;
+	width: 30%;
+}
+#date_month{
+	display: inline;
+	width: 30%;
+}
+
+#date_day{
+	display: inline;
+	width: 30%;
+}
