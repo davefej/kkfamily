@@ -98,8 +98,7 @@ function datepicker($year,$day, $month, $postfix){
 		$str .= '<option value="12">December</option>';
 	}
 		      
-	$str .= '</select>
-			<select class="form-control datepicker" id="date_day'.$postfix.'">';
+	$str .= '</select><select class="form-control datepicker" id="date_day'.$postfix.'">';
 	
 	if($day > 12 || $day < 0){
 		$str .= '<option value="" selected>Day</option>';

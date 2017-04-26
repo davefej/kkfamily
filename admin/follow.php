@@ -7,7 +7,7 @@ require("../common/header.php");
 
 <div class="followtop">
 ID:<input type="number" id="followpalletid" <?php if(isset($_GET["id"])){echo "value='".$_GET["id"]."'";} ?> >
-<button class="btn btn-sm btn-default" onclick="follow()" >Raklap Követés</button>
+<button class="btn btn-sm btn-default" onclick="follow()" >Raklap Követés</button><br/><br/>
 
 <?php if(isset($_GET["prodid"])){
 		echo productOptionStorage2($_GET["prodid"]);

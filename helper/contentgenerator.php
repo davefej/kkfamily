@@ -110,7 +110,7 @@ function periodOutput($year,$day, $month, $first,$last,$detail){
 
 	if($detail){
 		$sql = "SELECT p.id as id, pr.name as product,pr.unit as unit, o.amount as amount, o.time as time,
-				u.name as user,o.id as o_id,p.time as origtime, s.name as supp 
+				u.name as user,o.id as o_id,p.time as origtime, s.name as supp, o.id as oid
  				FROM  pallet p, product pr, output o, user u, supplier s 
 			where pr.id=p.product_id and o.pallet_id = p.id and o.user_id = u.id
 			 and s.id = p.supplier_id and
@@ -182,6 +182,8 @@ function periodOutput($year,$day, $month, $first,$last,$detail){
 			 $str .= '<th>Mértékegység</th>';
 			 if($detail){
 			 	$str .= '<th>Raktáros</th>';
+			
+			 	$str .= '<th>Törlés</th>';
 			 }
 			 $str .= '</tr>';
 			 $str .= '</thead>';
@@ -212,6 +214,7 @@ function periodOutput($year,$day, $month, $first,$last,$detail){
 				$str .= '<td>'.$row["unit"].'</td>';
 				if($detail){
 					$str .= '<td>'.$row["user"].'</td>';	
+					$str .= '<td><button class="btn btn-sm btn-danger" onclick="deleteOutput('.$row["oid"].')">Visszavonás</button></td>';
 				}
 			 	$str .= '</tr>';
 			 	$i =true;

@@ -3,6 +3,10 @@ $selected="tablet";
 $selector="kiadas";
 require("../common/header.php");
 
+$today = date("Y-m-d");
+$today_det = explode("-",$today);
+echo "<script> var global_date_str = '".datepicker((int)$today_det[0],(int)$today_det[2],(int)$today_det[1],"")."'; </script>";
+
 $id="";
 if(isset($_GET["filter"]) && $_GET["filter"] == "prod"){
 	if($_GET["id"] == "")

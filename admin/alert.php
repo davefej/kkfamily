@@ -53,9 +53,10 @@ updateAlert();
 						<div>
 						<?php 			
 							sqlExecute(
-						"SELECT a.id, a.type, a.param, a.param2, a.time,
-						u.name, a.seen from alert a, user u 
+						"SELECT a.id, a.type, a.param, a.param2, a.time,pr.name as prname,
+						u.name, a.seen from alert a, user u, pallet p, product pr 
 						where u.id = a.user_id and a.deleted = false and a.time > '".$day." 00:00:00' 
+						and a.param2=p.id and p.product_id = pr.id 
 						and a.type='trash' order by time desc ",
 						'alertspareTable');
 						?>
@@ -263,6 +264,7 @@ function alertspareTable($results){
 	print '<tr>';
 	print '<th>Selejt id</th>';
 	print '<th>Raklap id</th>';
+	print '<th>Termék</th>';
 	print '<th>Raktáros</th>';
 	print '<th>Időpont</th>';
 	print '<th>Láttam</th>';
@@ -276,6 +278,7 @@ function alertspareTable($results){
 		print '>';
 		print '<td>'.$row["param"].'</td>';
 		print '<td>'.$row["param2"].'</td>';
+		print '<td>'.$row["prname"].'</td>';
 		print '<td>'.$row["name"].'</td>';
 		print '<td>'.$row["time"].'</td>';
 		if($row["seen"] == '0' ){

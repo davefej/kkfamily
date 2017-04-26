@@ -40,7 +40,7 @@
 					<td>
 						Bevétel Dátuma:
 					</td>
-					<td colspan="4">
+					<td colspan="3">
 						<?php 
 							$today = date("Y-m-d");
 							$today_det = explode("-",$today);
@@ -50,8 +50,12 @@
 					<td>
 						Lejárat:
 					</td>	
-					<td>
-						<input type="number" id="expire" value="0" class="form-control tabletForm"></input>
+					<td colspan="3">
+						<?php 
+							$today = date("Y-m-d");
+							$today_det = explode("-",$today);
+							echo datepicker("","","","-expire");
+						?>	
 					</td>
 				</tr>
 				<tr>
@@ -181,7 +185,7 @@
 					<td>
 						Bevétel Dátuma:
 					</td>
-					<td colspan="4">
+					<td colspan="3">
 						<?php 
 							$today = date("Y-m-d");
 							$today_det = explode("-",$today);
@@ -193,8 +197,12 @@
 					<td>
 						Lejárat:
 					</td>	
-					<td>
-						<input type="number" id="expire-mobile" value="0" class="form-control tabletForm"></input>
+					<td colspan="3">
+						<?php 
+							$today = date("Y-m-d");
+							$today_det = explode("-",$today);
+							echo datepicker("","","","-expire-mobile");
+						?>	
 					</td>
 				</tr>
 				

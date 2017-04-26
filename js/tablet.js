@@ -4,10 +4,17 @@ function goTo(url){
 
 function input(e){
 	var amount = $('#suly').val()
-	
-	if(!amount || parseInt(amount) <=0){
+	var sumDifference = $('#sumDifference').val()
+	if(sumDifference == ""){
+		sumDifference = "0";
+	}
+	var sumdiffint = parseInt(sumDifference);
+	if(!amount || (parseInt(amount)+sumdiffint) <=0){
 		bootbox.alert("Csak 0-nál nagyobb súlyút vételezhet be")
 		return false;
+	}else{
+		amount = parseInt(amount)+sumdiffint;
+		amount = amount+"";
 	}
 	
 	e.preventDefault();     // stops default button action, e.g. submitting a form
@@ -16,7 +23,19 @@ function input(e){
 	var product = $('#alap').val()
 	
 	
-	var sumDifference = $('#sumDifference').val()
+	var day = $('#date_day').val()
+	var month = $('#date_month').val()
+	var year = $('#date_year').val()
+	var day_exp = $('#date_day-expire').val()
+	var month_exp = $('#date_month-expire').val()
+	var year_exp = $('#date_year-expire').val()
+	
+	if(!expireOK(year_exp,month_exp,day_exp)){
+		bootbox.alert("Hibás Lejárat!")
+		return;
+	}
+	
+	
 	var appearance = $('#appearance').val()
 	var consistency = $('#consistency').val()
 	var smell = $('#smell').val()
@@ -30,17 +49,29 @@ function input(e){
 	localStorage.product = product;
 	*/
 	newQualityForm(sumDifference, appearance, consistency, smell, color,
-			clearness, palletQuality, decision,product,supplier,amount)
+			clearness, palletQuality, decision,product,supplier,amount,
+			parseMyDate(year,month,day),
+			parseMyDate(year_exp,month_exp,day_exp))
 	
 	return false;
 }
 
 function inputMobile(e){
 	var amount = $('#suly-mobile').val()
-	if(!amount || parseInt(amount) <=0){
+	var sumDifference = $('#sumDifference-mobile').val()
+	if(sumDifference == ""){
+		sumDifference = "0";
+	}
+	var sumdiffint = parseInt(sumDifference);
+	
+	if(!amount || (parseInt(amount)+sumdiffint) <=0){
 		bootbox.alert("Csak 0-nál nagyobb súlyút vételezhet be")
 		return false;
+	}else{
+		amount = parseInt(amount)+sumdiffint;
+		amount = amount+"";
 	}
+	
 	
 	e.preventDefault();     // stops default button action, e.g. submitting a form
     e.stopPropagation();
@@ -48,7 +79,19 @@ function inputMobile(e){
 	var product = $('#alap-mobile').val()
 	
 	
-	var sumDifference = $('#sumDifference-mobile').val()
+	var day = $('#date_day-mobile').val()
+	var month = $('#date_month-mobile').val()
+	var year = $('#date_year-expire-mobile').val()
+	var day_exp = $('#date_day-expire-mobile').val()
+	var month_exp = $('#date_month-expire-mobile').val()
+	var year_exp = $('#date_year-expire-mobile').val()
+	
+	if(!expireOK(year_exp,month_exp,day_exp)){
+		bootbox.alert("Hibás Lejárat!")
+		return;
+	}
+	
+	
 	var appearance = $('#appearance-mobile').val()
 	var consistency = $('#consistency-mobile').val()
 	var smell = $('#smell-mobile').val()
@@ -62,7 +105,9 @@ function inputMobile(e){
 	localStorage.product = product;
 	*/
 	newQualityForm(sumDifference, appearance, consistency, smell, color,
-			clearness, palletQuality, decision,product,supplier,amount)
+			clearness, palletQuality, decision,product,supplier,amount,
+			parseMyDate(year,month,day),
+			parseMyDate(year_exp,month_exp,day_exp))
 	
 	return false;
 }
@@ -103,4 +148,40 @@ if (typeof String.prototype.startsWith != 'function') {
 	  String.prototype.startsWith = function (str){
 	    return this.indexOf(str) === 0;
 	  };
+}
+
+function parseMyDate(year,month,day){
+	if(year == "" || month == "" || day == ""){
+		return "NULL";
+	}else{
+		
+		var today = new Date();
+		var otherDate = new Date(year+"-"+month+"-"+day);
+		var isToday = (today.toDateString() == otherDate.toDateString());
+		if(isToday){
+			return "NULL";
+		}else{
+			return year+"-"+month+"-"+day
+		}
+	}
+}
+
+function expireOK(year,month,day){
+	if(year == "" || month == "" || day == ""){
+		
+	}else{
+		var today = new Date();
+		var otherDate = new Date(year+"-"+month+"-"+day);
+		if(today.getTime() > otherDate.getTime()){
+			return false;
+		}
+	}
+	return true;
+}
+
+function outputDate(){
+	var day = $('#date_day').val()
+	var month = $('#date_month').val()
+	var year = $('#date_year').val()
+	return parseMyDate(year,month,day);
 }

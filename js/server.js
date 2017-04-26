@@ -50,13 +50,15 @@ function newTrash(pallet_id,amount){
 	},alertcallback);
 }
 
-function newPallet(product_id,supplier_id,amount,qualityForm){	
+function newPallet(product_id,supplier_id,amount,qualityForm,date,expire){	
 	insert({
     	"product_id":product_id,
     	"supplier_id":supplier_id,
     	"amount":amount,
     	"quality_form":qualityForm,
-    	"type":"pallet"
+    	"type":"pallet",
+    	"date":date,
+    	"expire":expire
 	},clearAmount);
 }
 
@@ -75,12 +77,13 @@ function clearAmount(){
 	$("#suly").val(0);
 }
 
-function newOutput(pallet_id,amount,alert){	
+function newOutput(pallet_id,amount,alert,date){	
 
 	insert({
     	"pallet_id":pallet_id,
     	"amount":amount,    	
-    	"type":"output"
+    	"type":"output",
+    	"date":date
 	},alertcallback); 
 }
 
@@ -91,7 +94,7 @@ function alertcallback(json,response){
 }
 
 function newQualityForm(sumDifference, appearance, consistency, smell, color,
-		clearness, palletQuality, decision,product,supplier,amount){
+		clearness, palletQuality, decision,product,supplier,amount,date,expire){
 		if(decision == "accept" || decision == "accept2"){
 			
 			if(decision == "accept"){
@@ -114,7 +117,9 @@ function newQualityForm(sumDifference, appearance, consistency, smell, color,
 						"type":"quality_form",
 						"product":product,
 						"supplier":supplier,
-						"amount":amount
+						"amount":amount,
+						"date":date,
+						"expire":expire
 					},palletcallback);		
 				}
 			});
@@ -137,7 +142,9 @@ function newQualityForm(sumDifference, appearance, consistency, smell, color,
 							"type":"quality_form",
 							"product":product,
 							"supplier":supplier,
-							"amount":amount
+							"amount":amount,
+							"date":date,
+							"expire":expire
 						},palletcallback);
 				}
 			});
@@ -147,7 +154,7 @@ function newQualityForm(sumDifference, appearance, consistency, smell, color,
 function palletcallback(json,response){
 	
 	if(json.decision  == "0" || json.decision  == "1" || json.decision  == "accept2" || json.decision  == "accept"){//ÁTVÉVE
-		newPallet(json.product,json.supplier,json.amount,response)
+		newPallet(json.product,json.supplier,json.amount,response,json.date,json.expire)
 	}else{
 		newPalletDel(json.product,json.supplier,json.amount,response)
 		newAlert("input",response,JSON.stringify(json))	
@@ -371,9 +378,13 @@ function deleteTrash(id){
 	});
 }
 function deletePallet(id){
-	Delete({
-		"id":id,
-		"type":"pallet"
+	bootbox.confirm("<h3>Biztosan törli?</h3>",function (yes){
+		if(yes){
+			Delete({
+				"id":id,
+				"type":"pallet"
+			});
+		}
 	});
 }
 
@@ -381,14 +392,18 @@ function undeletePallet(id){
 	Delete({
 		"id":id,
 		"type":"restore_pallet"
-	});
+	});		
 }
 
 function deleteOutput(id){
-	Delete({
-		"id":id,
-		"type":"output"
-	});
+	bootbox.confirm("<h3>Biztosan törli?</h3>",function (yes){
+		if(yes){
+			Delete({
+				"id":id,
+				"type":"output"
+			});
+		}
+	});	
 }
 
 function deleteAlert(id){

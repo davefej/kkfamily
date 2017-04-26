@@ -39,6 +39,9 @@ function bbsave(){
 		newCategory(name)
 		
 	}else if(tipus == "createOutput"){
+		
+		var date = outputDate();
+		
 		var pallet_id = $('#type').attr("id2");
 		var amount = $('#output_amount').val()		
 		var max = $('#type').attr("max");
@@ -48,7 +51,7 @@ function bbsave(){
 		}else{
 			bootbox.confirm('<h3>Biztos kiadja?<br>Mennyiség: '+amount+'</h3>',function (yes){
 				if(yes){
-					newOutput(pallet_id,amount,old);			
+					newOutput(pallet_id,amount,old,date);			
 				}
 			});
 		}
@@ -272,6 +275,11 @@ function createOutput(pallet_id,full,old){
 		str += "<tr>";
 			str += "<td>";
 				str += "<input type='number' maxlength='50' value='"+full+"' id='output_amount' style='font-size: 130%; '>";
+			str += "</td>";
+		str += "</tr>";
+		str += "<tr>";
+			str += "<td>";
+				str += global_date_str;
 			str += "</td>";
 		str += "</tr>";
 	str += "</table>";

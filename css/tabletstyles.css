@@ -158,3 +158,24 @@ input.tabletForm{
 	display: inline;
 	width: 30%;
 }
+
+#date_month-expire{
+	display: inline;
+	width: 30%;
+}
+
+#date_day-expire{
+	display: inline;
+	width: 30%;
+}
+#date_year-expire{
+	display: inline;
+	width: 30%;
+}
+
+.beveteldate{
+	margin-left:50px;
+	width:50%;
+	margin-bottom:20px;
+	display:none;
+}
