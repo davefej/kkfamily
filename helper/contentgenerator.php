@@ -151,7 +151,8 @@ function periodOutput($from,$to,$detail){
 			 }else{
 			 	$str .= '<th> Részletes<input id="detailscb" type="checkbox" name="detailscb" ></th>';
 			 }
-			 $str .= '<th><button class="btn btn-sm btn-default printbutton" onclick="outputPrint()"></th>';
+			 $str .= '<th><button class="btn btn-sm btn-default printbutton" onclick="outputPrint()">
+			 		<button class="btn btn-sm btn-default csvbutton" onclick="outputCSV()"></th>';
 			 
 			 $str .= '</tr>';
 			 $str .= '</thead>';
@@ -223,7 +224,7 @@ function periodOutput($from,$to,$detail){
 			 }
 		 
 			
-			 $title = "Kiadás a szűrt időszakban";
+			 $title = "Kiadás ".$from."-tól ".$to."-ig";
 			 $json_str = json_encode($jsonarray,True);
 			 print '<div id="printhelper_json" class="hiddendiv" detail="'.strval($detail).'"
 				 		title="'.$title.'">'.$json_str.'</div>';
@@ -284,7 +285,8 @@ function periodSpare($from,$to,$detail){
 			}else{
 				$str .= '<th> Részletes<input id="detailscb" type="checkbox" name="detailscb" ></th>';	
 			}
-			$str .= '<th><button class="btn btn-sm btn-default printbutton" onclick="sparePrint()"></th>';
+			$str .= '<th><button class="btn btn-sm btn-default printbutton" onclick="sparePrint()">
+					<button class="btn btn-sm btn-default csvbutton" onclick="spareCSV()"></th>';
 				
 			if($detail){
 				
@@ -362,7 +364,7 @@ function periodSpare($from,$to,$detail){
 					
 			}
 		
-			$title = "Selejt a szűrt időszakban";
+			$title = "Selejt ".$from."-tól ".$to."-ig";
 			
 			$json_str = json_encode($jsonarray,True);
 			print '<div id="printhelper_json" class="hiddendiv" detail="'.strval($detail).'"
@@ -429,7 +431,8 @@ function periodInput($from,$to,$detail,$supp){
 				 }else{
 				 	$str .= '<td>Részletes<input id="detailscb" type="checkbox" name="detailscb" ></td>';
 				 }
-				 $str .= '<td> <button class="btn btn-sm btn-default printbutton" onclick="inputPrint()"></td>';
+				 $str .= '<td> <button class="btn btn-sm btn-default printbutton" onclick="inputPrint()">
+				 		<button class="btn btn-sm btn-default csvbutton" onclick="inputCSV()"></td>';
 				
 				
 				 
@@ -496,7 +499,7 @@ function periodInput($from,$to,$detail,$supp){
 				 }
 				 
 				
-			 	$title = "Bevétel az időszakban";
+			 	$title = "Bevétel ".$from."-tól ".$to."-ig";
 				 
 				 $json_str = json_encode($jsonarray,True);
 				 print '<div id="printhelper_json" class="hiddendiv" detail="'.strval($detail).'"

@@ -123,10 +123,12 @@ function qualityinputTable($results, $paramarray){
 	
 	if($detail){
 		print '<th>Összegzés<input id="detailscb" type="checkbox" name="detailscb" ></th>';
-		print '<th><button class="btn btn-sm btn-default printbutton" onclick="qualityPrint()"></th>';
+		print '<th><button class="btn btn-sm btn-default printbutton" onclick="qualityPrint()">
+				<button class="btn btn-sm btn-default csvbutton" onclick="qualityCSV()"></th>';
 	}else{
 		print '<th>Összegzés<input id="detailscb" type="checkbox" name="detailscb" checked></th>';
-		print '<th><button class="btn btn-sm btn-default printbutton" onclick="qualityPrint()"></th>';
+		print '<th><button class="btn btn-sm btn-default printbutton" onclick="qualityPrint()">
+				<button class="btn btn-sm btn-default csvbutton" onclick="qualityCSV()"></th>';
 	}
 	
 	print '<th><button class="btn btn-sm btn-default" onclick="reloadMonthlyQuality()">Havi betöltés</button></th>';

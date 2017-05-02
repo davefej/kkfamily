@@ -707,6 +707,41 @@ function startPrint(data,keys,header){
 	
 }
 
+function startCSV(data,keys,header){
+	var csv = "";
+	for(var i in keys){
+		csv += keys[i]+";"; 
+	}
+	csv += "\n";
+	for(var j in data){
+		
+		for(var i in keys){
+			csv += data[j][keys[i]]+";"; 
+		}
+		csv += "\n";
+	}
+	
+	var uri = 'data:text/csv;charset=utf-8,' + escape(csv);
+    
+    // Now the little tricky part.
+    // you can use either>> window.open(uri);
+    // but this will not work in some browsers
+    // or you will not get the correct file extension    
+    
+    //this trick will generate a temp <a /> tag
+    var link = document.createElement("a");    
+    link.href = uri;
+    
+    //set the visibility hidden so it will not effect on your web-layout
+    link.style = "visibility:hidden";
+    link.download = header + ".csv";
+    
+    //this part will append the anchor tag and remove it after automatic click
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
 function supplyPrint(){
 	
 	var day = $('#date_day').val()
@@ -772,6 +807,27 @@ function sparePrint(){
 	)
 }
 
+function spareCSV(){
+	var data = $('#printhelper_json').html()
+	data = JSON.parse(data);
+	var details = $('#printhelper_json').attr("detail") == "1";
+	var title = $('#printhelper_json').attr("title")
+	
+	if(details){
+		title += " (Részletes)";
+		headers = ["termék","mennyiség","bevétel","selejt","beszállító"];
+	}else{
+		title += " (Összegzett)";
+		headers = ["termék","mennyiség"];
+	}
+	startCSV(
+			data,
+			headers,
+			title
+	)
+}
+
+
 function outputPrint(){
 	var data = $('#printhelper_json').html()
 	data = JSON.parse(data);
@@ -791,6 +847,27 @@ function outputPrint(){
 			title
 	)
 }
+
+function outputCSV(){
+	var data = $('#printhelper_json').html()
+	data = JSON.parse(data);
+	var details = $('#printhelper_json').attr("detail") == "1";
+	var title = $('#printhelper_json').attr("title")
+	
+	if(details){
+		title += " (Részletes)";
+		headers = ["termék","mennyiség","bevétel","kiadás","beszállító"];
+	}else{
+		title += " (Összegzett)";
+		headers = ["termék","mennyiség"];
+	}
+	startCSV(
+			data,
+			headers,
+			title
+	)
+}
+
 
 function inputPrint(){
 	
@@ -813,6 +890,27 @@ function inputPrint(){
 	)
 }
 
+function inputCSV(){
+	
+	var data = $('#printhelper_json').html()
+	data = JSON.parse(data);
+	var details = $('#printhelper_json').attr("detail") == "1";
+	var title = $('#printhelper_json').attr("title")
+	
+	if(details){
+		title += " (Részletes)";
+		headers = ["termék","mennyiség","bevétel","beszállító"];
+	}else{
+		title += " (Összegzett)";
+		headers = ["termék","mennyiség"];
+	}
+	startCSV(
+			data,
+			headers,
+			title
+	)
+}
+
 function qualityPrint(){
 	var data = $('#printhelper_json').html()
 	data = JSON.parse(data);
@@ -829,6 +927,29 @@ function qualityPrint(){
 			"megjelenés","állag","illat","szín","tisztaság-hőfok","raklap-minőség"];
 	}
 	startPrint(
+			data,
+			headers,
+			title
+	)
+}
+
+
+function qualityCSV(){
+	var data = $('#printhelper_json').html()
+	data = JSON.parse(data);
+	var details = $('#printhelper_json').attr("detail") == "1";
+	var title = $('#printhelper_json').attr("title")
+	
+	if(details){
+		title += " (Részletes)";
+		headers = ["termék","mennyiség","bevétel","beszállító",
+			"megjelenés","állag","illat","szín","tisztaság-hőfok","raklap-minőség"];
+	}else{
+		title += " (Összegzett)";
+		headers = ["termék","mennyiség","beszállító",
+			"megjelenés","állag","illat","szín","tisztaság-hőfok","raklap-minőség"];
+	}
+	startCSV(
 			data,
 			headers,
 			title
