@@ -104,7 +104,7 @@ function palletSQL3($filter,$groupby){
 
 //** OTHER FUNCTIONS **//
 
-function periodOutput($year,$day, $month, $first,$last,$detail){
+function periodOutput($from,$to,$detail){
 	$jsonarray = array();
 	
 
@@ -114,8 +114,8 @@ function periodOutput($year,$day, $month, $first,$last,$detail){
  				FROM  pallet p, product pr, output o, user u, supplier s 
 			where pr.id=p.product_id and o.pallet_id = p.id and o.user_id = u.id
 			 and s.id = p.supplier_id and
-			o.time >= '".$first." 00:00:00' and
-			o.time <= '".$last." 23:59:59' 
+			o.time >= '".$from." 00:00:00' and
+			o.time <= '".$to." 23:59:59' 
 			and p.deleted = false and pr.deleted = false and o.deleted = false order by product";
 	}else{
 		$sql = "SELECT p.id as id, pr.name as product,pr.unit as unit, sum(o.amount) as amount, o.time as time,
@@ -123,8 +123,8 @@ function periodOutput($year,$day, $month, $first,$last,$detail){
  				FROM  pallet p, product pr, output o, user u,  supplier s 
 			where pr.id=p.product_id and o.pallet_id = p.id and o.user_id = u.id
 			 and s.id = p.supplier_id and
-			o.time >= '".$first." 00:00:00' and
-			o.time <= '".$last." 23:59:59'
+			o.time >= '".$from." 00:00:00' and
+			o.time <= '".$to." 23:59:59'
 			and p.deleted = false and pr.deleted = false and o.deleted = false group by pr.id order by product";
 		
 	}
@@ -138,30 +138,21 @@ function periodOutput($year,$day, $month, $first,$last,$detail){
 			 $str =  '<table class="table table-hover">';
 			 $str .= '<thead>';
 			 $str .= '<tr class="tableHeader">';
-			 if($detail && $first != $last){
-			 	$str .= '<th colspan=2>'.$first." <br> ".$last.'</th>';
-			 }else if($first != $last){
-			 	$str .= '<th colspan=2>'.$first." <br> ".$last.'</th>';
-			 }
+		
+			 $str .= '<th colspan=2>'.$from." <br> ".$to.'</th>';
 			 	
-			 if($first === $last){
-			 	$str .= '<th colspan=2>'.$first.'</th>';
-			 }
-			 	
-			 $str .= '<th class="dateth">'.datepicker($year,$day, $month, true).'</th>';
+			 $str .= '<th class="dateth">'.mydatepicker($from, "_from")."<br/>".mydatepicker($to, "_to").'</th>';
 			 
-			 $str .= '<th><button class="btn btn-sm btn-default"  onclick="monthlyOutput()">Havi Szűrés</button></th>';
-			 $str .= '<th>
-			 			<button class="btn btn-sm btn-default" onclick="dailyOutput()">Napi Szűrés</button>
-			 			<button class="btn btn-sm btn-default printbutton" onclick="outputPrint()">
-		 			</th>';
+			 $str .= '<th><button class="btn btn-sm btn-default"  onclick="outputfilter()">Szűrés</button></th>';
+			 
 			 
 			 if($detail){
 			 	$str .= '<th>Részletes<input id="detailscb" type="checkbox" name="detailscb" checked></th>';
 			 }else{
 			 	$str .= '<th> Részletes<input id="detailscb" type="checkbox" name="detailscb" ></th>';
 			 }
-			 	
+			 $str .= '<th><button class="btn btn-sm btn-default printbutton" onclick="outputPrint()"></th>';
+			 
 			 $str .= '</tr>';
 			 $str .= '</thead>';
 			 $str .= '</table>';
@@ -231,11 +222,8 @@ function periodOutput($year,$day, $month, $first,$last,$detail){
 			 	
 			 }
 		 
-			 if($first == $last){
-			 	$title = "Kiadás ".$first." napon";
-			 }else{
-			 	$title = "Kiadás ".substr($first,0,7)." hónapban";
-			 }
+			
+			 $title = "Kiadás a szűrt időszakban";
 			 $json_str = json_encode($jsonarray,True);
 			 print '<div id="printhelper_json" class="hiddendiv" detail="'.strval($detail).'"
 				 		title="'.$title.'">'.$json_str.'</div>';
@@ -249,7 +237,7 @@ function periodOutput($year,$day, $month, $first,$last,$detail){
 	$mysqli->close();
 }
 
-function periodSpare($year,$day, $month, $first,$last,$detail){
+function periodSpare($from,$to,$detail){
 	$jsonarray = array();
 	
 
@@ -260,8 +248,8 @@ function periodSpare($year,$day, $month, $first,$last,$detail){
  				FROM  pallet p, product pr, trash t, user u, supplier s
 			where pr.id=p.product_id and t.pallet_id = p.id and t.user_id = u.id
 			 and s.id = p.supplier_id and
-			t.time >= '".$first." 00:00:00' and
-			t.time <= '".$last." 23:59:59'
+			t.time >= '".$from." 00:00:00' and
+			t.time <= '".$to." 23:59:59'
 			and p.deleted = false and pr.deleted = false and t.deleted = false 
 			 order by product";
 	}else{
@@ -269,8 +257,8 @@ function periodSpare($year,$day, $month, $first,$last,$detail){
  				FROM  pallet p, product pr, trash t, user u
 			where pr.id=p.product_id and t.pallet_id = p.id and t.user_id = u.id
 			 and
-			t.time >= '".$first." 00:00:00' and
-			t.time <= '".$last." 23:59:59'
+			t.time >= '".$from." 00:00:00' and
+			t.time <= '".$to." 23:59:59'
 			and p.deleted = false and pr.deleted = false and t.deleted = false
 			group by pr.id  order by product";
 	}
@@ -283,32 +271,26 @@ function periodSpare($year,$day, $month, $first,$last,$detail){
 			$str .= '<thead>';
 			$str .= '<tr class="tableHeader">';
 				
-			if($detail && $first != $last){
-				$str .= '<th>'.$first." <br> ".$last.'</th>';
-			}else if($first != $last){
-				$str .= '<th>'.$first." <br> ".$last.'</th>';
-			}
+			$str .= '<th>'.$from." <br> ".$to.'</th>';
+		
 				
-			if($first === $last){
-				$str .= '<th>'.$first.'</th>';
-			}
-				
-			$str .= '<th class="dateth" colspan="2">'.datepicker($year,$day, $month, true).'</th>';
+			$str .= '<th class="dateth" colspan="4">'.mydatepicker($from, "_from")."<br/>".mydatepicker($to, "_to").'</th>';
 			
-			$str .= '<th><button class="btn btn-sm btn-default"  onclick="monthlySpare()">Havi Szűrés</button></th>';
-			$str .= '<th><button class="btn btn-sm btn-default" onclick="dailySpare()">Napi Szűrés</button></th>';
-			$str .= '<th><button class="btn btn-sm btn-default printbutton" onclick="sparePrint()"></th>';
+			$str .= '<th><button class="btn btn-sm btn-default"  onclick="sparefilter()">Szűrés</button></th>';
+			
+			
 			if($detail){
 				$str .= '<th>Részletes<input id="detailscb" type="checkbox" name="detailscb" checked></th>';
 			}else{
-				$str .= '<th> Részletes<input id="detailscb" type="checkbox" name="detailscb" ></th>';
+				$str .= '<th> Részletes<input id="detailscb" type="checkbox" name="detailscb" ></th>';	
 			}
-
-			$str .= '<th></th>';
+			$str .= '<th><button class="btn btn-sm btn-default printbutton" onclick="sparePrint()"></th>';
+				
 			if($detail){
-				$str .= '<th></th>';
+				
 				$str .= '<th></th>';
 			}
+			
 			$str .= '</tr>';
 			$str .= '<tr>';
 			if($detail){
@@ -379,15 +361,9 @@ function periodSpare($year,$day, $month, $first,$last,$detail){
 				print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 85%"><strong>Semmmit nem adtak ki a raktárból!</strong></div>';
 					
 			}
-
+		
+			$title = "Selejt a szűrt időszakban";
 			
-
-			
-			if($first == $last){
-				$title = "Selejt ".$first." napon";
-			}else{
-				$title = "Selejt ".substr($first,0,7)." hónapban";
-			}
 			$json_str = json_encode($jsonarray,True);
 			print '<div id="printhelper_json" class="hiddendiv" detail="'.strval($detail).'"
 				 		title="'.$title.'">'.$json_str.'</div>';
@@ -401,7 +377,7 @@ function periodSpare($year,$day, $month, $first,$last,$detail){
 	$mysqli->close();
 }
 
-function periodInput($year,$day, $month, $first,$last,$detail,$supp){
+function periodInput($from,$to,$detail,$supp){
 	
 	$jsonarray = array();
 	if($supp != ""){
@@ -416,8 +392,8 @@ function periodInput($year,$day, $month, $first,$last,$detail,$supp){
 	 				FROM supplier s, pallet p, product pr, user u
 				where pr.id=p.product_id and p.supplier_id = s.id 
 				and u.id = p.user_id ".$supp_filter."
-				 and  p.time >= '".$first." 00:00:00' and
-			p.time <= '".$last." 23:59:59' 
+				 and  p.time >= '".$from." 00:00:00' and
+			p.time <= '".$to." 23:59:59' 
 			and p.deleted = false and pr.deleted = false order by supplier";
 	}else{
 		
@@ -425,8 +401,8 @@ function periodInput($year,$day, $month, $first,$last,$detail,$supp){
 	 				FROM supplier s, pallet p, product pr, user u
 				where pr.id=p.product_id and p.supplier_id = s.id 
 				and u.id = p.user_id ".$supp_filter."
-				 and  p.time >= '".$first." 00:00:00' and
-			p.time <= '".$last." 23:59:59'
+				 and  p.time >= '".$from." 00:00:00' and
+			p.time <= '".$to." 23:59:59'
 			and p.deleted = false and pr.deleted = false group by pr.id order by supplier";
 		
 	}
@@ -439,29 +415,23 @@ function periodInput($year,$day, $month, $first,$last,$detail,$supp){
 				 $str = '<table class="table table-hover">';
 				 $str .= '<thead>';
 				 $str .= '<tr class="tableHeader">';
-				 if($detail && $first != $last){
-				 	$str .= '<td>'.$first." <br> ".$last.'</td>';
-				 }else if($first != $last){
-				 	$str .= '<td>'.$first." <br> ".$last.'</td>';
-				 }
+			 	 $str .= '<td>'.$from." <br> ".$to.'</td>';
 				 
-				 if($first === $last){
-				 	$str .= '<td>'.$first.'</td>';
-				 }
 				 
-				 $str .= '<td class="dateth">'.datepicker($year,$day, $month, true).'</td>';
+				 
+				 
+				 $str .= '<td class="dateth">'.mydatepicker($from, "_from")."<br/>".mydatepicker($to, "_to").'</td>';
 
-				 $str .= '<td>'.supplierOption2($supp).'<button class="btn btn-sm btn-default"  onclick="monthlyInput()">Havi Szűrés</button></td>';
-				 $str .= '<td>
-				 			<button class="btn btn-sm btn-default" onclick="dailyInput()">Napi Szűrés</button>
-				 			<button class="btn btn-sm btn-default printbutton" onclick="inputPrint()">
-				 		 </td>';
-				
+				 $str .= '<td>'.supplierOption2($supp);
+				 $str .= '<button class="btn btn-sm btn-default"  onclick="inputfilter()">Szűrés</button></td>';
 				 if($detail){
 				 	$str .= '<td>Részletes<input id="detailscb" type="checkbox" name="detailscb" checked></td>';
 				 }else{
 				 	$str .= '<td>Részletes<input id="detailscb" type="checkbox" name="detailscb" ></td>';
 				 }
+				 $str .= '<td> <button class="btn btn-sm btn-default printbutton" onclick="inputPrint()"></td>';
+				
+				
 				 
 				 $str .= '</tr>';
 				 $str .= '</thead>';
@@ -525,11 +495,9 @@ function periodInput($year,$day, $month, $first,$last,$detail,$supp){
 				 	print '<div class="alert alert-danger text-center centerBlock" role="alert" style="width: 85%"><strong>Ma még semmmit nem adtak ki a raktárból!</strong></div>';
 				 }
 				 
-				 if($first == $last){
-				 	$title = "Bevétel ".$first." napon";
-				 }else{
-				 	$title = "Bevétel ".substr($first,0,7)." hónapban";
-				 }
+				
+			 	$title = "Bevétel az időszakban";
+				 
 				 $json_str = json_encode($jsonarray,True);
 				 print '<div id="printhelper_json" class="hiddendiv" detail="'.strval($detail).'"
 				 		title="'.$title.'">'.$json_str.'</div>';
@@ -1134,6 +1102,13 @@ function supplySQL($timefilter,$prodfilter){
 	 			on p.id = t1.id GROUP BY pr_id
 						HAVING rest > 0
 						order by product, time";
+}
+
+function inputSql($timefilter,$prod_id){
+	return "select sum(o.amount) as amount
+				from pallet p, output o,product pr WHERE
+				 p.product_id = pr.id and p.deleted = false and pr.id = '".$prod_id."' 
+				 ".$timefilter." and o.pallet_id = p.id and o.deleted = false";
 }
 
 function inventorySQL($prodfilter){

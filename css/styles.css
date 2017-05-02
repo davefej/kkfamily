@@ -104,6 +104,15 @@ thead>tr>th{
 	padding-top: 20px;
 }
 
+#barChartContainer2{
+	background-color: white;
+	width: 80%;
+	float: none;
+	margin: 0 auto;
+	margin-top: 10px;
+	padding-top: 20px;
+}
+
 #newRetailer{
 	color: #555555;
 }
@@ -140,6 +149,31 @@ thead>tr>th{
 	display: inline;
 	width: 30%;
 }
+
+#date_month_from{
+	display: inline;
+	width: 30%;
+}
+#date_month_to{
+	display: inline;
+	width: 30%;
+}
+#date_day_from{
+	display: inline;
+	width: 30%;
+}
+#date_year_from{
+	display: inline;
+	width: 30%;
+}#date_day_to{
+	display: inline;
+	width: 30%;
+}
+#date_year_to{
+	display: inline;
+	width: 30%;
+}
+
 .navbar-brand{
 	padding: 5px;
 }
@@ -309,4 +343,9 @@ a:hover.details{
 
 .datepicker{
 	width:33%;
+}
+
+.followdate{
+	   width: 300px;
+    margin: 10px auto;
 }

@@ -6,14 +6,22 @@ require("../common/header.php");
 ?>
 
 <div class="followtop">
-ID:<input type="number" id="followpalletid" <?php if(isset($_GET["id"])){echo "value='".$_GET["id"]."'";} ?> >
+<br/>
+<input placeholder="ID" type="number" id="followpalletid" <?php if(isset($_GET["id"])){echo "value='".$_GET["id"]."'";} ?> >
 <button class="btn btn-sm btn-default" onclick="follow()" >Raklap Követés</button><br/><br/>
 
-<?php if(isset($_GET["prodid"])){
-		echo productOptionStorage2($_GET["prodid"]);
-	}else{
-		echo productOptionStorage2("");
+<?php 
+	
+	$prodid = "";
+	if(isset($_GET["prodid"])){
+		$prodid = ($_GET["prodid"]);
 	}
+	
+	echo "<div class='followdate'>";
+	echo datepicker("", "", "", "_from");
+	echo datepicker("", "", "", "_to");
+	echo "<div>".productOptionStorage2($prodid)."</div>";
+	echo "</div>"
 	?>
 &nbsp;&nbsp;<button class="btn btn-sm btn-default" onclick="followProd()" >Termék Követés</button>
 </div>
@@ -158,7 +166,7 @@ if(isset($_GET["id"])){
 	
 	$mysqli->close();
 	
-}else if(isset($_GET["prodid"])){
+}else if(isset($_GET["prodid"]) && isset($_GET["from"]) && isset($_GET["to"]) && isset($_GET["diff"])){
 	$mysqli = connect();
 	$id = $_GET["prodid"];
 	$idfiler = "and pr.id = '".$id."' ";
@@ -170,26 +178,47 @@ if(isset($_GET["id"])){
 	
 	$labels = array();
 	$data = array();
+	$labels2 = array();
+	$outputs = array();
 	$prodname ="";
 	
-	for($i=8; $i>=3; $i--){
-		$back = ($i)*7-1;
-		$back = $back+((int)date( "w")-1)-$weekday;
-		if((int)date( "w")-1 >= $weekday){
-			$back = $back-6;
-		}else{
-			$back = $back+1;
+	if((int) $_GET["diff"] < 13){
+		$backdays = 1;
+	}else if((int) $_GET["diff"] < 37){
+		$backdays = 3;
+	}else if((int) $_GET["diff"] < 370){
+		$backdays = 30;
+	}else if((int) $_GET["diff"] < 4500){
+		$backdays = 365;
+	}else{
+		echo "Túl nagy időtáv";
+	}
+	
+	for($i=12; $i>=0; $i--){
+		$back = ($i)*$backdays-1;
+		$currdate = date('Y-m-d', strtotime($_GET["to"]." -".$back." days"));
+		if(strtotime('now') < strtotime($_GET["to"])){
+			//FutuRE
+			continue;
 		}
-		$currdate = date('Y-m-d', strtotime("-".$back." days"));
+		$back2 = ($i+1)*$backdays-1;
+		$currdate2 = date('Y-m-d', strtotime($_GET["to"]." -".$back2." days"));
+		
+		
 		$timefilter = " and time < '".$currdate." 00:00:00' ";
 		
 		if($results = $mysqli->query(supplySQL($timefilter,$idfiler))){
+			$nores = true;
 			while($row = $results->fetch_assoc()) {
 				$prodname = $row["product"];
 				array_push($labels,$currdate);
 				array_push($data,(int)$row["rest"]);
-				
+				$nores = false;
 				//print $row['rest']."<br/> ";
+			}
+			if($nores){
+				array_push($labels,$currdate);
+				array_push($data,0);
 			}
 			$results->free();
 		
@@ -197,31 +226,30 @@ if(isset($_GET["id"])){
 			print mysqli_error($mysqli);
 			print "nincs adatbázis kapcsolat";
 		}
-
-	}
-	
-	for($i=7; $i>=0; $i--){
-		$back = ($i);		
-		$currdate = date('Y-m-d', strtotime("-".$back." days"));
-		$timefilter = " and time < '".$currdate." 00:00:00' ";	
-		if($results = $mysqli->query(supplySQL($timefilter,$idfiler))){
+		
+		if($results = $mysqli->query(inputSql("and o.time < '".$currdate." 23:59:59' and o.time > '".$currdate2." 00:00:00' ",$id))){
+			$nores = true;
+			
+			array_push($labels2,$currdate2." -> ".$currdate);
 			while($row = $results->fetch_assoc()) {
-				$prodname = $row["product"];
-				array_push($labels,$currdate);
-				array_push($data,(int)$row["rest"]);
-	
-				//print $row['rest']."<br/> ";
+				$nores = false;
+				array_push($outputs,(int)$row['amount']);				
+			}
+			if($nores){
+				array_push($outputs,0);
 			}
 			$results->free();
-	
+		
 		}else{
 			print mysqli_error($mysqli);
 			print "nincs adatbázis kapcsolat";
 		}
-	
+		
+
 	}
 	
-	print '<h1 align="center">'.$prodname.'</h1>';
+	
+	
 	$colors = array( 'rgba(255, 99, 132, 0.8)',
 			'rgba(54, 162, 235, 0.8)',
 			'rgba(255, 206, 86, 0.8)',
@@ -250,12 +278,65 @@ if(isset($_GET["id"])){
 		
 	print '<div id="follow_json" class="hiddendiv">'.$json_str.'</div>';
 	
+	for($i=0; $i < count($labels2); $i++){
+		$num = $i%count($colors);
+		array_push($backgroundColor,$colors[$num]);
+	}
+	
+	$datasets = array(
+			"label" => "Raktárkészletek",
+			"backgroundColor" => $backgroundColor,
+			"borderWidth" => 0,
+			"data" => $outputs
+	);
+	$datasetsarray = array($datasets);
+	$json = array(
+			"labels" => $labels2,
+			"datasets" => $datasetsarray
+	);
+	
+	$json_str = json_encode($json,True);
+	print '<div id="follow_json_outputs" class="hiddendiv">'.$json_str.'</div>';
+	print '<h1 align="center">'.$prodname.' - készlet</h1>';
 	?>
-	<div class="container-fluid" id="barChartContainer">
+<div class="container-fluid" id="barChartContainer">
 	<canvas id="myBarChart" width="600" height="150">
 		<script>
 		var ctx = document.getElementById("myBarChart");
 		var data = document.getElementById('follow_json').innerHTML; 
+		try{
+			data = JSON.parse(data);
+		}catch(err){
+			cosole.log(err);
+		}
+		
+		var myBarChart = new Chart(ctx, {
+			type: 'bar',
+		    data: data,
+		    options: {
+		    	legend: {
+                    display: false
+                },
+		        scales: {
+		            yAxes: [{
+		                ticks: {
+		                    beginAtZero:true
+		                }
+		            }]
+		        }
+		    }
+	        
+	    });
+		</script>
+	</canvas>
+</div>
+
+	<h1 align="center"><?php echo $prodname;?> - kiadások</h1>
+<div class="container-fluid" id="barChartContainer2">
+	<canvas id="myBarChart2" width="600" height="150">
+		<script>
+		var ctx = document.getElementById("myBarChart2");
+		var data = document.getElementById('follow_json_outputs').innerHTML; 
 		try{
 			data = JSON.parse(data);
 		}catch(err){

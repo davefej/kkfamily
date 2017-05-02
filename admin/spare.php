@@ -12,41 +12,16 @@ if(isset($_GET['detail'])){
 		$detail = true;
 	}
 }
+if(isset($_GET['from']) && isset($_GET['to'])){
 
-if(isset($_GET['type'])){
-	if($_GET['type'] == "day"){
-		if(isset($_GET['day'])){
-			$day  = $_GET['day'];
-			$only_month = date('n', strtotime($day));
-			$only_day = date('j', strtotime($day));
-			$only_year = date('Y', strtotime($day));
-		}else{
-			$day  = date("Y-m-d");
-			$only_month = "";
-			$only_day = "";
-			$only_year = "";
-		}
-		periodSpare($only_year,$only_day, $only_month, $day,$day,$detail);
-	}else if($_GET['type'] == "month"){
-		if(isset($_GET['month'])){
-			$month_begin  = $_GET['month'];
-			$month_end =  date('Y-m-t', strtotime($month_begin));
-			$only_month = date('n', strtotime($month_begin));
-			$only_year = date('Y', strtotime($month_begin));
-			$only_day = "";
-		}else{
-			$month_begin  = date("Y-m-d");
-			$month_end = date("Y-m-t");
-			$only_month = "";
-			$only_day = "";
-			$only_year = "";
-		}
-		periodSpare($only_year,$only_day, $only_month, $month_begin,$month_end,$detail);
-	}
-	
+	$fromarr = explode("-", $_GET['from']);
+	$toarr = explode("-", $_GET['to']);
+
+	periodSpare($_GET['from'],$_GET['to'],$detail);
+
 }else{
 	$day  = date("Y-m-d");
-	periodSpare("","","",$day,$day,$detail);
+	periodSpare($day,$day,$detail);
 }
 
 require("../common/footer.php");

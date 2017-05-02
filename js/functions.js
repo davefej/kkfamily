@@ -500,81 +500,38 @@ str += "</table>";
 
 
 
-function dailyOutput(){
-	var day = $('#date_day').val()
-	var month = $('#date_month').val()
-	var year = $('#date_year').val()
+function outputfilter(){
+	var dates = MyDateParse();
 	if($("#detailscb").is(":checked")){
 		detail = "true";
 	}else{
 		detail = "false";
 	}
-	window.location = "output.php?type=day&day="+year+"-"+month+"-"+day+"&detail="+detail;
+	window.location = "output.php?from="+dates.from+"&to="+dates.to+"&detail="+detail;
 }
 
 
-function dailyInput(){
-	var day = $('#date_day').val()
-	var month = $('#date_month').val()
+function inputfilter(){
+	var dates = MyDateParse();
+	if($("#detailscb").is(":checked")){
+		detail = "true";
+	}else{
+		detail = "false";
+	}
 	var supp_opt = $('#supp_opt').val()
-	var year = $('#date_year').val()
-	if($("#detailscb").is(":checked")){
-		detail = "true";
-	}else{
-		detail = "false";
-	}
-	window.location = "input.php?type=day&day="+year+"-"+month+"-"+day+"&detail="+detail+"&supp="+supp_opt;
+	window.location = "input.php?from="+dates.from+"&to="+dates.to+"&detail="+detail+"&supp="+supp_opt;
 }
 
-function dailySpare(){
-	var day = $('#date_day').val()
-	var month = $('#date_month').val()
-	var year = $('#date_year').val()
-	if($("#detailscb").is(":checked")){
-		detail = "true";
-	}else{
-		detail = "false";
-	}
-	window.location = "spare.php?type=day&day="+year+"-"+month+"-"+day+"&detail="+detail;
-}
-
-function monthlyOutput(){
-	var day = $('#date_day').val();
-	var month = $('#date_month').val();
+function sparefilter(){
+	var dates = MyDateParse();
 	
-	var year = $('#date_year').val()
 	if($("#detailscb").is(":checked")){
 		detail = "true";
 	}else{
 		detail = "false";
 	}
-	window.location = "output.php?type=month&month="+year+"-"+month+"-01"+"&detail="+detail;
-}
-
-
-function monthlyInput(){
-	var day = $('#date_day').val()
-	var month = $('#date_month').val()
-	var supp_opt = $('#supp_opt').val();
-	var year = $('#date_year').val()
-	if($("#detailscb").is(":checked")){
-		detail = "true";
-	}else{
-		detail = "false";
-	}
-	window.location = "input.php?type=month&month="+year+"-"+month+"-01"+"&detail="+detail+"&supp="+supp_opt;
-}
-
-function monthlySpare(){
-	var day = $('#date_day').val()
-	var month = $('#date_month').val()
-	var year = $('#date_year').val()
-	if($("#detailscb").is(":checked")){
-		detail = "true";
-	}else{
-		detail = "false";
-	}
-	window.location = "spare.php?type=month&month="+year+"-"+month+"-01"+"&detail="+detail;
+	var supp_opt = $('#supp_opt').val()
+	window.location = "spare.php?from="+dates.from+"&to="+dates.to+"&detail="+detail+"&supp="+supp_opt;
 }
 
 function filterProd(){
@@ -705,8 +662,14 @@ function follow(){
 }
 
 function followProd(){
+	var dates = MyDateParse()
 	var id = $('#follow_prod_select').val()
-	window.location = "follow.php?prodid="+id;
+	var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+	var firstDate = new Date(dates.from);
+	var secondDate = new Date(dates.to);
+	
+	var diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
+	window.location = "follow.php?prodid="+id+"&from="+dates.from+"&to="+dates.to+"&diff="+diffDays;
 }
 
 function startPrint(data,keys,header){
@@ -830,6 +793,7 @@ function outputPrint(){
 }
 
 function inputPrint(){
+	
 	var data = $('#printhelper_json').html()
 	data = JSON.parse(data);
 	var details = $('#printhelper_json').attr("detail") == "1";
@@ -871,3 +835,36 @@ function qualityPrint(){
 	)
 }
 
+function daysInMonth(iMonth, iYear)
+{
+    return new Date(iYear, iMonth, 0).getDate();
+}
+
+function MyDateParse(){
+	var day = $('#date_day_from').val()
+	var month = $('#date_month_from').val()	
+	var year = $('#date_year_from').val()
+	var day2 = $('#date_day_to').val()
+	var month2 = $('#date_month_to').val()	
+	var year2 = $('#date_year_to').val()	
+	if(!month){
+		bootbox.alert("Nincs hónap kiválasztva!");
+		return;
+	}
+	if(!day){
+		day = "01";
+		day2 = daysInMonth(parseInt(year),parseInt(day));
+		month2 = month;
+	}else{
+		if(!month2){
+			month2 = month;
+		}
+		if(!day2){
+			day2 = day;
+		}
+	}
+	return {
+		"from":year+"-"+month+"-"+day,
+		"to":year2+"-"+month2+"-"+day2
+	};
+}

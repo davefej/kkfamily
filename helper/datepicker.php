@@ -1,5 +1,10 @@
 <?php
 
+function mydatepicker($date, $postfix){
+	$myarr= explode("-", $date);
+	return datepicker($myarr[0],$myarr[2],$myarr[1],$postfix);
+}
+
 function datepicker($year,$day, $month, $postfix){
 
 	if($postfix === true || $postfix === false){
