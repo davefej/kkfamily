@@ -625,14 +625,14 @@ function reloadMonthlyQuality (){
 	var day = $('#date_day').val()
 	var month = $('#date_month').val()
 	var year  = $('#date_year').val()
-	var qualityfilter = $('#qualityfilter').val()
+
 	if($("#detailscb").is(":checked")){
 		detail = "true";
 	}else{
 		detail = "false";
 	}
 	
-	window.location = "quality.php?type=month&month="+year+"-"+month+"-01&filter="+qualityfilter+"&summary="+detail;
+	window.location = "quality.php?type=month&month="+year+"-"+month+"-01&summary="+detail;
 }
 
 function reloadDailyQuality (){
@@ -920,11 +920,11 @@ function qualityPrint(){
 	if(details){
 		title += " (Részletes)";
 		headers = ["termék","mennyiség","bevétel","beszállító",
-			"megjelenés","állag","illat","szín","tisztaság-hőfok","raklap-minőség"];
+			"megjelenés","állag","illat","szín","tisztaság-hőfok","raklap-minőség","döntés"];
 	}else{
 		title += " (Összegzett)";
 		headers = ["termék","mennyiség","beszállító",
-			"megjelenés","állag","illat","szín","tisztaság-hőfok","raklap-minőség"];
+			"megjelenés","állag","illat","szín","tisztaság-hőfok","raklap-minőség","döntés"];
 	}
 	startPrint(
 			data,
@@ -943,11 +943,11 @@ function qualityCSV(){
 	if(details){
 		title += " (Részletes)";
 		headers = ["termék","mennyiség","bevétel","beszállító",
-			"megjelenés","állag","illat","szín","tisztaság-hőfok","raklap-minőség"];
+			"megjelenés","állag","illat","szín","tisztaság-hőfok","raklap-minőség","döntés"];
 	}else{
 		title += " (Összegzett)";
 		headers = ["termék","mennyiség","beszállító",
-			"megjelenés","állag","illat","szín","tisztaság-hőfok","raklap-minőség"];
+			"megjelenés","állag","illat","szín","tisztaság-hőfok","raklap-minőség","döntés"];
 	}
 	startCSV(
 			data,

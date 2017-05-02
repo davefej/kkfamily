@@ -45,19 +45,15 @@ if(isset($_GET['type'])){
 	$paramarray['type'] = "month";
 }
 
-if(isset($_GET['filter'])){
-	$filter = " and q.decision = '".$_GET['filter']."' ";
-	$dec = $_GET['filter'];
-}else{
+
 	$filter = "";
-	$dec = "0";
-}
+	
 
 $paramarray = array();
 $paramarray['only_month'] = $only_month;
 $paramarray['only_day'] = $only_day;
 $paramarray['only_year'] = $only_year;
-$paramarray['decision'] = $dec;
+
 $paramarray['begin'] = $begin;
 $paramarray['end'] = $end;
 
@@ -101,25 +97,7 @@ function qualityinputTable($results, $paramarray){
 	print '<thead>';
 	print '<tr>';
 	print '<th colspan="10" class="dateth">'.datepicker($year,$day, $month, true).'</th>';
-	print '<th><select class="form-control" id="qualityfilter">';
-			print '<option value="0" ';
-			if( $paramarray['decision'] == "0"){
-				print 'selected';
-			}
-			print	' >Átvéve</option>';
-			print '<option value="1" ';
-			if( $paramarray['decision'] == "1"){
-				print 'selected';
-			}
-			print	' >Reklamáció (Átvéve)</option>';
-			
-			print '<option value="2" ';
-			if( $paramarray['decision'] == "2"){
-				print 'selected';
-			}
-			print	' >Nincs Átvéve</option>';
-			
-	print '</select></th>';
+	print '<th></th>';
 	
 	if($detail){
 		print '<th>Összegzés<input id="detailscb" type="checkbox" name="detailscb" ></th>';
@@ -184,6 +162,17 @@ function qualityinputTable($results, $paramarray){
 		$arritem['szín'] =$row["color"];
 		$arritem['tisztaság-hőfok'] =$row["clearness"];
 		$arritem['raklap-minőség'] =$row["pallet_quality"];
+		
+		if($row["decision"] == "0"){
+			$arritem['döntés'] ="Átvéve";
+		}else if($row["decision"] == "1"){
+			$arritem['döntés'] ="Reklamáció - Átvéve";
+		}else{
+			$arritem['döntés'] ="Nincs Átvéve";
+		}
+		
+		
+		
 		array_push($jsonarray, $arritem);		
 		
 		print '<tr>';
@@ -224,17 +213,11 @@ function qualityinputTable($results, $paramarray){
 		print '</tr>';
 	}
 	print '</table>';
-	if($paramarray['decision'] == "0"){
-		$decstr = "Átvéve";
-	}else if($paramarray['decision'] == "1"){
-		$decstr = "Reklamáció (Átvéve)";
-	}else if($paramarray['decision'] == "2"){
-		$decstr = "Nincs Átvéve";
-	}
+	
 	if($paramarray['end'] == $paramarray['begin']){
-		$title = $decstr." ".$paramarray['end']." napon ";
+		$title = "Minőség "." ".$paramarray['end']." napon ";
 	}else{
-		$title = $decstr." ".substr($paramarray['end'],0,7)." hónapban ";
+		$title = "Minőség "." ".substr($paramarray['end'],0,7)." hónapban ";
 	}
 	
 	if($detail){
