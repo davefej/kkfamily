@@ -18,9 +18,15 @@ if(isset($_GET['pass']) && $_GET['pass'] == "kkpass123"){
 	$id = "";
 	$str = "NO_DATA";
 	$mysqli = connect();
-	if($results = $mysqli->query("SELECT p.id as id, p.amount as amount,pr.name as prod, s.name as sup, p.time as time, pr.unit as unit from pallet p,product pr, supplier s WHERE p.deleted = 0 and p.printed = 0 and p.product_id = pr.id and p.supplier_id = s.id")){		
+	if($results = $mysqli->query("SELECT p.id as id, p.amount as amount,pr.name as prod,p.expire as expire, s.name as sup, p.time as time, pr.unit as unit from pallet p,product pr, supplier s WHERE p.deleted = 0 and p.printed = 0 and p.product_id = pr.id and p.supplier_id = s.id")){		
 		while($row = $results->fetch_assoc()) {
-			$str = $row['id']."#_#".$row['amount']."#_#".$row['prod']."#_#".$row['time']."#_#".$row['sup']."#_#".$row['unit']."#_#";
+			if($row['expire'] == "0000-00-00 00:00:00" || $row['expire'] == "" || $row['expire'] == "NULL"){
+				$expire = " ";
+			}else{
+				$expire = "szav. ido: ".substr($row['expire'],0,10);
+			}
+		
+			$str = $row['id']."#_#".$row['amount']."#_#".$row['prod']."#_#".$row['time']."#_#".$row['sup']."#_#".$row['unit']."#_#".$expire."#_#";
 			$id = $row['id'];
 			break;
 		}		

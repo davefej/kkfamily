@@ -11,6 +11,9 @@ if(isset($_GET['id'])){
 	echo "NINCS ID MEGADVA";
 }
 
+$today = date("Y-m-d");
+$today_det = explode("-",$today);
+echo "<script> var global_date_str = '".datepicker((int)$today_det[0],(int)$today_det[2],(int)$today_det[1],"")."'; </script>";
 
 ?>
 
