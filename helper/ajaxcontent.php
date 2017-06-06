@@ -33,7 +33,14 @@ function supplieJSON($results){
 		
 		$item = array();
 		$item["terméknév"] = $row['product'];
-		$item["mennyiség"] = $row['rest']." ".$row['unit'];
+		
+		if(isset($_GET['format']) && $_GET['format'] == "csv"){
+			$item["mennyiség"] = $row['rest'];
+			$item["egység"] = $row['unit'];
+		}else{
+			$item["mennyiség"] = $row['rest']." ".$row['unit'];
+		}
+		
 
 		array_push($arr,$item);
 	}

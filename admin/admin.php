@@ -116,7 +116,26 @@ require("../common/header.php");
 	  </div>
 	  
 	  
-	  
+	  <div class="panel panel-danger">
+	  	<div class="panel-heading">
+	  		<a data-toggle="collapse" href="#collapse3">
+	  			Lejárt termékek
+	  		</a>
+	  	</div>
+	  	<div id="collapse3" class="panel-collapse collapse">
+		  	<table class="table">
+		  		<tr>
+			  		<td>
+						<div>
+						<?php 			
+							listOld();
+						?>
+						</div>
+					</td>
+				</tr>
+		  	</table>
+		  </div>
+		</div>
 	  
 	 
 		
@@ -167,26 +186,7 @@ require("../common/header.php");
 			</div>
 	</div>
 
-	  <div class="panel panel-danger">
-	  	<div class="panel-heading">
-	  		<a data-toggle="collapse" href="#collapse3">
-	  			Hamarosan Lejáró Termékek
-	  		</a>
-	  	</div>
-	  	<div id="collapse3" class="panel-collapse collapse">
-		  	<table class="table">
-		  		<tr>
-			  		<td>
-						<div>
-						<?php 			
-							listOld();
-						?>
-						</div>
-					</td>
-				</tr>
-		  	</table>
-		  </div>
-		</div>
+	  
 
 </div>
 <?php 

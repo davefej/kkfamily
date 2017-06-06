@@ -150,7 +150,9 @@ function qualityinputTable($results, $paramarray){
 		
 		$arritem = array();
 		$arritem['termék'] =$row["name"];
-		$arritem['mennyiség'] = $row["amount"]." ".$row["unit"];
+		$arritem['mennyiség'] = $row["amount"];
+		$arritem['egység'] =$row["unit"];
+		
 	
 		$arritem['beszállító'] = $row["supp"];
 		if($detail){

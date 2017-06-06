@@ -20,6 +20,8 @@
 				<li <?php if($selector =="openqr"){ echo "class=\"active\"";} ?> ><a href="openqr.php">QR CODE</a></li>
 				<li <?php if($selector =="idkiadas"){ echo "class=\"active\"";} ?> ><a href="idkiadas.php">ID BEÍRÁS</a></li>
 				<li <?php if($selector =="raktar"){ echo "class=\"active\"";} ?> ><a href="raktar.php">Raktár</a></li>
+				<li <?php if($selector =="dailyoutput"){ echo "class=\"active\"";} ?> ><a href="dailyoutput.php">Napi kiadás</a></li>
+				
 				
 			</ul>
 			<ul class="nav navbar-nav navbar-right">

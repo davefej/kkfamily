@@ -292,6 +292,14 @@ function updateOutput(id,pallet_id,amount,time,user_id){
 	});
 }
 
+function reverseOutputServer(outputid,newamount){
+	update({
+		"id":outputid,		
+		"amount":newamount,
+		"type":"reverse_output"
+	});
+}
+
 function updateAlert(id){
 	update({
 		"id":id,
@@ -347,28 +355,44 @@ function update(json){
 //////////////////////////////
 
 function deleteCategory(id){
-	Delete({
-		"id":id,
-		"type":"category"
+	bootbox.confirm("<h3>Biztosan törli?</h3>",function (yes){
+		if(yes){
+			Delete({
+				"id":id,
+				"type":"category"
+			});
+		}
 	});
 }
 
 function deleteUser(id){
-	Delete({
-		"id":id,
-		"type":"user"
+	bootbox.confirm("<h3>Biztosan törli?</h3>",function (yes){
+		if(yes){
+			Delete({
+				"id":id,
+				"type":"user"
+			});
+		}
 	});
 }
 function deleteSupplier(id){
-	Delete({
-		"id":id,
-		"type":"supplier"
+	bootbox.confirm("<h3>Biztosan törli?</h3>",function (yes){
+		if(yes){
+			Delete({
+				"id":id,
+				"type":"supplier"
+			});
+		}
 	});
 }
 function deleteProduct(id){
-	Delete({
-		"id":id,
-		"type":"product"
+	bootbox.confirm("<h3>Biztosan törli?</h3>",function (yes){
+		if(yes){
+			Delete({
+				"id":id,
+				"type":"product"
+			});
+		}
 	});
 }
 function deleteTrash(id){

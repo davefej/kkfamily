@@ -19,6 +19,7 @@ function sqlExecute($sql,$proces){
 }
 
 function sqlExecute2($sql,$proces,$param){
+	
 	$mysqli = connect();
 	if($results = $mysqli->query($sql)){
 
@@ -67,7 +68,7 @@ function palletSQL3($filter,$groupby){
 
 	}
 	return "select p.id as id, pr.name as product, pr.id as pr_id,pr.unit as unit,
-			s.name as supplier, p.time as time, u.name as user,p.amount as origamount, pr.minimum as min, p.printed as printed,
+			s.name as supplier, p.time as time,p.expire as expire, u.name as user,".$sum1."p.amount".$sum2." as origamount, pr.minimum as min, p.printed as printed,
 				".$sum1."IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0)".$sum2." as rest
 				from pallet p
 				INNER JOIN product pr on p.product_id = pr.id ".$filter." and p.deleted = false
@@ -183,7 +184,8 @@ function periodOutput($from,$to,$detail){
 			 while($row = $results->fetch_assoc()) {
 			 	$arritem = array();
 			 	$arritem['termék'] =$row["product"];
-			 	$arritem['mennyiség'] = $row["amount"]." ".$row["unit"];
+			 	$arritem['mennyiség'] = $row["amount"];
+			 	$arritem['egység'] =$row["unit"];
 			 	if($detail){
 			 		$arritem['bevétel'] = $row["origtime"];
 			 		$arritem['beszállító'] = $row["supp"];
@@ -312,7 +314,7 @@ function periodSpare($from,$to,$detail){
 			if($detail){
 				$str .= '<th>Beszállító neve</th>';
 				$str .= '<th>Beszállítás dátuma</th>';
-				$str .= '<th>Kiadási idő</th>';
+				$str .= '<th>Selejtezési idő</th>';
 				$str .= '<th colspan=2>Raktáros</th>';
 			}
 			
@@ -323,7 +325,9 @@ function periodSpare($from,$to,$detail){
 			while($row = $results->fetch_assoc()) {
 				$arritem = array();
 				$arritem['termék'] =$row["product"];
-				$arritem['mennyiség'] = $row["amount"]." ".$row["unit"];
+				$arritem['mennyiség'] = $row["amount"];
+				$arritem['egység'] = $row["unit"];
+				
 				if($detail){
 					$arritem['bevétel'] = $row["origtime"];
 					$arritem['beszállító'] = $row["sname"];
@@ -390,7 +394,7 @@ function periodInput($from,$to,$detail,$supp){
 	
 	if($detail){
 		
-		$sql = "SELECT p.id as id, pr.name as product,pr.unit as unit, s.name as supplier, p.amount as amount, u.name as user, p.time as time
+		$sql = "SELECT p.id as id, pr.name as product,pr.unit as unit, s.name as supplier, p.amount as amount, p.expire as expire, u.name as user, p.time as time
 	 				FROM supplier s, pallet p, product pr, user u
 				where pr.id=p.product_id and p.supplier_id = s.id 
 				and u.id = p.user_id ".$supp_filter."
@@ -452,6 +456,7 @@ function periodInput($from,$to,$detail,$supp){
 				 if($detail){
 				 	$str .= '<th>Beszállító Neve</th>';
 				 	$str .= '<th>Bevétel ideje</th>';
+				 	$str .= '<th>Szav idő</th>';
 				 	$str .= '<th>Raktáros</th>';
 				 }
 				
@@ -462,7 +467,8 @@ function periodInput($from,$to,$detail,$supp){
 				 while($row = $results->fetch_assoc()) {
 				 	$arritem = array();
 				 	$arritem['termék'] =$row["product"];
-				 	$arritem['mennyiség'] = $row["amount"]." ".$row["unit"];
+				 	$arritem['mennyiség'] = $row["amount"];
+				 	$arritem['egység'] = $row["unit"];
 				 	if($detail){
 					 	$arritem['bevétel'] = $row["time"];
 					 	$arritem['beszállító'] = $row["supplier"];
@@ -478,6 +484,14 @@ function periodInput($from,$to,$detail,$supp){
 				 	if($detail){
 				 		$str .= '<td>'.$row["supplier"].'</td>';
 				 		$str .= '<td>'.$row["time"].'</td>';
+				 		
+				 		$exp = $row["expire"];
+				 		if($exp != "" && $exp != "NULL" && $exp != "0000-00-00 00:00:00" ){
+				 			$str .= '<td>'.$exp.'</td>';
+				 		}else{
+				 			$str .= '<td> - </td>';
+				 		}
+				 		
 				 		$str .= '<td>'.$row["user"].'</td>';
 				 	}
 				
@@ -518,13 +532,7 @@ function periodInput($from,$to,$detail,$supp){
 function listOld(){
 
 	$mysqli = connect();
-	$prod_exp = array();
-	if($results = $mysqli->query("SELECT id,expire,name from product where deleted = false and expire > 0")){
-		while($row = $results->fetch_assoc()) {
-			$prod_exp[$row["id"]] = $row["expire"];
-		}
-		$results->free();
-	}
+	
 	if($results = $mysqli->query(palletSQL())){
 		
 		$str =  '<table class="table table-hover  sortable">';
@@ -534,38 +542,42 @@ function listOld(){
 		$str .= '<th>Alapanyag</th>';
 		$str .= '<th>Mennyiség</th>';
 		$str .= '<th>Bevétel ideje</th>';
-		$str .= '<th>Kalkulált Lejárat</th>';
+		$str .= '<th>Lejárat</th>';
 		$str .= '<th>Lejárt </th>';
 		$str .= '</tr>';
 		$str .= '</thead>';
 		$i = false;
 
 		while($row = $results->fetch_assoc()) {
+			$exp = $row["expire"];
 			
-			if(array_key_exists($row["pr_id"],$prod_exp)){
+			if($exp != "" && $exp != "NULL"){
+				if( $exp != "0000-00-00 00:00:00" &&  strtotime('now') > strtotime($exp)
+					&& strtotime($exp) > strtotime("2015-01-01")){
 				
-				$expday = $prod_exp[$row["pr_id"]];
-				$date = date("Y-m-d",strtotime($row["time"]));
-				$expireDate = date('Y-m-d',strtotime($date . "+".$expday." days"));
-				//$expireDate = date("Y-m-d",date( strtotime("+".$expday." days"),$date));
-				$today = date("Y-m-d");
-				if($today > $expireDate) {
+				
 					
-					$timediff = strtotime($today)-strtotime($expireDate);
-					$daydiff = floor($timediff / (60 * 60 * 24));
+					$expireDate = $row["expire"];
 					
-					$str .= '<tr>';
-					$str .= '<td>'.$row["id"].'</td>';
-					$str .= '<td>'.$row["product"].'</td>';
-					$str .= '<td>'.$row["rest"].'</td>';
-					$str .= '<td>'.$row["time"].'</td>';
-					$str .= '<td>'.$expireDate.'</td>';
-					$str .= '<td>'.$daydiff.' napja</td>';
-					$str .= '</tr>';
-					$i = true;
-				}				
+					$today = date("Y-m-d");
+					if($today > $expireDate) {
+						
+						$timediff = strtotime($today)-strtotime($expireDate);
+						$daydiff = floor($timediff / (60 * 60 * 24));
+						
+						$str .= '<tr>';
+						$str .= '<td>'.$row["id"].'</td>';
+						$str .= '<td>'.$row["product"].'</td>';
+						$str .= '<td>'.$row["rest"].'</td>';
+						$str .= '<td>'.$row["time"].'</td>';
+						$str .= '<td>'.$expireDate.'</td>';
+						$str .= '<td>'.$daydiff.' napja</td>';
+						$str .= '</tr>';
+						$i = true;
+					}				
+				}
+	
 			}
-
 		}
 		$str .= '</table>';
 	
@@ -726,7 +738,9 @@ function outputStatistic($weekday){
 	$str =  '<table class="table table-hover sortable">';
 	$str .= '<thead><tr class="tableHeader">';
 	$str .= '<th>Átlag</th>';
-	$str .= '<th ><button class="btn btn-sm btn-default printbutton" onclick="statisticsPrint()"></th>';
+	$str .= '<th ><button class="btn btn-sm btn-default printbutton" onclick="statisticsPrint()">';
+	$str .= '<button class="btn btn-sm btn-default csvbutton" onclick="statisticsCSV()"></th>';
+	
 	$str .= '<th >'.daymap($weekday).'</th>';
 	$str .= '</tr>';
 	
@@ -1107,6 +1121,40 @@ function supplySQL($timefilter,$prodfilter){
 						order by product, time";
 }
 
+
+function supplyDetailsSQL($timefilter,$prodfilter){
+	return "select p.id as id, pr.name as product, pr.id as pr_id,pr.unit as unit, s.name as supplier, p.time as time,p.expire as expire, u.name as user,p.amount as origamount, pr.minimum as min, p.printed as printed,
+				IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0) as rest
+				from pallet p
+				INNER JOIN product pr on p.product_id = pr.id and p.deleted = false  ".$prodfilter." ".$timefilter."
+				INNER JOIN supplier s on s.id = p.supplier_id
+				INNER JOIN user u on u.id = p.user_id
+				LEFT JOIN (
+	    			select t2.id as id ,t3.amount as trash,t2.amount as output from
+					(
+			           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false ".$timefilter." group by pallet_id
+			        )t2
+				LEFT JOIN
+				(
+		           SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false ".$timefilter." group by pallet_id
+		        )t3
+				ON t2.id = t3.id
+				UNION
+				select t2.id as id ,t2.amount as trash,t3.amount as output from
+				(
+	             	SELECT pallet_id as id, sum(amount) as amount from trash WHERE deleted = false ".$timefilter." group by pallet_id
+	        	)t2
+				LEFT JOIN
+				(
+		           SELECT pallet_id as id, sum(amount) as amount from output WHERE deleted = false ".$timefilter." group by pallet_id
+		        )t3
+				ON t2.id = t3.id
+	 			) t1
+	 			on p.id = t1.id 
+		           		HAVING rest > 0
+						order by product, time";
+}
+
 function inputSql($timefilter,$prod_id){
 	return "select sum(o.amount) as amount
 				from pallet p, output o,product pr WHERE
@@ -1118,7 +1166,7 @@ function inventorySQL($prodfilter){
 	return "select p.id as id, pr.name as product, pr.id as pr_id,pr.unit as unit, s.name as supplier, p.time as time, u.name as user,p.amount as origamount, pr.minimum as min, p.printed as printed,
 				IFNULL(p.amount,0) - IFNULL(t1.trash,0) - IFNULL(t1.output,0) as rest, p.deleted as deleted
 				from pallet p
-				INNER JOIN product pr on p.product_id = pr.id and p.time > (CURDATE() - INTERVAL 1 MONTH) ".$prodfilter." 
+				INNER JOIN product pr on p.product_id = pr.id and p.time > (CURDATE() - INTERVAL 2 MONTH) ".$prodfilter." 
 				INNER JOIN supplier s on s.id = p.supplier_id
 				INNER JOIN user u on u.id = p.user_id
 				LEFT JOIN (
@@ -1182,4 +1230,52 @@ function prodnameFromId($id){
 	return $suppname;
 }
 
+
+function dailyOutputSqlTablet($from,$to){
+	$sql = "SELECT p.id as id, pr.name as product,pr.unit as unit, o.amount as amount, o.time as time,
+				u.name as user,o.id as o_id,p.time as origtime, s.name as supp, o.id as oid
+ 				FROM  pallet p, product pr, output o, user u, supplier s
+			where pr.id=p.product_id and o.pallet_id = p.id and o.user_id = u.id
+			 and s.id = p.supplier_id and
+			o.time >= '".$from." 00:00:00' and
+			o.time <= '".$to." 23:59:59'
+			and p.deleted = false and pr.deleted = false and o.deleted = false order by product";
+	
+	$mysqli = connect();
+	$str = "";
+	if($results = $mysqli->query(
+			$sql
+			)){
+	
+				
+				
+
+				while($row = $results->fetch_assoc()) {
+					$str .=  '<table class="table table-hover">';
+					$str .= '<tr>';						
+					$str .= '<td>ID:'.$row['id'].'</td>';
+					$str .= '<td><b>'.$row['product'].'</b></td>';
+					$str .= '</tr>';
+					$str .= '<tr>';
+					$str .= '<td>kiadás: '.$row['amount'].' '.$row['unit'].'</td>';
+					$str .= '<td>'.$row['time'].'</td>';
+					$str .= '</tr>';
+					$str .= '<tr>';
+					$str .= '<td><button class="btn btn-sm btn-danger" onclick="reverseOutput('.$row['o_id'].','.$row['amount'].')" >Visszavétel</button></td>';
+					$str .= '<td><button class="btn btn-sm btn-danger" onclick="deleteOutput('.$row['o_id'].')" >Törlés</button></td>';
+					$str .= '</tr>';
+					$str .= '</table>';
+					$str .= '<br/>';
+				}
+				
+				print $str;
+	
+				$results->free();
+	}else{
+		print mysqli_error($mysqli);
+		print ("nincs adatbázis kapcsolat");
+	}
+	
+	$mysqli->close();
+}
 ?>

@@ -174,6 +174,7 @@ function listStorageByProduct($id){
 		print '<th>Alapanyag név</th>';
 		print '<th>Beszállító Neve</th>';
 		print '<th>Beérkezés ideje</th>';
+		print '<th>Szav. ido</th>';
 		print '<th>Mennyiség</th>';
 		print '<th>Mértékegység</th>';
 		print '<th>Raktáros</th>';
@@ -188,6 +189,18 @@ function listStorageByProduct($id){
 			print '<td>'.$row["product"].'</td>';
 			print '<td>'.$row["supplier"].'</td>';
 			print '<td>'.$row["time"].'</td>';
+			$exp = $row['expire'];
+			if($exp != "" && $exp != "NULL" && $exp != "0000-00-00 00:00:00"){
+				if(strtotime('now') > strtotime($exp) && strtotime($exp) > strtotime("2015-01-01")){
+					print '<td class="expiredcell">'.$exp.'</td>';
+				}else{
+					print '<td>'.$exp.'</td>';
+				}
+			}else{
+				print '<td> - </td>';
+			}
+			
+			
 			print '<td>'.$row["rest"].'</td>';
 			print '<td>'.$row["unit"].'</td>';
 			print '<td>'.$row["user"].'</td>';
@@ -197,6 +210,7 @@ function listStorageByProduct($id){
 		print '<td colspan="4"></td>';
 		print '<td >Összesen:</td>';
 		print '<td ><b>'.strval($summ).'</b></td>';
+		print '<td ></td>';
 		print '<td ></td>';
 		print '</tr>';
 		
@@ -250,7 +264,7 @@ function listStorageByCategory($id){
 	$data = array();
 	$mysqli = connect();
 	if($results = $mysqli->query(palletSQL2($filter))){
-	
+		$summ = 0;
 		print '<table class="table table-hover">';
 		print '<thead>';
 		print '<tr class="tableHeader">';
@@ -271,25 +285,69 @@ function listStorageByCategory($id){
 		print 'Alapanyag név</th>';
 		print '<th>Beszállító Neve</th>';
 		print '<th>Beérkezés ideje</th>';
+		print '<th>Szav. ido</th>';
 		print '<th>Mennyiség</th>';
 		print '<th>Mértékegység</th>';
 		print '<th>Raktáros</th>';
 		print '</tr>';
 		print '</thead>';
+		$lastname = "";
 		while($row = $results->fetch_assoc()) {
 			array_push($labels,$row["product"]);
 			array_push($data,(int)$row["rest"]);
-	
+			
+			if($lastname != "" && $lastname != $row["product"]){
+				print '<tr class="summtr">';
+				print '<td></td>';
+				print '<td>'.$lastname.'</td>';
+				print '<td></td>';				
+				print '<td >Összesen:</td>';
+				print '<td ><b>'.strval($summ).'</b></td>';
+				print '<td ></td>';
+				print '<td></td>';
+				print '<td ></td>';
+				print '</tr>';
+				$summ = 0;
+			}
+			$summ += (int) $row["rest"];
 			print '<tr>';
 			print '<td>'.$row["id"].'</td>';
 			print '<td>'.$row["product"].'</td>';
 			print '<td>'.$row["supplier"].'</td>';
 			print '<td>'.$row["time"].'</td>';
+			
+			$exp = $row['expire'];
+			if($exp != "" && $exp != "NULL" && $exp != "0000-00-00 00:00:00"){
+				if(strtotime('now') > strtotime($exp) && strtotime($exp) > strtotime("2015-01-01")){
+					print '<td class="expiredcell">'.$exp.'</td>';
+				}else{
+					print '<td>'.$exp.'</td>';
+				}
+			}else{
+				print '<td> - </td>';
+			}
+			
 			print '<td>'.$row["rest"].'</td>';
 			print '<td>'.$row["unit"].'</td>';
 			print '<td>'.$row["user"].'</td>';
 			print '</tr>';
+			
+			
+				
+			$lastname = $row["product"];
 		}
+		
+		print '<tr class="summtr">';
+		print '<td></td>';
+		print '<td>'.$lastname.'</td>';
+		print '<td></td>';
+		print '<td >Összesen:</td>';
+		print '<td ><b>'.strval($summ).'</b></td>';
+		print '<td ></td>';
+		print '<td ></td>';
+		print '<td ></td>';
+		print '</tr>';
+		
 		print '</table>';
 	
 		$colors = array( 'rgba(255, 99, 132, 0.8)',

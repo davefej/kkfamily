@@ -185,3 +185,4 @@ function outputDate(){
 	var year = $('#date_year').val()
 	return parseMyDate(year,month,day);
 }
+

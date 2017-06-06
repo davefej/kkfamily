@@ -66,7 +66,18 @@ function bbsave(){
 		}else{
 			newTrash(pallet_id,amount)
 		}
-	}else if(tipus == "editSupplier"){
+	}else if(tipus == "createReverseOutput"){
+		var output_id = $('#type').attr("id2");
+		var amount = $('#reverse_output_amount').val()		
+		var max = $('#type').attr("max");
+		
+		
+		if(parseInt(max) <= parseInt(amount) || amount < 1){
+			bootbox.alert("Hibás mennyiség, min:1 max:"+(max-1));
+		}else{
+			reverseOutputServer(output_id,max-amount)
+		}
+	} else if(tipus == "editSupplier"){
 		
 		var name = $('#edit_supplier_name').val()
 		var address = $('#edit_supplier_address').val()
@@ -300,6 +311,26 @@ function createTrash(pallet_id,full){
 		str += "<tr>";
 			str += "<td>";
 				str += "<input type='number' maxlength='50' value='"+full+"' id='trash_amount'>";
+			str += "</td>";
+		str += "</tr>";
+	str += "</table>";
+	bootbox.alert(str);
+	
+}
+
+function reverseOutput(outputid,max){
+	var str = '<input type="hidden" id="type" value="createReverseOutput" id2="'+outputid+'" max="'+max+'" />';
+	str += '<table class = "table table-hover">';
+	str += "<thead>";
+		str += "<tr>";
+			str += '<th>';
+				str += "Vissza vételezési mennyiség minimum 1, maximum "+(max-1)+" ";
+			str += "</th>";			
+		str += "</tr>";
+	str += "</thead>";
+		str += "<tr>";
+			str += "<td>";
+				str += "<input type='number' maxlength='50' value='0' id='reverse_output_amount' style='font-size: 130%; '>";
 			str += "</td>";
 		str += "</tr>";
 	str += "</table>";
@@ -653,7 +684,12 @@ function loadSupply(){
 	var day = $('#date_day').val()
 	var month = $('#date_month').val()
 	var year = $('#date_year').val()
-	window.location = "supply.php?month="+month+"&day="+day+"&year="+year;
+	if($("#detailscb").is(":checked")){
+		var detail = "true";
+	}else{
+		var detail = "false";
+	}
+	window.location = "supply.php?month="+month+"&day="+day+"&year="+year+"&details="+detail;
 }
 
 function follow(){
@@ -766,6 +802,28 @@ function supplyPrint(){
     });
 }
 
+function supplyCSV(){
+	var day = $('#date_day').val()
+	var month = $('#date_month').val()
+	var year = $('#date_year').val()
+	$.ajax({
+        url: "../helper/ajaxcontent.php?format=csv&type=supplyprint&day="+day+"&month="+month+"&year="+year,
+        type: "get",
+        cache: false,
+        success: function (response) {        	
+        	if(response){
+        		startCSV(
+        				JSON.parse(response),
+        				["terméknév","mennyiség","egység"],
+        				"NYITÓ KÉSZLET "+year+"-"+month+"-"+day
+        		)        		
+        	}
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+        	bootbox.alert("Internet vagy szerver hiba<br/>"+textStatus+"<br/>"+errorThrown)
+        }
+    });
+}
 
 function statisticsPrint(){
 	var today = new Date();
@@ -785,6 +843,28 @@ function statisticsPrint(){
 			["termék","mennyiség"],
 			"Napi Feladás "+tomorrow
 	)	
+}
+
+
+function statisticsCSV(){
+	var today = new Date();
+	today.setDate(today.getDate() + 1);
+	var tomorrow = today.toISOString().substring(0, 10);
+	var arr = [];
+	$('.statistic_amountinput').each(function() {
+		arr.push({
+			"termék":$(this).attr("prodname"),
+			"mennyiség":$(this).val(),
+			"egység":$(this).attr("unit")
+		})
+	   
+	});
+	
+	startCSV(
+			arr,
+			["termék","mennyiség","egység"],
+			"Napi Feladás "+tomorrow
+	)
 }
 
 function sparePrint(){
@@ -815,10 +895,10 @@ function spareCSV(){
 	
 	if(details){
 		title += " (Részletes)";
-		headers = ["termék","mennyiség","bevétel","selejt","beszállító"];
+		headers = ["termék","mennyiség","egység","bevétel","selejt","beszállító"];
 	}else{
 		title += " (Összegzett)";
-		headers = ["termék","mennyiség"];
+		headers = ["termék","mennyiség","egység"];
 	}
 	startCSV(
 			data,
@@ -856,10 +936,10 @@ function outputCSV(){
 	
 	if(details){
 		title += " (Részletes)";
-		headers = ["termék","mennyiség","bevétel","kiadás","beszállító"];
+		headers = ["termék","mennyiség","egység","bevétel","kiadás","beszállító"];
 	}else{
 		title += " (Összegzett)";
-		headers = ["termék","mennyiség"];
+		headers = ["termék","mennyiség","egység"];
 	}
 	startCSV(
 			data,
@@ -899,10 +979,10 @@ function inputCSV(){
 	
 	if(details){
 		title += " (Részletes)";
-		headers = ["termék","mennyiség","bevétel","beszállító"];
+		headers = ["termék","mennyiség","egység","bevétel","beszállító"];
 	}else{
 		title += " (Összegzett)";
-		headers = ["termék","mennyiség"];
+		headers = ["termék","mennyiség","egység"];
 	}
 	startCSV(
 			data,
@@ -942,11 +1022,11 @@ function qualityCSV(){
 	
 	if(details){
 		title += " (Részletes)";
-		headers = ["termék","mennyiség","bevétel","beszállító",
+		headers = ["termék","mennyiség","egység","bevétel","beszállító",
 			"megjelenés","állag","illat","szín","tisztaság-hőfok","raklap-minőség","döntés"];
 	}else{
 		title += " (Összegzett)";
-		headers = ["termék","mennyiség","beszállító",
+		headers = ["termék","mennyiség","egység","beszállító",
 			"megjelenés","állag","illat","szín","tisztaság-hőfok","raklap-minőség","döntés"];
 	}
 	startCSV(
