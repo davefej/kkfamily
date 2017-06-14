@@ -916,7 +916,7 @@ function outputPrint(){
 	
 	if(details){
 		title += " (Részletes)";
-		headers = ["termék","mennyiség","bevétel","kiadás","beszállító"];
+		headers = ["raklapid","termék","mennyiség","bevétel","kiadás","beszállító"];
 	}else{
 		title += " (Összegzett)";
 		headers = ["termék","mennyiség"];

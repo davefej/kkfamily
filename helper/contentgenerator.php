@@ -183,6 +183,9 @@ function periodOutput($from,$to,$detail){
 			 $i =false;
 			 while($row = $results->fetch_assoc()) {
 			 	$arritem = array();
+			 	if($detail){
+			 		$arritem['raklapid'] =$row["id"];
+			 	}
 			 	$arritem['termék'] =$row["product"];
 			 	$arritem['mennyiség'] = $row["amount"];
 			 	$arritem['egység'] =$row["unit"];
